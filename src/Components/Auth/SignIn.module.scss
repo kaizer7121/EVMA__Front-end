@@ -1,0 +1,167 @@
+@import "../SASS_Abstract/variable";
+
+.login {
+  height: 100vh;
+  font-size: 16px;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba($color-primary, 0.7),
+      rgba($color-primary-dark, 0.7)
+    ),
+    url(./images/background.jpg);
+  background-size: cover;
+  background-position: top;
+  position: relative;
+
+  &__box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52%;
+    box-shadow: 1.6px 15px 30px rgba($color-black, 0.2);
+    display: table;
+
+    @media only screen and (max-width: 1800px) {
+      width: 60%;
+    }
+
+    @media only screen and (max-width: 1450px) {
+      width: 70%;
+    }
+
+    @media only screen and (max-width: 1200px) {
+      width: 80%;
+    }
+
+    @media only screen and (max-width: 900px) {
+      width: 95%;
+    }
+
+    @media only screen and (max-width: 620px) {
+      width: 70%;
+    }
+
+    @media only screen and (max-width: 450px) {
+      width: 85%;
+    }
+  }
+
+  &__poster {
+    width: 50%;
+    display: table-cell;
+    background-image: url("./images/poster.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    @media only screen and (max-width: 620px) {
+      display: none;
+    }
+  }
+
+  &__content {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 24px 72px 35px;
+    background: rgba($color-white, 0.9);
+
+    h1 {
+      text-transform: uppercase;
+      color: $color-primary-dark;
+      font-size: 43px;
+      margin: 0;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 27px;
+      font-weight: 600;
+    }
+
+    p {
+      font-weight: 500;
+      margin-top: -18px;
+
+      a {
+        color: $color-primary-dark;
+      }
+    }
+
+    @media only screen and (max-width: 1450px) {
+      padding: 18px 55px 27px;
+
+      h1 {
+        font-size: 35px;
+      }
+
+      h3 {
+        font-size: 25px;
+      }
+    }
+
+    @media only screen and (max-width: 1200px) {
+      padding: 18px 48px 27px;
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h3 {
+        font-size: 22px;
+      }
+    }
+
+    @media only screen and (max-width: 900px) {
+      background: rgba($color-white, 0.7);
+      padding: 16px 24px 25px;
+
+      h3 {
+        font-size: 21px;
+      }
+
+      p {
+        margin-top: -14px;
+        margin-bottom: -8px;
+      }
+    }
+
+    @media only screen and (max-width: 620px) {
+      p {
+        margin-top: -12px;
+        margin-bottom: -12px;
+      }
+    }
+  }
+
+  &__form {
+    &__group {
+      margin-bottom: 33px;
+    }
+
+    &__checkbox {
+      margin-top: -9.5px;
+      margin-bottom: 16px;
+      display: flex;
+
+      input {
+        transform: scale(1.2) translateY(1px);
+      }
+
+      label {
+        margin-left: 9.5px;
+      }
+    }
+
+    @media only screen and (max-width: 900px) {
+      &__group {
+        margin-bottom: 20px;
+      }
+
+      &__checkbox {
+        margin-top: -5.5px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
+

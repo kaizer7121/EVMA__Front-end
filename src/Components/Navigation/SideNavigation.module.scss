@@ -42,7 +42,7 @@
     width: 3px;
     background-color: $color-primary;
     transform: scaleY(0);
-    transition: transform 0.15s, width 0.25s cubic-bezier(1, 0, 0, 1) 0.15s,
+    transition: transform 0.15s, width 0.20s cubic-bezier(1, 0, 0, 1) 0.1s,
       background-color 0.1s;
   }
 
