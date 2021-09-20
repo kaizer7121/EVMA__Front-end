@@ -5,6 +5,52 @@
     padding: 0 0.5rem;
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__iconBox {
+    position: relative;
+    margin-right: 2rem;
+    padding: 0.5rem;
+    border-radius: 7%;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover > img {
+      transform: rotate(15deg);
+    }
+
+    &:active {
+      background-color: $color-tertiary-light;
+    }
+  }
+
+  &__icon {
+    height: 2.25rem;
+    width: 2.25rem;
+    transition: all 0.2s;
+
+
+  }
+
+  &__notification {
+    font-size: 0.8rem;
+    height: 1.7rem;
+    width: 1.7rem;
+    border-radius: 50%;
+    background-color: $color-primary;
+    color: $color-white;
+    position: absolute;
+    top: -0.2rem;
+    right: 0rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover * .userNav__icon {
+      transform: rotate(15deg);
+    }
   }
 
   &__user {
@@ -16,8 +62,8 @@
   }
 
   &__avatar {
-    height: 50px;
-    width: 50px;
+    height: 55px;
+    width: 55px;
     border-radius: 50%;
     margin-right: 5%;
   }
@@ -25,6 +71,72 @@
   &__name {
     font-size: 1.1rem;
     margin-right: 0.6rem;
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__name {
+      font-size: 1.3rem;
+      margin-right: 1.1rem;
+    }
+
+    &__avatar {
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__icon {
+      height: 2.75rem;
+      width: 2.75rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    &__icon {
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+
+    &__name {
+      font-size: 1.4rem;
+      margin-right: 0.8rem;
+    }
+
+    &__avatar {
+      height: 45px;
+      width: 45px;
+    }
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    &__avatar {
+      height: 35px;
+      width: 35px;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__iconBox {
+      margin-right: 1.2rem;
+      padding: 0.2rem;
+      border-radius: 7%;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      &:active {
+        background-color: $color-tertiary-light;
+      }
+    }
+
+    &__name {
+      font-size: 1.5rem;
+    }
+
+    &__avatar {
+      height: 25px;
+      width: 25px;
+    }
   }
 }
 
@@ -98,5 +210,52 @@
 
   &:hover &__content {
     opacity: 1;
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__content {
+      right: -1.2rem;
+      top: 3rem;
+      z-index: 100;
+    }
+    a {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    &__button {
+      margin-top: 0.4rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    margin-right: 1rem;
+
+    &__button {
+      img {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    &__content {
+      width: 900%;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__button {
+      margin-top: 0.7rem;
+
+      img {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
+    &__content {
+      width: 650%;
+    }
   }
 }

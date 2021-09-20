@@ -1,1 +1,25 @@
+@import "./components/SASS_Abstract/variable";
 
+html {
+  font-size: 100%;
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    font-size: 80%;
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    font-size: 70%;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    font-size: 60%;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    font-size: 50%;
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    font-size: 35%;
+  }
+}
