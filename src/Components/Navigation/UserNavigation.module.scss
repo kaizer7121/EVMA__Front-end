@@ -1,12 +1,16 @@
 @import "../SASS_Abstract/variable";
 
 .userNav {
+  background-color: $color-white;
+  margin-right: 1rem;
+
   & > * {
     padding: 0 0.5rem;
     display: flex;
     align-items: center;
     position: relative;
     z-index: 1;
+    
   }
 
   &__iconBox {
@@ -30,8 +34,6 @@
     height: 2.25rem;
     width: 2.25rem;
     transition: all 0.2s;
-
-
   }
 
   &__notification {
@@ -182,23 +184,23 @@
       font-weight: 600;
       font-size: 1.4rem;
 
-      &:link {
-        color: $color-fourth-light;
+      &:link, &:visited {
+        color: $color-tertiary-light;
       }
 
       &:active {
-        color: $color-fourth-dark;
+        color: $color-tertiary-dark;
       }
     }
 
     &_edit {
       font-weight: 500;
-      &:link {
-        color: $color-fourth-light;
+      &:link, &:visited {
+        color: $color-tertiary-light;
       }
 
       &:active {
-        color: $color-fourth-dark;
+        color: $color-tertiary-dark;
       }
     }
 

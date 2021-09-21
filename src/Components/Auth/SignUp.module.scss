@@ -5,8 +5,8 @@
   font-size: 16px;
   background-image: linear-gradient(
       to right bottom,
-      rgba($color-primary, 0.7),
-      rgba($color-primary-dark, 0.7)
+      rgba($color-primary-light, 0.6),
+      rgba($color-primary-dark, 0.6)
     ),
     url(./images/background.jpg);
   background-size: cover;
@@ -67,7 +67,7 @@
 
     h1 {
       text-transform: uppercase;
-      color: $color-primary-dark;
+      color: $color-primary;
       font-size: 43px;
       margin: 0;
       text-align: center;
@@ -78,7 +78,7 @@
       margin-bottom: -10px;
 
       a {
-        color: $color-primary-dark;
+        color: $color-primary;
       }
     }
 
