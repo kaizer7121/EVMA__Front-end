@@ -9,11 +9,20 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import EventDetail from "./components/Events/EventDetail";
 
 import "./App.scss";
-
+import EventCreation from "./components/Events/EventCreation";
 
 function App() {
   return (
     <Switch>
+      <Route path="/sign-in">
+        <SignIn />
+      </Route>
+      <Route path="/sign-up">
+        <SignUp />
+      </Route>
+      <Route path="/forgot-password">
+        <ForgotPassword />
+      </Route>
       <Route path="/home">
         <NavigationBar />
         <SideNavigation />
@@ -24,14 +33,9 @@ function App() {
         <SideNavigation />
         <EventDetail />
       </Route>
-      <Route path="/sign-in">
-        <SignIn />
-      </Route>
-      <Route path="/sign-up">
-        <SignUp />
-      </Route>
-      <Route path="/forgot-password">
-        <ForgotPassword />
+      <Route path="/create">
+        <NavigationBar />
+        <EventCreation />
       </Route>
       <Route path="*">
         <Redirect to="/home" />
