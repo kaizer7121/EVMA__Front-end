@@ -21,7 +21,7 @@ const DUMMY_DATA = {
   categories: ["Science", "Education", "Psychology", "Online", "Social"],
   date: "19:00, September 10, 2012",
   location: "FPT HCM University",
-  remain: 20,
+  organization: "CLB Nghiên Cứu Tâm Lý Học - Giáo Dục Học",
   image:
     "https://scontent.fsgn8-1.fna.fbcdn.net/v/t39.30808-6/242145009_222288139941640_6679877824071632444_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=340051&_nc_ohc=GDEukTT17DoAX-iw0PH&tn=AcLQveYFpgLxAnDM&_nc_ht=scontent.fsgn8-1.fna&oh=632f09b64830fbf22d075142cd6e8141&oe=614D4AD3",
 };
@@ -49,10 +49,10 @@ const EventDetail = () => {
             <p className={`${styles.detail__category}`}>{category}</p>
           ))}
           <h3 className={`${styles.detail__topic}`}>
-            Remaining registerations:
+            Organization:
           </h3>
           <p className={`${styles.detail__registerText}`}>
-            {DUMMY_DATA.remain} left
+            {DUMMY_DATA.organization}
           </p>
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}

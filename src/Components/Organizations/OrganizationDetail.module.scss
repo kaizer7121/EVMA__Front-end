@@ -1,0 +1,223 @@
+@import "../SASS_Abstract/variable";
+
+.organizationDetail {
+  width: 65%;
+  margin-left: 25%;
+  margin-top: 8%;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  box-shadow: 0px 0px 20px rgba($color-black, 0.2);
+  border-radius: 12px;
+  //   overflow: hidden;
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 70%;
+    margin-left: 24%;
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 75%;
+    margin-left: 22%;
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 19%;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 13rem;
+  }
+
+  &__image {
+    position: relative;
+    margin-bottom: 11rem;
+
+    &_cover {
+      width: 100%;
+      min-height: 35vh;
+      border-radius: 12px;
+    }
+
+    &_avatar {
+      position: absolute;
+      bottom: -11rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+
+      img {
+        width: 10rem;
+        height: 10rem;
+        border-radius: 50%;
+        padding: 0.5rem;
+        background-color: $color-white;
+        box-sizing: border-box;
+      }
+
+      h3 {
+        font-size: 2rem;
+        color: $color-primary-dark;
+        margin-top: 0;
+        text-transform: uppercase;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      &_avatar {
+        h3 {
+          font-size: 2.1rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      &_cover {
+        min-height: 28vh;
+      }
+
+      &_avatar {
+        h3 {
+          font-size: 2.2rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      &_cover {
+        min-height: 26vh;
+      }
+
+      &_avatar {
+        h3 {
+          font-size: 2.3rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      &_cover {
+        min-height: 22vh;
+      }
+
+      &_avatar {
+        bottom: -13rem;
+
+        img {
+          width: 12rem;
+          height: 12rem;
+        }
+
+        h3 {
+          font-size: 2.5rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      &_cover {
+        min-height: 20vh;
+      }
+
+      &_avatar {
+        h3 {
+          font-size: 2.6rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_cover {
+        min-height: 16vh;
+      }
+    }
+  }
+
+  hr {
+    border: 1px solid $color-secondary-light;
+    margin: 0 2.5rem;
+  }
+
+  &__description {
+    margin: 3rem 0 2rem;
+    padding: 0 2.5rem;
+
+    &_part {
+      margin-bottom: 2rem;
+    }
+
+    &_topic {
+      font-size: 1.8rem;
+      color: $color-tertiary-light;
+    }
+
+    &_param {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      &_topic {
+        font-size: 1.9rem;
+      }
+
+      &_param {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      &_topic {
+        font-size: 2rem;
+      }
+
+      &_param {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      &_topic {
+        font-size: 2.1rem;
+      }
+
+      &_param {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      &_topic {
+        font-size: 2.2rem;
+      }
+
+      &_param {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      &_topic {
+        font-size: 2.3rem;
+      }
+
+      &_param {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_topic {
+        font-size: 2.4rem;
+      }
+
+      &_param {
+        font-size: 1.7rem;
+      }
+    }
+  }
+}

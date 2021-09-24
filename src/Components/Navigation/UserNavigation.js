@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./UserNavigation.module.scss";
 
 const UserNavigation = () => {
@@ -23,15 +24,18 @@ const UserNavigation = () => {
             <img src="/images/icon/Dropdown-icon.png" alt="User avatar" />
           </div>
           <div className={`${styles.dropdown__content}`}>
-            <a href="#" className={`${styles.dropdown__content_createEvent}`}>
+            <Link
+              to="/create"
+              className={`${styles.dropdown__content_createEvent}`}
+            >
               Create an event
-            </a>
-            <a href="# " className={`${styles.dropdown__content_edit}`}>
+            </Link>
+            <Link to="/home" className={`${styles.dropdown__content_edit}`}>
               Edit your profile
-            </a>
-            <a href="#" className={`${styles.dropdown__content_logout}`}>
+            </Link>
+            <Link to="/sign-in" className={`${styles.dropdown__content_logout}`}>
               Log out
-            </a>
+            </Link>
           </div>
         </div>
       </div>

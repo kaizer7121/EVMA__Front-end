@@ -22,7 +22,7 @@ const Event = (props) => {
               <p className={`${styles.event__category}`}>{category}</p>
             ))}
           </div>
-          <Link to="/detail" className={`${styles.event__btnText}`}>
+          <Link to="/event-detail" className={`${styles.event__btnText}`}>
             Learn more &rarr;
           </Link>
         </div>

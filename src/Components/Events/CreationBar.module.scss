@@ -78,7 +78,7 @@
     @media only screen and (max-width: $bp-larger) {
       font-size: 2.6rem;
     }
- 
+
     @media only screen and (max-width: $bp-small) {
       font-size: 3rem;
     }
@@ -188,7 +188,6 @@
     }
 
     @media only screen and (max-width: $bp-extraSmall) {
-
       &__label {
         padding: 0 0.8rem;
         font-size: 2.7rem;
@@ -213,7 +212,6 @@
     margin-bottom: 3rem;
     gap: 10%;
     justify-content: space-around;
-    
   }
 
   &__datePicker {
@@ -442,8 +440,8 @@
     padding: 0.3rem 0.6rem;
     font-weight: 700;
     font-size: 1.3rem;
-    background-color: $color-grey-dark-2;
-    color: $color-grey-dark-3;
+    color: $color-white;
+    background-color: $color-grey-dark-3;
     border-radius: 4px;
     display: inline-block;
     cursor: pointer;
@@ -458,13 +456,13 @@
     }
 
     &:hover {
-      color: $color-white;
-      background-color: $color-grey-dark-3;
+      background-color: $color-grey-dark-2;
+      color: $color-grey-dark-3;
     }
 
     &:active {
-      background-color: $color-grey-dark-2;
-      color: $color-grey-dark-3;
+      color: $color-white;
+      background-color: $color-grey-dark-3;
     }
   }
 
@@ -816,7 +814,7 @@
       }
     }
   }
-  
+
   @media only screen and (max-width: $bp-extraSmall) {
     &__buttons {
       margin-top: 5rem;

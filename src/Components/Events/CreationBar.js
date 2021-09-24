@@ -37,13 +37,11 @@ const CreationBar = (props) => {
 
   const addEmoji = (emoji, type) => {
     props.addEmoji(emoji, type);
-  }
+  };
 
   const uploadImage = () => {
     props.uploadImage();
   };
-
-  
 
   return (
     <div className={`${styles.creationBar}`}>
@@ -52,7 +50,7 @@ const CreationBar = (props) => {
         <input
           className={`${styles.creationBar__input__field}`}
           type="text"
-          placeholder=""
+          placeholder=" "
           onChange={(event) => {
             inputValue(event.target.value, "title");
           }}

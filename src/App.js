@@ -7,9 +7,11 @@ import ListEvent from "./components/Events/ListEvent";
 import SignUp from "./components/Auth/SignUp";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import EventDetail from "./components/Events/EventDetail";
+import EventCreation from "./components/Events/EventCreation";
+import ListOrganization from "./components/Organizations/ListOrganization";
+import OrganizationDetail from "./components/Organizations/OrganizationDetail";
 
 import "./App.scss";
-import EventCreation from "./components/Events/EventCreation";
 
 function App() {
   return (
@@ -28,7 +30,17 @@ function App() {
         <SideNavigation />
         <ListEvent />
       </Route>
-      <Route path="/detail">
+      <Route path="/organizations">
+        <NavigationBar />
+        <SideNavigation />
+        <ListOrganization />
+      </Route>
+      <Route path="/organization-detail">
+        <NavigationBar />
+        <SideNavigation />
+        <OrganizationDetail />
+      </Route>
+      <Route path="/event-detail">
         <NavigationBar />
         <SideNavigation />
         <EventDetail />
