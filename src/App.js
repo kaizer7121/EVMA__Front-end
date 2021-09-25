@@ -12,6 +12,7 @@ import ListOrganization from "./components/Organizations/ListOrganization";
 import OrganizationDetail from "./components/Organizations/OrganizationDetail";
 
 import "./App.scss";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   return (
@@ -48,6 +49,10 @@ function App() {
       <Route path="/create">
         <NavigationBar />
         <EventCreation />
+      </Route>
+      <Route path="/profile">
+        <NavigationBar />
+        <Profile />
       </Route>
       <Route path="*">
         <Redirect to="/home" />
