@@ -1,0 +1,82 @@
+@import "../SASS_Abstract/variable";
+
+.confirmImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  width: 35%;
+  min-height: 92vh;
+  max-height: 95vh;
+  overflow-y: auto;
+
+  box-shadow: 0px 0px 10px rgba($color-black, 0.2);
+  background-color: $color-white;
+  border-radius: 10px;
+
+  box-sizing: border-box;
+  padding: 0rem 3rem;
+
+  animation-duration: 0.5s;
+  animation-name: slidedown;
+
+  &__cancelIcon {
+    cursor: pointer;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 20px;
+
+  }
+
+  &__crop {
+    width: 90%;
+    border-radius: 5px;
+  }
+
+  &__cropedImgage {
+    margin: 0 auto 2rem;
+    border-radius: 5px;
+
+    canvas {
+      border-radius: 5px;
+      width: 90%;
+    }
+  }
+
+  &__button {
+    display: inline-block;
+    border: 1px solid transparent;
+    font-size: 1.6rem;
+    border-radius: 10px;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-weight: 500;
+    margin-bottom: 1rem;
+
+    color: $color-white;
+    background-color: $color-primary;
+
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+
+    &:active {
+      background-color: transparent;
+      color: $color-black;
+      border: 1px solid $color-primary;
+    }
+  }
+}
+
+@keyframes slidedown {
+  from {
+    transform: translate(-50%, -55%);
+  }
+
+  to {
+    transform: translateY(-50%, -50%);
+  }
+}

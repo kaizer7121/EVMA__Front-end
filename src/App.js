@@ -13,6 +13,7 @@ import OrganizationDetail from "./components/Organizations/OrganizationDetail";
 
 import "./App.scss";
 import Profile from "./components/Profile/Profile";
+import ConfirmImage from "./components/Popup/ConfirmImage";
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
       <Route path="/profile">
         <NavigationBar />
         <Profile />
+      </Route>
+      <Route path="/test">
+        {/* <NavigationBar /> */}
+        <ConfirmImage />
       </Route>
       <Route path="*">
         <Redirect to="/home" />

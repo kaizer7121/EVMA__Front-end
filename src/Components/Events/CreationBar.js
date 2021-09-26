@@ -39,8 +39,9 @@ const CreationBar = (props) => {
     props.addEmoji(emoji, type);
   };
 
-  const uploadImage = () => {
-    props.uploadImage();
+  const uploadImage = (e, type) => {
+    console.log("UPLOAD");
+    props.uploadImage(e, type);
   };
 
   return (
@@ -180,7 +181,13 @@ const CreationBar = (props) => {
             type="file"
             accept="image/png, image/jpeg"
             className={`${styles.creationBar__fileUpload__upload}`}
-            onInput={uploadImage}
+            onInput={(e) => {
+              const info = e;
+              uploadImage(info, "cover");
+              setTimeout(() => {
+                e.target.value = null;
+              }, 500);
+            }}
           />
           <span>Upload</span>
         </div>
