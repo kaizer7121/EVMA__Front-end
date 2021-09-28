@@ -1,33 +1,50 @@
 @import "../SASS_Abstract/variable";
 
 .form {
-    margin-top: 35px;
-  
-    label {
-      color: $color-grey-dark;
-      font-weight: 500;
-      display: block;
-      margin-bottom: 16px;
-  
-      a {
-        color: $color-primary;
-        text-decoration: none;
-        float: right;
-      }
+  margin-top: 35px;
+
+  label {
+    color: $color-grey-dark;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 16px;
+
+    a {
+      color: $color-primary;
+      text-decoration: none;
+      float: right;
     }
-  
-    &__input {
-      width: 95%;
-      font-weight: 400;
-      font-size: 18px;
-      padding: 9px;
-      border-radius: 5px;
-      border: 1px solid $color-grey-dark-2;
-  
-      @media only screen and (max-width: 620px) {
-        background-color: rgba($color-white, 0.5);
-      }
+  }
+
+  &__input {
+    width: 95%;
+    font-weight: 400;
+    font-size: 18px;
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid $color-grey-dark-2;
+
+    @media only screen and (max-width: 620px) {
+      background-color: rgba($color-white, 0.5);
     }
+  }
+
+  &__error {
+    color: $color-danger;
+    font-size: 16px;
+    font-weight: 400;
+    padding-bottom: 16px;
+
+    @media only screen and (max-width: 1200px) {
+      font-size: 14px;
+    }
+
+    @media only screen and (max-width: 900px) {
+      font-size: 14px;
+      padding-top: 4px;
+      padding-bottom: 25px;
+    }
+  }
 }
 
 .btn {
@@ -49,7 +66,6 @@
   &:active {
     transform: translateY(0);
   }
-
 }
 
 .btn_primary {
@@ -84,6 +100,15 @@
   &:active {
     background-color: $color-primary;
     color: white;
+  }
+}
+
+.googleBtn {
+  button {
+    color: $color-primary;
+    padding: 1rem 0rem 1rem 2rem;
+    width: 200%;
+    background-color: $color-white;
   }
 }
 

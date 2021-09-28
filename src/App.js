@@ -14,8 +14,27 @@ import OrganizationDetail from "./components/Organizations/OrganizationDetail";
 import "./App.scss";
 import Profile from "./components/Profile/Profile";
 import ConfirmImage from "./components/Popup/ConfirmImage";
+import { useEffect } from "react";
+import firebase from "./Firebase";
 
 function App() {
+  // Handle firebase auth changed
+  useEffect(() => {
+    const unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged(async (user) => {
+        // setIsSignedIn(!!user);
+        if (!user) {
+          return console.log("Log out");
+        }
+        console.log(user.displayName);
+        console.log("======================");
+        const token = await user.getIdToken();
+        console.log(token);
+      });
+    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
+
   return (
     <Switch>
       <Route path="/sign-in">

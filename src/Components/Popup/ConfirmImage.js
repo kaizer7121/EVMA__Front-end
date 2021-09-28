@@ -28,13 +28,9 @@ const ConfirmImage = (props) => {
       return;
     }
 
-    canvas.toBlob(
-      (blob) => {
-        props.onConfirm(blob);
-      },
-      "image/png",
-      1
-    );
+    canvas.toBlob((blob) => {
+      props.onConfirm(blob);
+    }, "image/jpeg");
   };
 
   useEffect(() => {
@@ -43,6 +39,7 @@ const ConfirmImage = (props) => {
       const reader = new FileReader();
       reader.addEventListener("load", () => setUpImg(reader.result));
       reader.readAsDataURL(files[0]);
+      console.log(files[0]);
     }
   });
 
