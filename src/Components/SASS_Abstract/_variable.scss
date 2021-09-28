@@ -1,19 +1,17 @@
 // COLORS
-$color-primary: #CDF0EA;
-$color-primary-light: #d9fff9;
-$color-primary-dark: #aaddd5;
+$color-primary: #55c57a;
+$color-primary-light: #7ed56f;
+$color-primary-dark: #28b485;
 
-$color-secondary-light: #F9F9F9;
-$color-secondary-dark: #e4d6d6;
+$color-secondary-light: #ffb900;
+$color-secondary-dark: #ff7730;
 
-$color-tertiary-light: #F7DBF0;
-$color-tertiary-dark: #e2bbd8;
-
-$color-fourth-light: #BEAEE2;
-$color-fourth-dark: #a792d6;
+$color-tertiary-light: #2998ff;
+$color-tertiary-dark: #5643fa;
 
 $color-grey-light-1: #f7f7f7;
 $color-grey-light-2: #eee;
+$color-grey-light-3: #f0f0f0;
 
 $color-grey-dark: #777;
 $color-grey-dark-2: #999;
@@ -22,4 +20,23 @@ $color-grey-dark-3: #333;
 $color-white: #fff;
 $color-black: #000;
 
-$color-danger: #F8485E;
+$color-fourth-light: #DF4A8F;
+$color-fourth-dark: #F00775;
+
+$color-grey-dark: #777;
+$color-grey-dark-2: #999;
+$color-grey-dark-3: #333;
+
+$color-white: #fff;
+$color-black: #000;
+
+$color-danger: #f8485e;
+
+//BREAK POINTS
+$bp-extraLarge: 1800px;
+$bp-larger: 1450px; 
+$bp-large: 1100px;
+$bp-medium: 900px;
+$bp-small: 760px;
+$bp-smaller: 600px; 
+$bp-extraSmall: 450px;

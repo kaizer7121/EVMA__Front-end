@@ -1,0 +1,138 @@
+@import "../SASS_Abstract/variable";
+
+.listOrganizations {
+  width: 65%;
+  margin-left: 25%;
+  margin-top: 8%;
+  position: relative;
+  display: inline-block;
+  border-radius: 1%;
+
+  &__searchBar {
+    width: 55%;
+    margin: -1rem auto 3rem;
+    position: relative;
+
+    input {
+      width: 80%;
+      padding: 0.6rem 1rem;
+      border: 1px solid $color-grey-light-2;
+      background-color: $color-grey-light-2;
+      border-radius: 10px;
+      font-size: 1.1rem;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: $color-grey-dark-2;
+      }
+    }
+
+    img {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      top: 25%;
+      right: 7.5rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+
+      &:active {
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__searchBar {
+      input {
+        width: 85%;
+        padding: 0.7rem 1rem;
+        font-size: 1.3rem;
+      }
+
+      img {
+        width: 18px;
+        height: 18px;
+        top: 25%;
+        right: 6rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 72%;
+    margin-left: 23%;
+
+    &__searchBar {
+      margin: 0 auto 3rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 75%;
+    margin-left: 22%;
+
+    &__searchBar {
+      width: 60%;
+      margin: 2rem auto 3rem;
+      input {
+        width: 90%;
+        font-size: 1.4rem;
+      }
+
+      img {
+        width: 18px;
+        height: 18px;
+        top: 25%;
+        right: 3.5rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    margin-top: 18%;
+    width: 90%;
+    margin-left: 3.5%;
+
+    &__searchBar {
+      width: 65%;
+      input {
+        width: 100%;
+        font-size: 1.5rem;
+        padding: 1rem 2rem;
+      }
+
+      img {
+        width: 18px;
+        height: 18px;
+        top: 25%;
+        right: -2.5rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+
+    &__searchBar {
+      input {
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    margin-top: 14rem;
+    width: 95%;
+    margin-left: 1.5%;
+
+    &__searchBar {
+        input {
+          font-size: 1.7rem;
+        }
+      }
+  }
+}

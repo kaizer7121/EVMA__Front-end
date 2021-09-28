@@ -1,0 +1,204 @@
+@import "../SASS_Abstract/variable";
+
+.organization {
+  background-color: $color-grey-light-2;
+  box-shadow: 0px 0px 20px rgba($color-black, 0.2);
+  padding: 1rem;
+  margin: 5rem auto;
+  width: 90%;
+  border-radius: 10px;
+
+  position: relative;
+  display: flex;
+  gap: 2%;
+  align-items: center;
+
+  img {
+    width: 9rem;
+    height: auto;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.04s;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__information {
+    vertical-align: top;
+    font-size: 1.2rem;
+
+    h3 {
+      font-size: 2rem;
+      display: inline;
+      cursor: pointer;
+
+      &:hover {
+        border-bottom: 2px solid $color-black;
+      }
+    }
+  }
+
+  &__button {
+    width: 20%;
+    text-align: center;
+
+    &__btn {
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
+      display: inline-block;
+      border-radius: 6px;
+      position: relative;
+      transition: all 0.1s;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &__btn_primary {
+      background-color: $color-primary;
+      color: white;
+      border: 1px solid transparent;
+
+      &:active {
+        color: $color-primary;
+        background-color: $color-white;
+        border: 1px solid $color-primary;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    img {
+      width: 9.5rem;
+    }
+
+    &__information {
+      font-size: 1.3rem;
+
+      h3 {
+        font-size: 2.1rem;
+      }
+    }
+
+    &__button {
+      &__btn {
+        font-size: 1.2rem;
+        padding: 0.7rem 1.3rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    img {
+      width: 10rem;
+    }
+
+    &__information {
+      font-size: 1.4rem;
+
+      h3 {
+        font-size: 2.3rem;
+      }
+    }
+
+    &__button {
+      &__btn {
+        font-size: 1.3rem;
+        padding: 0.8rem 1.4rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 95%;
+
+    &__button {
+      &__btn {
+        font-size: 1.4rem;
+        padding: 0.9rem 1.5rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    width: 100%;
+    img {
+      width: 10.5rem;
+    }
+
+    &__information {
+      font-size: 1.5rem;
+
+      h3 {
+        font-size: 2.4rem;
+      }
+    }
+
+    &__button {
+      &__btn {
+        font-size: 1.4rem;
+        padding: 0.9rem 1.5rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    img {
+      width: 11rem;
+    }
+
+    &__information {
+      font-size: 1.6rem;
+
+      h3 {
+        font-size: 2.5rem;
+
+        &:hover {
+          border-bottom: 1.8px solid $color-black;
+        }
+      }
+    }
+
+    &__button {
+      &__btn {
+        font-size: 1.4rem;
+        padding: 0.9rem 1.5rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    img {
+      width: 11.5rem;
+    }
+
+    &__information {
+      font-size: 1.7rem;
+
+      h3 {
+        font-size: 2.6rem;
+      }
+    }
+
+    &__button {
+      &__btn {
+        font-size: 1.5rem;
+        padding: 1 1.6rem;
+      }
+    }
+  }
+}

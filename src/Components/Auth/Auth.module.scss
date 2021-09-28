@@ -1,0 +1,123 @@
+@import "../SASS_Abstract/variable";
+
+.form {
+    margin-top: 35px;
+  
+    label {
+      color: $color-grey-dark;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 16px;
+  
+      a {
+        color: $color-primary;
+        text-decoration: none;
+        float: right;
+      }
+    }
+  
+    &__input {
+      width: 95%;
+      font-weight: 400;
+      font-size: 18px;
+      padding: 9px;
+      border-radius: 5px;
+      border: 1px solid $color-grey-dark-2;
+  
+      @media only screen and (max-width: 620px) {
+        background-color: rgba($color-white, 0.5);
+      }
+    }
+}
+
+.btn {
+  width: 100%;
+  font-size: 19px;
+  font-weight: 500;
+  padding: 10px 40px;
+  display: inline-block;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.1s;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+}
+
+.btn_primary {
+  background-color: $color-primary;
+  color: white;
+  border: 1px solid transparent;
+
+  &:active {
+    color: $color-primary;
+    background-color: $color-white;
+    border: 1px solid $color-primary;
+  }
+}
+
+.btn_primary_light {
+  background-color: $color-primary-light;
+  color: white;
+  border: 1px solid transparent;
+
+  &:active {
+    color: $color-primary-light;
+    background-color: $color-white;
+    border: 1px solid $color-primary-light;
+  }
+}
+
+.btn_primary_outline {
+  color: $color-primary;
+  background-color: $color-white;
+  border: 1px solid $color-primary;
+
+  &:active {
+    background-color: $color-primary;
+    color: white;
+  }
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 28px 0;
+  font-weight: 500;
+
+  @media only screen and (max-width: 900px) {
+    margin: 14px 0;
+  }
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #000;
+}
+
+.separator:not(:empty)::before {
+  margin-right: 1rem;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 1rem;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 0.5rem;
+  transform: translateY(1.6px);
+}

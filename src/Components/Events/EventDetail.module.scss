@@ -1,0 +1,222 @@
+@import "../SASS_Abstract/variable";
+
+.detail {
+  width: 65%;
+  margin-left: 25%;
+  margin-top: 8%;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  border-radius: 1%;
+  box-shadow: 1.6px 15px 30px rgba($color-black, 0.2);
+  padding: 1rem 3rem;
+
+  hr {
+    margin: 1rem 0;
+    border: 0.2px solid $color-secondary-light;
+  }
+
+  &__header {
+    display: flex;
+    gap: 5%;
+    padding: 1.5rem 0;
+    align-items: center;
+  }
+
+  &__poster {
+    width: 65%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__register {
+    width: 30%;
+  }
+
+  &__topic {
+    align-self: flex-start;
+    font-size: 1.5rem;
+    color: $color-primary-dark;
+    margin-top: -0.2rem;
+    margin-bottom: 0;
+  }
+
+  &__registerText {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  &__category {
+    margin-top: 0;
+    padding: 0.4rem 0.6rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: $color-white;
+    background-color: $color-tertiary-light;
+    border-radius: 5%;
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 1.5rem;
+    }
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: $color-primary;
+    margin-bottom: 2.5rem;
+  }
+
+  &__description {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    width: 70%;
+    margin-left: 21%;
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__header {
+      gap: 5%;
+    }
+
+    &__poster {
+      width: 60%;
+    }
+
+    &__register {
+      width: 35%;
+    }
+
+    &__title {
+      font-size: 2.8rem;
+      margin-bottom: 2.8rem;
+    }
+
+    &__description {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    &__header {
+      flex-direction: column;
+    }
+
+    &__poster {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    &__register {
+      width: 100%;
+    }
+
+    &__topic {
+      font-size: 2rem;
+    }
+
+    &__registerText {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    width: 75%;
+    margin-left: 9%;
+    margin-top: 18%;
+
+    &__category {
+      padding: 0.5rem 0.8rem;
+      font-size: 1.6rem;
+
+      &:not(:last-child) {
+        margin-right: 2rem;
+      }
+    }
+
+    &__title {
+      font-size: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    &__description {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    width: 80%;
+    margin-left: 6%;
+
+    &__topic {
+      font-size: 2.2rem;
+    }
+
+    &__registerText {
+      font-size: 1.8rem;
+    }
+
+    &__category {
+      padding: 0.6rem 0.9rem;
+      font-size: 1.7rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    width: 85%;
+    margin-left: 3%;
+
+    &__topic {
+      font-size: 2.5rem;
+    }
+
+    &__registerText {
+      font-size: 2.1rem;
+    }
+
+    &__category {
+      padding: 0.7rem 1.1rem;
+      font-size: 1.9rem;
+    }
+
+    &__description {
+      font-size: 1.7rem;
+    }
+  }
+}
+
+.mb_small {
+  margin-bottom: 1rem;
+}
+
+.btn_small {
+  width: 30%;
+  padding: 10px 15px;
+  position: relative;
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    width: 34%;
+    padding: 8px;
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 15%;
+    padding: 5px 1px;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    width: 20%;
+    padding: 5px 0px;
+    font-size: 2.5rem;
+  }
+}

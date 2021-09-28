@@ -1,0 +1,366 @@
+@import "../SASS_Abstract/variable";
+
+.profile {
+  width: 75%;
+  margin: 7rem auto 0;
+  text-align: center;
+
+  @media only screen and (max-width: $bp-large) {
+    width: 80%;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    width: 100%;
+  }
+
+  &__section {
+    margin: 1rem 0;
+
+    hr {
+      border: 1px solid $color-secondary-light;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: $color-primary-light;
+      display: inline-block;
+      border-bottom: 2px solid $color-primary-light;
+      width: 50%;
+      padding-bottom: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    &_button {
+      display: inline-block;
+      border: 1px solid transparent;
+      font-size: 1.6rem;
+      border-radius: 10px;
+      padding: 1rem 2.5rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-weight: 500;
+      margin-bottom: 3rem;
+
+      color: $color-white;
+      background-color: $color-primary;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+
+      &:active {
+        background-color: transparent;
+        color: $color-black;
+        border: 1px solid $color-primary;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      h1 {
+        font-size: 3.1rem;
+      }
+
+      &_button {
+        font-size: 1.7rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      h1 {
+        font-size: 3.2rem;
+      }
+
+      &_button {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      h1 {
+        width: 60%;
+      }
+
+      &_button {
+        font-size: 2.1rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      h1 {
+        width: 90%;
+      }
+
+      &_button {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      h1 {
+        width: 70%;
+      }
+    }
+  }
+
+  &__topic {
+    margin: 3rem 0;
+
+    h2 {
+      font-size: 2.5rem;
+      margin-top: 7rem;
+      color: $color-tertiary-dark;
+    }
+
+    h3 {
+      font-size: 2rem;
+      color: $color-tertiary-light;
+    }
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+
+    &_avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+    }
+
+    &_cover {
+      width: 500px;
+      border-radius: 5px;
+    }
+
+    &_fileUpload {
+      background: $color-tertiary-light;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.5rem 1.4rem;
+      position: relative;
+      display: inline-block;
+      margin: 2rem 0 0;
+
+      &:hover,
+      &:focus {
+        background: $color-tertiary-dark;
+      }
+
+      &:active {
+        background: $color-tertiary-light;
+      }
+
+      &_upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        height: 3rem;
+        cursor: pointer;
+      }
+    }
+
+    input {
+      box-sizing: border-box;
+      padding: 0.5rem 1.2rem;
+      margin: -1rem 0 1rem;
+      width: 25rem;
+      border-radius: 5px;
+      border: 2px solid $color-black;
+      font-size: 1.1rem;
+      font-weight: 500;
+
+      &:focus {
+        outline: none;
+        border: 2px solid $color-primary;
+      }
+    }
+
+    &_row {
+      display: flex;
+      justify-content: center;
+      gap: 5%;
+    }
+
+    &_col {
+      input {
+        width: 20rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      h2 {
+        font-size: 2.6rem;
+      }
+
+      h3 {
+        font-size: 2.1rem;
+      }
+
+      p {
+        font-size: 1.4rem;
+      }
+
+      input {
+        width: 25rem;
+        font-size: 1.2rem;
+      }
+
+      &_fileUpload {
+        font-size: 1.2rem;
+        padding: 0.6rem 1.5rem;
+
+        &_upload {
+          height: 3.1rem;
+        }
+      }
+
+      &_col {
+        input {
+          width: 20.2rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      h2 {
+        font-size: 2.7rem;
+      }
+
+      h3 {
+        font-size: 2.2rem;
+      }
+
+      p {
+        font-size: 1.5rem;
+      }
+
+      input {
+        width: 25.1rem;
+        font-size: 1.3rem;
+      }
+
+      &_fileUpload {
+        font-size: 1.3rem;
+        padding: 0.7rem 1.6rem;
+
+        &_upload {
+          height: 3.2rem;
+        }
+      }
+
+      &_col {
+        input {
+          width: 20.2rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      h2 {
+        font-size: 3rem;
+      }
+
+      h3 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.8rem;
+      }
+
+      input {
+        width: 25.5rem;
+        font-size: 1.6rem;
+      }
+
+      &_avatar {
+        width: 150px;
+        height: 150px;
+      }
+
+      &_cover {
+        width: 400px;
+      }
+
+      &_fileUpload {
+        font-size: 1.6rem;
+        padding: 0.8rem 1.8rem;
+
+        &_upload {
+          height: 3.5rem;
+        }
+      }
+
+      &_col {
+        input {
+          width: 20.5rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      h2 {
+        font-size: 3.3rem;
+      }
+
+      h3 {
+        font-size: 2.8rem;
+      }
+
+      p {
+        font-size: 2.1rem;
+      }
+
+      input {
+        width: 32rem;
+        font-size: 2rem;
+      }
+
+      &_avatar {
+        width: 130px;
+        height: 130px;
+      }
+
+      &_cover {
+        width: 380px;
+      }
+
+      &_fileUpload {
+        font-size: 1.9rem;
+        padding: 1rem 2.1rem;
+
+        &_upload {
+          height: 3.8rem;
+        }
+      }
+
+      &_col {
+        input {
+          width: 25rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_avatar {
+        width: 100px;
+        height: 100px;
+      }
+
+      &_cover {
+        width: 320px;
+      }
+    }
+  }
+}

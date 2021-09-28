@@ -1,0 +1,828 @@
+@import "../SASS_Abstract/variable";
+
+.creationBar {
+  //font
+  font-size: 1.3rem;
+  font-weight: 500;
+
+  //style
+  list-style: none;
+  box-sizing: border-box;
+  background-color: $color-white;
+  padding: 3.5rem 1.5rem;
+  margin-top: 6.1rem;
+  width: 20%;
+  box-shadow: 2px 6px rgba($color-black, 0.2);
+  text-align: center;
+  overflow-y: scroll;
+
+  //position
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  z-index: 10;
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    width: 22%;
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 26%;
+    font-size: 1.7rem;
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    background-color: $color-white;
+    margin: 5rem auto 0;
+    padding: 3rem 1rem;
+    width: 60%;
+    box-shadow: none;
+    text-align: center;
+    overflow-y: hidden;
+
+    //position
+    position: static;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    margin: 5rem auto 0;
+    width: 70%;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    margin: 5rem auto 0;
+    width: 75%;
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    margin: 5rem auto 0;
+    width: 85%;
+  }
+
+  // TITLE
+  &__title {
+    font-size: 2.4rem;
+    margin-top: 0;
+    margin-bottom: 3rem;
+    padding: 0;
+    text-transform: uppercase;
+    color: $color-tertiary-light;
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      font-size: 2.5rem;
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 2.6rem;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      font-size: 3rem;
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      margin-top: 1rem;
+      font-size: 3.8rem;
+    }
+  }
+
+  // INPUT
+  &__input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    &__label {
+      position: absolute;
+      margin: 0 1.4rem;
+      padding: 0 0.4rem;
+      white-space: nowrap;
+      transform: translate(0, 0);
+      transform-origin: 0 0;
+      background: $color-white;
+      transition: transform 0.12s ease-in;
+      line-height: 1.2;
+      font-size: 1.3rem;
+    }
+    &__field {
+      box-sizing: border-box;
+      display: block;
+      border: 2px solid $color-primary-light;
+      padding: 1rem 1rem;
+      margin: 0 auto;
+
+      width: 100%;
+      font-weight: 400;
+      font-size: 1.1rem;
+      border-radius: 5px;
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        outline: none;
+        border: 2px solid $color-primary;
+
+        & + .creationBar__input__label {
+          transform: translate(0.25rem, -100%) scale(0.7);
+          color: $color-tertiary-light;
+          border-radius: 1%;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      &__label {
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+      }
+
+      &__field {
+        font-size: 1.2rem;
+
+        &:focus,
+        &:not(:placeholder-shown) {
+          & + .creationBar__input__label {
+            transform: translate(0.25rem, -92%) scale(0.7);
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      &__label {
+        padding: 0 0.5rem;
+        font-size: 1.6rem;
+      }
+
+      &__field {
+        font-size: 1.3rem;
+
+        &:focus,
+        &:not(:placeholder-shown) {
+          & + .creationBar__input__label {
+            transform: translate(0.25rem, -90%) scale(0.7);
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      &__label {
+        padding: 0 0.5rem;
+        font-size: 2rem;
+      }
+
+      &__field {
+        font-size: 1.6rem;
+
+        &:focus,
+        &:not(:placeholder-shown) {
+          & + .creationBar__input__label {
+            transform: translate(0.2rem, -80%) scale(0.8);
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &__label {
+        padding: 0 0.8rem;
+        font-size: 2.7rem;
+      }
+
+      &__field {
+        font-size: 2.3rem;
+
+        &:focus,
+        &:not(:placeholder-shown) {
+          & + .creationBar__input__label {
+            transform: translate(0.2rem, -80%) scale(0.8);
+          }
+        }
+      }
+    }
+  }
+
+  // Picker
+  &__picker {
+    display: flex;
+    margin-bottom: 3rem;
+    gap: 10%;
+    justify-content: space-around;
+  }
+
+  &__datePicker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    border: 2px solid $color-primary-light;
+    padding: 0.7rem 1rem;
+    margin: 1rem auto 0;
+
+    width: 55%;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border-radius: 5px;
+
+    &__label {
+      position: absolute;
+      left: 0;
+      margin: 0 1.4rem;
+      padding: 0 0.4rem;
+      white-space: nowrap;
+      background: $color-white;
+      transform: translate(0, -90%) scale(0.7);
+      color: $color-tertiary-light;
+      border-radius: 1%;
+      font-size: 1.3rem;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+      border: none;
+      margin: 0;
+      padding: 0.1rem 0;
+
+      font-weight: 400;
+      font-size: 1.1rem;
+      color: #000;
+
+      transform: translateY(2px);
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        outline: none;
+
+        border: none;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      font-size: 1.3rem;
+
+      &__label {
+        transform: translate(0, -85%) scale(0.7);
+        font-size: 1.5rem;
+      }
+
+      input {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 1.4rem;
+
+      &__label {
+        transform: translate(0, -80%) scale(0.7);
+        font-size: 1.6rem;
+      }
+
+      input {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      &__label {
+        transform: translate(0, -80%) scale(0.7);
+        font-size: 2rem;
+      }
+
+      input {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &__label {
+        transform: translate(0, -75%) scale(0.7);
+        font-size: 2.8rem;
+      }
+
+      input {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  &__timePicker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    border: 2px solid $color-primary-light;
+    padding: 0.4rem 1rem;
+    margin: 1rem auto 0;
+
+    width: 28%;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border-radius: 5px;
+
+    &__label {
+      position: absolute;
+      left: -5%;
+      margin: 0 1.4rem;
+      padding: 0 0.4rem;
+      background: pink;
+      white-space: nowrap;
+      background: $color-white;
+      transform: translate(0, -90%) scale(0.7);
+      color: $color-tertiary-light;
+      border-radius: 1%;
+      font-size: 1.3rem;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+      border: none;
+      margin: 0;
+      padding: 0.1rem 0.2rem;
+
+      font-weight: 400;
+      font-size: 1.1rem;
+
+      transform: translateY(2px);
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        outline: none;
+        border: none;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      font-size: 1.3rem;
+
+      &__label {
+        transform: translate(0, -85%) scale(0.7);
+        font-size: 1.5rem;
+      }
+
+      input {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 1.4rem;
+
+      &__label {
+        transform: translate(0, -80%) scale(0.7);
+        font-size: 1.6rem;
+      }
+
+      input {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      &__label {
+        transform: translate(0, -80%) scale(0.7);
+        font-size: 2rem;
+      }
+
+      input {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &__label {
+        transform: translate(0, -75%) scale(0.7);
+        font-size: 2.8rem;
+      }
+
+      input {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  // CATEGORIES
+  &__categories {
+    text-align: left;
+    margin-bottom: 3rem;
+  }
+
+  &__topic {
+    text-align: left;
+    color: $color-tertiary-light;
+  }
+
+  &__category {
+    margin-top: 0;
+    padding: 0.3rem 0.6rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: $color-white;
+    background-color: $color-tertiary-light;
+    border-radius: 4px;
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 1.5rem;
+    }
+  }
+
+  &__addCategory {
+    margin-top: 0;
+    padding: 0.3rem 0.6rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: $color-white;
+    background-color: $color-grey-dark-3;
+    border-radius: 4px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.06s;
+    text-transform: uppercase;
+
+    img {
+      font-size: 2rem;
+      color: red;
+      margin-right: 0.3rem;
+      transform: scale(1.1) translateY(-2px);
+    }
+
+    &:hover {
+      background-color: $color-grey-dark-2;
+      color: $color-grey-dark-3;
+    }
+
+    &:active {
+      color: $color-white;
+      background-color: $color-grey-dark-3;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__topic {
+      font-size: 2.2rem;
+    }
+
+    &__category {
+      padding: 0.4rem 0.7rem;
+      font-size: 1.5rem;
+
+      &:not(:last-child) {
+        margin-right: 1.6rem;
+      }
+    }
+
+    &__addCategory {
+      padding: 0.4rem 0.8rem;
+      font-size: 1.5rem;
+
+      img {
+        color: red;
+        margin-right: 0.4rem;
+        transform: scale(1.2) translateY(-1px);
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__topic {
+      font-size: 2.3rem;
+    }
+
+    &__category {
+      padding: 0.5rem 0.8rem;
+      font-size: 1.6rem;
+
+      &:not(:last-child) {
+        margin-right: 1.7rem;
+      }
+    }
+
+    &__addCategory {
+      padding: 0.5rem 0.8rem;
+      font-size: 1.6rem;
+
+      img {
+        color: red;
+        margin-right: 0.5rem;
+        transform: scale(1.2) translateY(-1px);
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__topic {
+      font-size: 2.7rem;
+    }
+
+    &__category {
+      padding: 1rem 1.3rem;
+      font-size: 1.8rem;
+
+      &:not(:last-child) {
+        margin-right: 2.3rem;
+      }
+    }
+
+    &__addCategory {
+      padding: 1rem 1.3rem;
+      font-size: 1.8rem;
+
+      img {
+        color: red;
+        margin-right: 1rem;
+        transform: scale(1.4) translateY(-0.5px);
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__topic {
+      font-size: 2.9rem;
+    }
+
+    &__category {
+      padding: 1.5rem 2rem;
+      font-size: 2.3rem;
+
+      &:not(:last-child) {
+        margin-right: 4rem;
+      }
+    }
+
+    &__addCategory {
+      padding: 1.5rem 2rem;
+      font-size: 2.3rem;
+
+      img {
+        color: red;
+        margin-right: 1.2rem;
+        transform: scale(1.6) translateY(1px);
+      }
+    }
+  }
+
+  //DESCRIPTION
+  &__description {
+    text-align: left;
+    margin-bottom: 3rem;
+    position: relative;
+
+    textarea {
+      resize: vertical;
+      width: 100%;
+
+      box-sizing: border-box;
+      display: block;
+      border: 1.5px solid $color-primary-light;
+
+      font-weight: 400;
+      font-size: 1rem;
+      border-radius: 5px;
+
+      &:focus {
+        outline: none;
+        border: 2px solid $color-primary;
+      }
+    }
+  }
+
+  &__emojiPicker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  &__emoji {
+    text-align: right;
+    margin-bottom: 0.2rem;
+    cursor: pointer;
+    transition: all 0.1s;
+
+    img {
+      height: 30px;
+      width: 30px;
+
+      &:active {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__description {
+      textarea {
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__description {
+      textarea {
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__description {
+      textarea {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__description {
+      textarea {
+        font-size: 2.3rem;
+      }
+    }
+  }
+
+  //COVER
+  &__cover {
+    position: relative;
+
+    img {
+      width: 100%;
+      border: 1px solid rgba($color-black, 0.2);
+    }
+  }
+
+  &__fileUpload {
+    background: $color-tertiary-light;
+    border-radius: 1rem;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: -1rem auto 1rem;
+    padding: 0.6rem 1.6rem;
+    position: relative;
+    display: inline-block;
+
+    &:hover,
+    &:focus {
+      background: $color-tertiary-dark;
+    }
+
+    &:active {
+      background: $color-tertiary-light;
+    }
+
+    &__upload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      height: 3rem;
+      cursor: pointer;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__fileUpload {
+      font-size: 1.2rem;
+      padding: 0.7rem 1.8rem;
+
+      &__upload {
+        height: 3.1rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__fileUpload {
+      font-size: 1.3rem;
+      padding: 0.8rem 1.9rem;
+
+      &__upload {
+        height: 3.2rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__fileUpload {
+      font-size: 1.7rem;
+      padding: 1rem 2.2rem;
+
+      &__upload {
+        height: 3.7rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__fileUpload {
+      font-size: 2rem;
+      padding: 1.2rem 2.4rem;
+
+      &__upload {
+        height: 4rem;
+      }
+    }
+  }
+
+  //BUTTON
+  &__buttons {
+    margin-top: 4rem;
+    display: flex;
+    gap: 10%;
+    align-items: center;
+    justify-content: space-around;
+
+    &__btn {
+      border: none;
+      font-size: 1.6rem;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-weight: 500;
+    }
+
+    &__cancel {
+      color: $color-white;
+      background-color: $color-secondary-dark;
+
+      &:hover {
+        background-color: $color-secondary-light;
+      }
+
+      &:active {
+        background-color: $color-secondary-dark;
+      }
+    }
+
+    &__submit {
+      color: $color-white;
+      background-color: $color-primary-dark;
+
+      &:hover {
+        background-color: $color-primary-light;
+      }
+
+      &:active {
+        background-color: $color-primary-dark;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__buttons {
+      margin-top: 4.1rem;
+
+      &__btn {
+        font-size: 1.7rem;
+        padding: 0.6rem 1.1rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__buttons {
+      margin-top: 4.2rem;
+
+      &__btn {
+        font-size: 1.8rem;
+        padding: 0.7rem 1.2rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__buttons {
+      margin-top: 5rem;
+
+      &__btn {
+        font-size: 2.3rem;
+        padding: 1rem 1.6rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__buttons {
+      margin-top: 5rem;
+
+      &__btn {
+        font-size: 2.8rem;
+        padding: 1.3rem 2rem;
+      }
+    }
+  }
+}

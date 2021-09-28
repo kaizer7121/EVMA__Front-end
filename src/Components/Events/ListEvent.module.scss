@@ -1,0 +1,38 @@
+@import "../SASS_Abstract/variable";
+
+.listEvent {
+  width: 65%;
+  margin-left: 25%;
+  margin-top: 8%;
+  position: relative;
+  display: inline-block;
+  border-radius: 1%;
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 72%;
+    margin-left: 23%;
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 75%;
+    margin-left: 22%;
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    margin-top: 18%;
+    width: 85%;
+    margin-left: 7.5%;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    margin-top: 18%;
+    width: 90%;
+    margin-left: 5%;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    margin-top: 18%;
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
