@@ -1,11 +1,13 @@
 import styles from "./InitEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { getDate } from "../Service/Functions";
+import { getDate, validURL } from "../Service/functions";
 
 const InitEvent = (props) => {
-  const descriptionArr = props.information.description.split("\n");
-  const date = getDate(props.information.date);
-  
+  const eventType = validURL(props.information.location) ? "Online" : "Offline";
+  const descriptionArr = props.information.content.split("\n");
+  const startDate = getDate(props.information.startDate);
+  const endDate = getDate(props.information.endDate);
+  console.log(eventType);
   return (
     <section className={`${styles.detail}`}>
       <header className={`${styles.detail__header}`}>
@@ -17,12 +19,26 @@ const InitEvent = (props) => {
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
           <p className={`${styles.detail__registerText}`}>
-            {date}, {props.information.time}
+            {startDate}, {props.information.startTime}
+            {endDate.length > 0 &&
+              ` - ${endDate}, ${props.information.endTime}`}
           </p>
-          <h3 className={`${styles.detail__topic}`}>Location:</h3>
-          <p className={`${styles.detail__registerText}`}>
-            {props.information.location}
-          </p>
+          <h3 className={`${styles.detail__topic}`}>
+            {eventType === "Online" ? "URL" : "Location"}
+          </h3>
+          {eventType === "Online" ? (
+            <a
+              href={props.information.location}
+              className={`${styles.detail__registerText}`}
+            >
+              <p>Link to join the event</p>
+            </a>
+          ) : (
+            <p className={`${styles.detail__registerText}`}>
+              {props.information.location}
+            </p>
+          )}
+
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Categories:
           </h3>
@@ -32,6 +48,9 @@ const InitEvent = (props) => {
           <h3 className={`${styles.detail__topic}`}>Organization:</h3>
           <p className={`${styles.detail__registerText}`}>
             {props.information.organization}
+            {props.information.otherOrganizations &&
+              props.information.otherOrganizations.trim().length > 0 &&
+              `, ${props.information.otherOrganizations}`}
           </p>
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}

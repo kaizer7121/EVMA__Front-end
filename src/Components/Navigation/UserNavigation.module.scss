@@ -10,7 +10,6 @@
     align-items: center;
     position: relative;
     z-index: 1;
-    
   }
 
   &__iconBox {
@@ -73,6 +72,7 @@
   &__name {
     font-size: 1.1rem;
     margin-right: 0.6rem;
+    text-align: center;
   }
 
   @media only screen and (max-width: $bp-extraLarge) {
@@ -184,7 +184,8 @@
       font-weight: 600;
       font-size: 1.4rem;
 
-      &:link, &:visited {
+      &:link,
+      &:visited {
         color: $color-tertiary-light;
       }
 
@@ -195,7 +196,8 @@
 
     &_edit {
       font-weight: 500;
-      &:link, &:visited {
+      &:link,
+      &:visited {
         color: $color-tertiary-light;
       }
 

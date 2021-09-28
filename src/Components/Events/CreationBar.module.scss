@@ -62,6 +62,25 @@
     width: 85%;
   }
 
+  //ERROR
+  &__error {
+    color: $color-danger;
+    font-size: 0.9rem;
+    font-weight: 400;
+
+    &_mt_smallerNegative {
+      margin-top: -2.5rem;
+    }
+
+    &_mt_smallNegative {
+      margin-top: -1.5rem;
+    }
+
+    &_mb_smaller {
+      margin-bottom: 2.5rem;
+    }
+  }
+
   // TITLE
   &__title {
     font-size: 2.4rem;
@@ -206,12 +225,45 @@
     }
   }
 
+  // Multi input in row
+  &__multiInput {
+    display: flex;
+    gap: 5%;
+
+    &_short {
+      width: 50%;
+
+      span {
+        transform: translate(-0.4rem, -92%) scale(0.7) !important;
+
+        @media only screen and (max-width: $bp-large) {
+          transform: translate(-0.7rem, -92%) scale(0.6) !important;
+        }
+
+        @media only screen and (max-width: $bp-medium) {
+          transform: translate(-0.4rem, -92%) scale(0.7) !important;
+        }
+      }
+    }
+
+    &_long {
+      width: 80%;
+    }
+  }
+
   // Picker
   &__picker {
     display: flex;
     margin-bottom: 3rem;
     gap: 10%;
     justify-content: space-around;
+
+    &__title {
+      margin-bottom: 0;
+      font-size: 1.5rem;
+      text-align: left;
+      color: $color-tertiary-dark;
+    }
   }
 
   &__datePicker {
@@ -604,7 +656,7 @@
 
   &__emoji {
     text-align: right;
-    margin-bottom: 0.2rem;
+    margin-top: 0.5rem;
     cursor: pointer;
     transition: all 0.1s;
 
@@ -741,9 +793,10 @@
   &__buttons {
     margin-top: 4rem;
     display: flex;
-    gap: 10%;
+    gap: 5%;
     align-items: center;
     justify-content: space-around;
+    flex-wrap: wrap;
 
     &__btn {
       border: none;
@@ -753,6 +806,7 @@
       cursor: pointer;
       transition: all 0.1s;
       font-weight: 500;
+      margin-bottom: 1rem;
     }
 
     &__cancel {
@@ -768,9 +822,23 @@
       }
     }
 
+    &__saveDraft {
+      color: $color-white;
+      background-color: $color-tertiary-light;
+
+      &:hover {
+        background-color: $color-tertiary-dark;
+      }
+
+      &:active {
+        background-color: $color-tertiary-light;
+      }
+    }
+
     &__submit {
       color: $color-white;
       background-color: $color-primary-dark;
+      flex: 1;
 
       &:hover {
         background-color: $color-primary-light;
@@ -779,6 +847,11 @@
       &:active {
         background-color: $color-primary-dark;
       }
+    }
+
+    &__break {
+      flex-basis: 100%;
+      height: 0;
     }
   }
 

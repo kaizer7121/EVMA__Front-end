@@ -18,7 +18,7 @@ const UserNavigation = () => {
           alt="User avatar"
           className={`${styles.userNav__avatar}`}
         />
-        <p className={`${styles.userNav__name}`}>Hữu Đức</p>
+        <p className={`${styles.userNav__name}`}>Đào Hữu Đức</p>
         <div className={`${styles.dropdown}`}>
           <div className={`${styles.dropdown__button}`}>
             <img src="/images/icon/Dropdown-icon.png" alt="User avatar" />
