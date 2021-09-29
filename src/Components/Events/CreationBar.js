@@ -11,9 +11,6 @@ import { useState, useEffect } from "react";
 import "rc-time-picker/assets/index.css";
 import styles from "./CreationBar.module.scss";
 
-const DUMMY_IMAGE =
-  "https://scontent.fsgn8-1.fna.fbcdn.net/v/t39.30808-6/242145009_222288139941640_6679877824071632444_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=340051&_nc_ohc=GDEukTT17DoAX-iw0PH&tn=AcLQveYFpgLxAnDM&_nc_ht=scontent.fsgn8-1.fna&oh=632f09b64830fbf22d075142cd6e8141&oe=614D4AD3";
-
 let startMoment;
 let endMoment;
 
@@ -22,6 +19,23 @@ const CreationBar = (props) => {
     shortDesc: false,
     desc: false,
   });
+  const [numberOfMultiInput, setNumberOfMultiInput] = useState({
+    location: 1,
+    hashtag: 1,
+    otherOrganizations: 1,
+  });
+  useEffect(() => {
+    setNumberOfMultiInput((prevValue) => ({
+      ...prevValue,
+      location: props.information.locationName.length,
+      hashtag: props.information.hashtag.length,
+      otherOrganizations: props.information.otherOrganizations.length,
+    }));
+  }, [
+    props.information.locationName.length,
+    props.information.hashtag.length,
+    props.information.otherOrganizations.length,
+  ]);
 
   useEffect(() => {
     startMoment = moment();
@@ -194,39 +208,71 @@ const CreationBar = (props) => {
         </p>
       )}
 
-      <section className={`${styles.creationBar__multiInput}`}>
-        <label
-          className={`${styles.creationBar__input} ${styles.creationBar__multiInput_short}`}
+      <h3 className={`${styles.creationBar__topic}`}>Location:</h3>
+      {props.information.locationName.map((location, index) => {
+        console.log(location);
+        return (
+          <section key={index} className={`${styles.creationBar__multiInput}`}>
+            <label
+              className={`${styles.creationBar__input} ${styles.creationBar__multiInput_short}`}
+            >
+              <input
+                className={`${styles.creationBar__input__field}`}
+                type="text"
+                placeholder=""
+                onChange={(event) => {
+                  props.changeMultiInputValue(
+                    event.target.value,
+                    "LOCATIONNAME",
+                    index
+                  );
+                }}
+                value={props.information.locationName[index]}
+              />
+              <span className={`${styles.creationBar__input__label}`}>
+                Name
+              </span>
+            </label>
+            <label className={`${styles.creationBar__input}`}>
+              <input
+                className={`${styles.creationBar__input__field}`}
+                type="text"
+                placeholder=""
+                onChange={(event) => {
+                  props.changeMultiInputValue(
+                    event.target.value,
+                    "LOCATIONDETAIL",
+                    index
+                  );
+                }}
+                value={props.information.locationDetail[index]}
+              />
+              <span className={`${styles.creationBar__input__label}`}>
+                Detail(URL)
+              </span>
+            </label>
+          </section>
+        );
+      })}
+      {numberOfMultiInput.location > 1 && (
+        <p
+          className={`${styles.creationBar__multiInput_remove}`}
+          onClick={() => {
+            props.changeMultiInput("LOCATION", "REMOVE");
+          }}
         >
-          <input
-            className={`${styles.creationBar__input__field}`}
-            type="text"
-            placeholder=""
-            onChange={(event) => {
-              inputValue(event.target.value, "location");
-            }}
-            value={props.information.location}
-          />
-          <span className={`${styles.creationBar__input__label}`}>
-            Location
-          </span>
-        </label>
-        <label className={`${styles.creationBar__input}`}>
-          <input
-            className={`${styles.creationBar__input__field}`}
-            type="text"
-            placeholder=""
-            onChange={(event) => {
-              inputValue(event.target.value, "fulltext");
-            }}
-            value={props.information.fulltext}
-          />
-          <span className={`${styles.creationBar__input__label}`}>
-            Full text
-          </span>
-        </label>
-      </section>
+          Remove last location (-)
+        </p>
+      )}
 
+      <p
+        className={`${styles.creationBar__multiInput_add}`}
+        onClick={() => {
+          props.changeMultiInput("LOCATION", "ADD");
+        }}
+      >
+        Add more location (+)
+      </p>
       {props.eventError.location && (
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallNegative}`}
@@ -234,6 +280,54 @@ const CreationBar = (props) => {
           Location must not be empty
         </p>
       )}
+
+      <h3 className={`${styles.creationBar__topic}`}>Hashtag:</h3>
+      {props.information.hashtag.map((location, index) => {
+        return (
+          <section key={index} className={`${styles.creationBar__multiInput}`}>
+            <label
+              className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
+            >
+              <input
+                className={`${styles.creationBar__input__field}`}
+                type="text"
+                placeholder=""
+                onChange={(event) => {
+                  props.changeMultiInputValue(
+                    event.target.value,
+                    "HASHTAG",
+                    index
+                  );
+                }}
+                value={props.information.hashtag[index]}
+              />
+              <span className={`${styles.creationBar__input__label}`}>
+                Hashtag name
+              </span>
+            </label>
+          </section>
+        );
+      })}
+      {numberOfMultiInput.hashtag > 1 && (
+        <p
+          className={`${styles.creationBar__multiInput_remove}`}
+          onClick={() => {
+            props.changeMultiInput("HASHTAG", "REMOVE");
+          }}
+        >
+          Remove last hashtag (-)
+        </p>
+      )}
+
+      <p
+        className={`${styles.creationBar__multiInput_add}`}
+        onClick={() => {
+          props.changeMultiInput("HASHTAG", "ADD");
+        }}
+      >
+        Add more hashtag (+)
+      </p>
+
       <section className={`${styles.creationBar__categories}`}>
         <h3 className={`${styles.creationBar__topic}`}>Categories:</h3>
         <p className={`${styles.creationBar__category}`}>Education</p>
@@ -250,20 +344,53 @@ const CreationBar = (props) => {
           Number of category must between (0 - 10)
         </p>
       )}
-      <label className={`${styles.creationBar__input}`}>
-        <input
-          className={`${styles.creationBar__input__field}`}
-          type="text"
-          placeholder=""
-          onChange={(event) => {
-            inputValue(event.target.value, "otherOrganizations");
+
+      <h3 className={`${styles.creationBar__topic}`}>Other organizations:</h3>
+      {props.information.otherOrganizations.map((location, index) => {
+        return (
+          <section key={index} className={`${styles.creationBar__multiInput}`}>
+            <label
+              className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
+            >
+              <input
+                className={`${styles.creationBar__input__field}`}
+                type="text"
+                placeholder=""
+                onChange={(event) => {
+                  props.changeMultiInputValue(
+                    event.target.value,
+                    "OTHER_ORGANIZATIONS",
+                    index
+                  );
+                }}
+                value={props.information.otherOrganizations[index]}
+              />
+              <span className={`${styles.creationBar__input__label}`}>
+                Organiztion name
+              </span>
+            </label>
+          </section>
+        );
+      })}
+      {numberOfMultiInput.otherOrganizations > 1 && (
+        <p
+          className={`${styles.creationBar__multiInput_remove}`}
+          onClick={() => {
+            props.changeMultiInput("OTHER_ORGANIZATIONS", "REMOVE");
           }}
-          value={props.information.otherOrganizations}
-        />
-        <span className={`${styles.creationBar__input__label}`}>
-          Other organizations <small>(Optional)</small>
-        </span>
-      </label>
+        >
+          Remove last organization (-)
+        </p>
+      )}
+
+      <p
+        className={`${styles.creationBar__multiInput_add}`}
+        onClick={() => {
+          props.changeMultiInput("OTHER_ORGANIZATIONS", "ADD");
+        }}
+      >
+        Add more organization (+)
+      </p>
 
       <section className={`${styles.creationBar__description}`}>
         <h3 className={`${styles.creationBar__topic}`}>Summary:</h3>

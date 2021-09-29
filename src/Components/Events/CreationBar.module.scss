@@ -247,7 +247,31 @@
     }
 
     &_long {
-      width: 80%;
+      width: 100%;
+    }
+
+    &_add {
+      text-align: left;
+      font-size: 1.1rem;
+      margin-top: 0;
+      color: $color-tertiary-dark;
+      cursor: pointer;
+
+      &:active {
+        filter: brightness(0.5);
+      }
+    }
+
+    &_remove {
+      text-align: left;
+      font-size: 1.1rem;
+      margin-top: 0;
+      color: $color-danger;
+      cursor: pointer;
+
+      &:active {
+        filter: brightness(0.5);
+      }
     }
   }
 
