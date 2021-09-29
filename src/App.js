@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import NavigationBar from "./Components/Navigation/NavigationBar";
+import NavigationBar from "./Components/Navigation/Navigationbar";
 import SideNavigation from "./Components/Navigation/SideNavigation";
 import SignIn from "./Components/Auth/SignIn";
 import ListEvent from "./Components/Events/ListEvent";
