@@ -26,15 +26,15 @@ export const validURL = (str) => {
 
 export const isValidHttpUrl = (string) => {
   let url;
-  
+
   try {
     url = new URL(string);
   } catch (_) {
-    return false;  
+    return false;
   }
 
   return url.protocol === "http:" || url.protocol === "https:";
-}
+};
 
 export const validateEmail = (email) => {
   const re =
@@ -45,4 +45,9 @@ export const validateEmail = (email) => {
 export const validateName = (name) => {
   var regex = /^([a-zA-Z ]){1,50}$/;
   return regex.test(name);
+};
+
+export const validatePassword = (password) => {
+  // var regex = /^([a-zA-Z ]){1,50}$/;
+  // return regex.test(name);
 };
