@@ -1,6 +1,6 @@
 import styles from "./InitEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { getDate, validURL } from "../Service/functions";
+import { getDate, validURL } from "../Service/functions.js";
 
 const InitEvent = (props) => {
   const descriptionArr = props.information.content.split("\n");

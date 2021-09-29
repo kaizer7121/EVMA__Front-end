@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
 import { useState } from "react";
-import { validateEmail, validateName } from "../Service/functions";
+import { validateEmail, validateName } from "../Service/functions.js";
 
 const SignUp = () => {
   const [registerInfo, setRegisterInfo] = useState({
