@@ -1,5 +1,7 @@
 import Event from "./Event";
 
+import { useEffect, useState } from "react";
+
 import styles from "./ListEvent.module.scss";
 
 const DUMMY_DATA = [
@@ -32,9 +34,36 @@ const DUMMY_DATA = [
 ];
 
 const ListEvent = () => {
+  const [listEvent, setListEvent] = useState(DUMMY_DATA);
+  useEffect(() => {
+    window.addEventListener("scroll", trackScrolling);
+
+    return function cleanup() {
+      window.removeEventListener("scroll", trackScrolling);
+    };
+  }, []);
+
+  const trackScrolling = () => {
+    const wrappedElement = document.getElementById("header");
+
+    const isBottom =
+      wrappedElement.getBoundingClientRect().bottom * 0.8 <= window.innerHeight;
+
+    if (isBottom) {
+      const newEvent = {
+        title: "Tư vấn cùng chuyên gia, chủ đề: Trầm cảm",
+        shortDescription:
+          "Báo cáo viên: ThS.BS. Vũ Sơn Tùng và ThS.BS. Trịnh Thị Vân Anh - Viện Sức khỏe Tâm thần, Bệnh viện Bạch Mai \n Chủ đề: Trầm cảm",
+        categories: ["Healthy", "Education", "Psychology"],
+        image:
+          "https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.6435-9/241390112_2976639862579617_1690972362834424290_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=340051&_nc_ohc=aCPKF5vr3SAAX8oaMqD&_nc_ht=scontent.fsgn3-1.fna&oh=f175309efa0bd3f547227efaf68f5979&oe=616CD77A",
+      };
+      setListEvent((prevValue) => [...prevValue, newEvent]);
+    }
+  };
   return (
-    <div className={`${styles.listEvent}`}>
-      {DUMMY_DATA.map((event) => (
+    <div className={`${styles.listEvent}`} id="header">
+      {listEvent.map((event) => (
         <Event
           title={event.title}
           shortDescription={event.shortDescription}

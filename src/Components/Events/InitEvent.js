@@ -3,11 +3,9 @@ import commonStyles from "../Auth/Auth.module.scss";
 import { getDate, validURL } from "../Service/functions";
 
 const InitEvent = (props) => {
-  const eventType = validURL(props.information.location) ? "Online" : "Offline";
   const descriptionArr = props.information.content.split("\n");
   const startDate = getDate(props.information.startDate);
   const endDate = getDate(props.information.endDate);
-  console.log(eventType);
   return (
     <section className={`${styles.detail}`}>
       <header className={`${styles.detail__header}`}>
@@ -23,22 +21,27 @@ const InitEvent = (props) => {
             {endDate.length > 0 &&
               ` - ${endDate}, ${props.information.endTime}`}
           </p>
-          <h3 className={`${styles.detail__topic}`}>
-            {eventType === "Online" ? "URL" : "Location"}
-          </h3>
-          {eventType === "Online" ? (
-            <a
-              href={props.information.location}
-              className={`${styles.detail__registerText}`}
-            >
-              <p>Link to join the event</p>
-            </a>
-          ) : (
-            <p className={`${styles.detail__registerText}`}>
-              {props.information.location}
-            </p>
-          )}
-
+          <h3 className={`${styles.detail__topic}`}>Location</h3>
+          {props.information.locationName.map((location, index) => {
+            const eventType = validURL(props.information.locationDetail[index])
+              ? "Online"
+              : "Offline";
+            return eventType === "Online" ? (
+              <a
+                key={index}
+                href={props.information.locationDetail[index]}
+                className={`${styles.detail__registerText}`}
+              >
+                <p>{props.information.locationName[index]}</p>
+              </a>
+            ) : (
+              <p key={index} className={`${styles.detail__registerText}`}>
+                {(props.information.locationName[index] !== "" ||
+                  props.information.locationDetail[index] !== "") &&
+                  `${props.information.locationName[index]}: ${props.information.locationDetail[index]}`}
+              </p>
+            );
+          })}
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Categories:
           </h3>
@@ -48,9 +51,12 @@ const InitEvent = (props) => {
           <h3 className={`${styles.detail__topic}`}>Organization:</h3>
           <p className={`${styles.detail__registerText}`}>
             {props.information.organization}
+
             {props.information.otherOrganizations &&
-              props.information.otherOrganizations.trim().length > 0 &&
-              `, ${props.information.otherOrganizations}`}
+              props.information.otherOrganizations[0] !== "" &&
+              props.information.otherOrganizations.map(
+                (organization) => `, ${organization}`
+              )}
           </p>
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}

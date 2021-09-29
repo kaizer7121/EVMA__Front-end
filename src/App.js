@@ -1,19 +1,19 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import NavigationBar from "./components/Navigation/NavigationBar";
-import SideNavigation from "./components/Navigation/SideNavigation";
-import SignIn from "./components/Auth/SignIn";
-import ListEvent from "./components/Events/ListEvent";
-import SignUp from "./components/Auth/SignUp";
-import ForgotPassword from "./components/Auth/ForgotPassword";
-import EventDetail from "./components/Events/EventDetail";
-import EventCreation from "./components/Events/EventCreation";
-import ListOrganization from "./components/Organizations/ListOrganization";
-import OrganizationDetail from "./components/Organizations/OrganizationDetail";
+import NavigationBar from "./Components/Navigation/NavigationBar";
+import SideNavigation from "./Components/Navigation/SideNavigation";
+import SignIn from "./Components/Auth/SignIn";
+import ListEvent from "./Components/Events/ListEvent";
+import SignUp from "./Components/Auth/SignUp";
+import ForgotPassword from "./Components/Auth/ForgotPassword";
+import EventDetail from "./Components/Events/EventDetail";
+import EventCreation from "./Components/Events/EventCreation";
+import ListOrganization from "./Components/Organizations/ListOrganization";
+import OrganizationDetail from "./Components/Organizations/OrganizationDetail";
 
 import "./App.scss";
-import Profile from "./components/Profile/Profile";
-import ConfirmImage from "./components/Popup/ConfirmImage";
+import Profile from "./Components/Profile/Profile";
+import ConfirmImage from "./Components/Popup/ConfirmImage";
 import { useEffect } from "react";
 import firebase from "./Firebase";
 

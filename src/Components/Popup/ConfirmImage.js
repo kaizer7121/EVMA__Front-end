@@ -14,7 +14,7 @@ const ConfirmImage = (props) => {
     width: 50,
     x: 25,
     y: 25,
-    aspect: props.information.type === "cover" ? 2 / 1 : 1 / 1,
+    aspect: props.information.type === "cover" ? 16 / 9 : 1 / 1,
   });
   const [completedCrop, setCompletedCrop] = useState(null);
 
