@@ -1,11 +1,39 @@
 import styles from "./InitEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { getDate, validURL } from "../Service/functions.js";
+import { useEffect, useState } from "react";
 
 const InitEvent = (props) => {
+  const [locations, setLocations] = useState({
+    offline: [],
+    online: [],
+  });
   const descriptionArr = props.information.content.split("\n");
   const startDate = getDate(props.information.startDate);
   const endDate = getDate(props.information.endDate);
+
+  useEffect(() => {
+    const listOffline = [];
+    const listOnline = [];
+    props.information.locationDetail.forEach((location, index) => {
+      if (validURL(location)) {
+        listOnline.push({
+          locationName: props.information.locationName[index],
+          locationDetail: props.information.locationDetail[index],
+        });
+      } else {
+        listOffline.push({
+          locationName: props.information.locationName[index],
+          locationDetail: props.information.locationDetail[index],
+        });
+      }
+      setLocations({
+        offline: listOffline,
+        online: listOnline,
+      });
+    });
+  }, [props.information.locationDetail, props.information.locationName]);
+
   return (
     <section className={`${styles.detail}`}>
       <header className={`${styles.detail__header}`}>
@@ -22,31 +50,60 @@ const InitEvent = (props) => {
               ` - ${endDate}, ${props.information.endTime}`}
           </p>
           <h3 className={`${styles.detail__topic}`}>Location</h3>
-          {props.information.locationName.map((location, index) => {
-            const eventType = validURL(props.information.locationDetail[index])
-              ? "Online"
-              : "Offline";
-            return eventType === "Online" ? (
-              <a
-                key={index}
-                href={props.information.locationDetail[index]}
+          <br />
+          {locations.offline.map((location, index) => {
+            return (
+              <span
+                key={`offline_${index}`}
                 className={`${styles.detail__registerText}`}
               >
-                <p>{props.information.locationName[index]}</p>
-              </a>
-            ) : (
-              <p key={index} className={`${styles.detail__registerText}`}>
-                {(props.information.locationName[index] !== "" ||
-                  props.information.locationDetail[index] !== "") &&
-                  `${props.information.locationName[index]}: ${props.information.locationDetail[index]}`}
-              </p>
+                {(location.locationName !== "" ||
+                  location.locationDetail !== "") &&
+                  `${location.locationName}: ${location.locationDetail}`}
+                <br />
+              </span>
             );
           })}
+
+          <span className={`${styles.detail__registerText} `}>URL: </span>
+          {locations.online.map((location, index) => {
+            const isLast = index + 1 === locations.online.length;
+            return isLast ? (
+              <a
+                key={`online_${index}`}
+                href={location.locationDetail}
+                className={`${styles.detail__registerText} `}
+              >
+                <span
+                  key={`online_${index}`}
+                >{`${location.locationName}`}</span>
+              </a>
+            ) : (
+              <>
+                <a
+                  key={`online_${index}`}
+                  href={props.information.locationDetail}
+                  className={`${styles.detail__registerText}`}
+                >
+                  <span
+                    key={`online_${index}`}
+                  >{`${location.locationName},`}</span>
+                </a>
+                <span key={`online_${index}`}> </span>
+              </>
+            );
+          })}
+          <p></p>
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Categories:
           </h3>
-          {props.information.categories.map((category) => (
-            <p className={`${styles.detail__category}`}>{category}</p>
+          {props.information.categories.map((category, index) => (
+            <p
+              key={`category_${index}`}
+              className={`${styles.detail__category}`}
+            >
+              {category}
+            </p>
           ))}
           <h3 className={`${styles.detail__topic}`}>Organization:</h3>
           <p className={`${styles.detail__registerText}`}>
@@ -58,6 +115,25 @@ const InitEvent = (props) => {
                 (organization) => `, ${organization}`
               )}
           </p>
+          <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
+            Hashtags:
+          </h3>
+          {props.information.hashtag[0] !== "" &&
+            props.information.hashtag.map((tag, index) => {
+              const isLast = index + 1 === props.information.hashtag.length;
+              return isLast ? (
+                <span
+                key={`hashtag_${index}`}
+                  className={`${styles.detail__registerText}`}
+                >{`#${tag}`}</span>
+              ) : (
+                <span
+                key={`hashtag_${index}`}
+                  className={`${styles.detail__registerText}`}
+                >{`#${tag}, `}</span>
+              );
+            })}
+          <p></p>
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
           >
@@ -68,8 +144,13 @@ const InitEvent = (props) => {
       <hr />
       <div className={`${styles.detail__body}`}>
         <h1 className={`${styles.detail__title}`}>{props.information.title}</h1>
-        {descriptionArr.map((sentence) => (
-          <p className={`${styles.detail__description}`}>{sentence}</p>
+        {descriptionArr.map((sentence, index) => (
+          <p
+            key={`sentence_${index}`}
+            className={`${styles.detail__description}`}
+          >
+            {sentence}
+          </p>
         ))}
       </div>
     </section>

@@ -51,3 +51,22 @@ export const validatePassword = (password) => {
   // var regex = /^([a-zA-Z ]){1,50}$/;
   // return regex.test(name);
 };
+
+export const calculateAge = (birthday) => {
+  var ageDifMs = Date.now() - birthday.getTime();
+  var ageDate = new Date(ageDifMs);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+};
+
+export const convertDate = (date) => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return `${date.toLocaleDateString(
+    undefined,
+    options
+  )} at ${date.toLocaleTimeString("en-US")}`;
+};

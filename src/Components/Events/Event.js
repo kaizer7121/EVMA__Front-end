@@ -7,11 +7,12 @@ const Event = (props) => {
 
   return (
     <section className={`${styles.event}`}>
+      <div className={`${styles.event__status}`}>Progressing</div>
       <h1 className={`${styles.event__title}`}>{props.title}</h1>
       <div className={`${styles.event__information}`}>
         <div className={`${styles.event__detail}`}>
           <div>
-            <h3 className={`${styles.event__topic}`}>Short description: </h3>
+            <h3 className={`${styles.event__topic}`}>Summary: </h3>
             {shortDescriptionArr.map((sentence) => (
               <p className={`${styles.event__shortDescription}`}>{sentence}</p>
             ))}

@@ -1,5 +1,9 @@
+import ListPost from "./Posts/ListPost";
+
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
+import { useState } from "react";
+import { validURL } from "../Service/functions";
 
 const DUMMY_DATA = {
   title: "Diễn Đàn Sinh Viên Nghiên Cứu Khoa Học",
@@ -20,52 +24,198 @@ const DUMMY_DATA = {
 
   categories: ["Science", "Education", "Psychology", "Online", "Social"],
   date: "19:00, September 10, 2012",
-  location: "FPT HCM University",
-  organization: "CLB Nghiên Cứu Tâm Lý Học - Giáo Dục Học",
+  locationName: ["FPT University", "Google meet", "Facebook"],
+  locationDetail: [
+    "Giảng đường B",
+    "https://www.youtube.com/",
+    "https://www.youtube.com/",
+  ],
+  organization: "CLB Nghiên Cứu Tâm Lý Học",
+  otherOrganizations: ["F-code", "FEV"],
+  isShowAttendees: true,
+  hashtag: ["OU", "Sharing"],
   image:
     "https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.6435-9/106504737_2722347444536344_728271756182488456_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=8631f5&_nc_ohc=sojVDo3kAzUAX_VsoLg&_nc_ht=scontent.fsgn3-1.fna&oh=caf9c7e799dd4228b712c0e7df4f523c&oe=6179C8A8",
 };
 
 const EventDetail = () => {
+  const [displayType, setDisplayType] = useState("detail");
+
   const descriptionArr = DUMMY_DATA.description.split("\n");
+
+  let locations = { offline: [], online: [] };
+  const listOffline = [];
+  const listOnline = [];
+  DUMMY_DATA.locationDetail.forEach((location, index) => {
+    if (validURL(location)) {
+      listOnline.push({
+        locationName: DUMMY_DATA.locationName[index],
+        locationDetail: DUMMY_DATA.locationDetail[index],
+      });
+    } else {
+      listOffline.push({
+        locationName: DUMMY_DATA.locationName[index],
+        locationDetail: DUMMY_DATA.locationDetail[index],
+      });
+    }
+    locations = { offline: listOffline, online: listOnline };
+  });
+
+  const changeDisplayType = (type) => {
+    if (displayType !== type) {
+      setDisplayType(type);
+    }
+  };
+
+  const mainContent = (
+    <div className={`${styles.detail__body}`}>
+      <h1 className={`${styles.detail__title}`}>{DUMMY_DATA.title}</h1>
+      {descriptionArr.map((sentence, index) => (
+        <p
+          key={`sentence_${index}`}
+          className={`${styles.detail__description}`}
+        >
+          {sentence}
+        </p>
+      ))}
+    </div>
+  );
 
   return (
     <section className={`${styles.detail}`}>
       <header className={`${styles.detail__header}`}>
         <div className={`${styles.detail__poster}`}>
+          <div className={`${styles.detail__status}`}>Progressing</div>
           <img src={DUMMY_DATA.image} alt="Poster" />
         </div>
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
           <p className={`${styles.detail__registerText}`}>{DUMMY_DATA.date}</p>
-          <h3 className={`${styles.detail__topic}`}>Location:</h3>
-          <p className={`${styles.detail__registerText}`}>
-            {DUMMY_DATA.location}
-          </p>
+
+          <h3 className={`${styles.detail__topic}`}>Location</h3>
+          <br />
+          {locations.offline.map((location, index) => {
+            return (
+              <span
+                key={`offline_${index}`}
+                className={`${styles.detail__registerText}`}
+              >
+                {(location.locationName !== "" ||
+                  location.locationDetail !== "") &&
+                  `${location.locationName}: ${location.locationDetail}`}
+                <br />
+              </span>
+            );
+          })}
+          <span className={`${styles.detail__registerText} `}>URL: </span>
+          {locations.online.map((location, index) => {
+            const isLast = index + 1 === locations.online.length;
+            return isLast ? (
+              <a
+                key={`online_link_${index}`}
+                href={location.locationDetail}
+                className={`${styles.detail__registerText} `}
+              >
+                <span
+                  key={`online_name_${index}`}
+                >{`${location.locationName}`}</span>
+              </a>
+            ) : (
+              <span key={`online_${index}`}>
+                <a
+                  key={`online_link_${index}`}
+                  href={location.locationDetail}
+                  className={`${styles.detail__registerText} `}
+                >
+                  <span
+                    key={`online_name_${index}`}
+                  >{`${location.locationName}`}</span>
+                </a>
+                <span key={`online_blank_${index}`}>{`, ${" "}`} </span>
+              </span>
+            );
+          })}
+          <p></p>
+
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Categories:
           </h3>
-          {DUMMY_DATA.categories.map((category) => (
-            <p className={`${styles.detail__category}`}>{category}</p>
+          {DUMMY_DATA.categories.map((category, index) => (
+            <p
+              key={`category__${index}`}
+              className={`${styles.detail__category}`}
+            >
+              {category}
+            </p>
           ))}
           <h3 className={`${styles.detail__topic}`}>Organization:</h3>
           <p className={`${styles.detail__registerText}`}>
             {DUMMY_DATA.organization}
+            {DUMMY_DATA.otherOrganizations &&
+              DUMMY_DATA.otherOrganizations[0] !== "" &&
+              DUMMY_DATA.otherOrganizations.map(
+                (organization) => `, ${organization}`
+              )}
           </p>
-          <button
-            className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-          >
-            Join
-          </button>
+          <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
+            Hashtags:
+          </h3>
+          {DUMMY_DATA.hashtag[0] !== "" &&
+            DUMMY_DATA.hashtag.map((tag, index) => {
+              const isLast = index + 1 === DUMMY_DATA.hashtag.length;
+              return isLast ? (
+                <span
+                  key={`hashtag_${index}`}
+                  className={`${styles.detail__registerText}`}
+                >{`#${tag}`}</span>
+              ) : (
+                <span
+                  key={`hashtag_${index}`}
+                  className={`${styles.detail__registerText}`}
+                >{`#${tag}, `}</span>
+              );
+            })}
+          <p></p>
+          <div className={`${styles.detail__buttons}`}>
+            <button
+              className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
+            >
+              Follow
+            </button>
+
+            <button
+              className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+            >
+              SHARE
+            </button>
+          </div>
         </div>
       </header>
       <hr />
-      <div className={`${styles.detail__body}`}>
-        <h1 className={`${styles.detail__title}`}>{DUMMY_DATA.title}</h1>
-        {descriptionArr.map((sentence) => (
-          <p className={`${styles.detail__description}`}>{sentence}</p>
-        ))}
-      </div>
+      <section className={`${styles.detail_subNav}`}>
+        <div
+          className={`${styles.detail_subNav_item} ${
+            displayType === "detail" && styles.detail_subNav_item_choice
+          }`}
+          onClick={() => {
+            changeDisplayType("detail");
+          }}
+        >
+          Detail
+        </div>
+        <div
+          className={`${styles.detail_subNav_item} ${
+            displayType === "posts" && styles.detail_subNav_item_choice
+          }`}
+          onClick={() => {
+            changeDisplayType("posts");
+          }}
+        >
+          Posts
+        </div>
+      </section>
+      {displayType === "detail" && mainContent}
+      {displayType === "posts" && <ListPost />}
     </section>
   );
 };

@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 
 import "rc-time-picker/assets/index.css";
 import styles from "./CreationBar.module.scss";
+import commonStyles from "../Auth/Auth.module.scss";
 
 let startMoment;
 let endMoment;
@@ -147,7 +148,6 @@ const CreationBar = (props) => {
                 inputValue("", "startTime");
               }
             }}
-            defaultValue={startMoment}
           />
           <span className={`${styles.creationBar__timePicker__label}`}>
             Time
@@ -191,7 +191,6 @@ const CreationBar = (props) => {
                 inputValue("", "endTime");
               }
             }}
-            defaultValue={endMoment}
           />
 
           <span className={`${styles.creationBar__timePicker__label}`}>
@@ -396,6 +395,7 @@ const CreationBar = (props) => {
         <h3 className={`${styles.creationBar__topic}`}>Summary:</h3>
         <TextareaAutosize
           minRows={4}
+          maxRows={15}
           placeholder="Type short description of event"
           onChange={(event) => {
             inputValue(event.target.value, "summary");
@@ -432,7 +432,8 @@ const CreationBar = (props) => {
       <section className={`${styles.creationBar__description}`}>
         <h3 className={`${styles.creationBar__topic}`}>Content:</h3>
         <TextareaAutosize
-          minRows={6}
+          minRows={7}
+          maxRows={15}
           placeholder="Describe the content of event"
           onChange={(event) => {
             inputValue(event.target.value, "content");
@@ -492,6 +493,19 @@ const CreationBar = (props) => {
           This event don't have cover image
         </p>
       )}
+      <div className={`${styles.creationBar__toggleButton}`}>
+        <span>Show number of attendees</span>
+        <label className={`${commonStyles.switch}`}>
+          <input
+            type="checkbox"
+            checked={props.information.isShowAttendees}
+            onChange={() => props.changeToggleButtonHandler("SHOW_ATTENDEES")}
+          />
+          <span
+            className={`${commonStyles.slider} ${commonStyles.round}`}
+          ></span>
+        </label>
+      </div>
       <section className={`${styles.creationBar__buttons}`}>
         <button
           className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__cancel}`}

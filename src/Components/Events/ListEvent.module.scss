@@ -11,6 +11,7 @@
   @media only screen and (max-width: $bp-larger) {
     width: 72%;
     margin-left: 23%;
+    margin-top: 11rem;
   }
 
   @media only screen and (max-width: $bp-large) {
@@ -19,19 +20,18 @@
   }
 
   @media only screen and (max-width: $bp-medium) {
-    margin-top: 18%;
+    margin-top: 17rem;
     width: 85%;
     margin-left: 7.5%;
   }
 
   @media only screen and (max-width: $bp-small) {
-    margin-top: 18%;
-    width: 90%;
-    margin-left: 5%;
+    margin-top: 15rem;
+    width: 95%;
+    margin-left: 2.5%;
   }
 
   @media only screen and (max-width: $bp-smaller) {
-    margin-top: 18%;
     width: 95%;
     margin-left: 2.5%;
   }

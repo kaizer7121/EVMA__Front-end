@@ -2,7 +2,14 @@ import { Link } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
 import { useState } from "react";
-import { validateEmail, validateName } from "../Service/functions.js";
+import {
+  calculateAge,
+  validateEmail,
+  validateName,
+} from "../Service/functions.js";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import "react-day-picker/lib/style.css";
+import { formatDate, parseDate } from "react-day-picker/moment";
 
 const SignUp = () => {
   const [registerInfo, setRegisterInfo] = useState({
@@ -10,7 +17,9 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
     fullName: "",
+    dateOfBirth: "",
   });
+  const [userYearOld, setUserYearOld] = useState("");
   const [errorRegister, setErrorRegister] = useState({
     email: false,
     password: false,
@@ -21,6 +30,16 @@ const SignUp = () => {
     const type = event.target.id;
     const value = event.target.value;
     setRegisterInfo((prevValue) => ({ ...prevValue, [type]: value }));
+  };
+  const inputDateHandler = (value) => {
+    if (value !== "") {
+      const yearOld = calculateAge(value);
+      setUserYearOld(yearOld);
+    } else {
+      setUserYearOld("");
+    }
+
+    setRegisterInfo((prevValue) => ({ ...prevValue, dateOfBirth: value }));
   };
 
   const checkValidInfo = () => {
@@ -118,6 +137,33 @@ const SignUp = () => {
                 </p>
               )}
             </div>
+            <div className={`${styles.register__form__group} `}>
+              <label htmlFor="full-name">Date of birth (older than 16)</label>
+              <div className={`${styles.register__form__group__date_input}`}>
+                <DayPickerInput
+                  formatDate={formatDate}
+                  parseDate={parseDate}
+                  placeholder=""
+                  onDayChange={(date) => {
+                    if (date === undefined) date = "";
+                    inputDateHandler(date);
+                  }}
+                  value={registerInfo.dateOfBirth}
+                />
+                <input
+                  type="text"
+                  disabled={true}
+                  className={`${styles.register__form__group__date_input_age}`}
+                  value={userYearOld}
+                />
+              </div>
+
+              {errorRegister.fullName && (
+                <p className={`${commonStyles.form__error}`}>
+                  Date format must be correct and user must older than 16
+                </p>
+              )}
+            </div>
             <div className={`${styles.register__form__group}`}>
               <label htmlFor="full-name">Full Name</label>
               <input
@@ -133,6 +179,7 @@ const SignUp = () => {
                 </p>
               )}
             </div>
+
             <button
               type="submit"
               className={`${commonStyles.btn} ${commonStyles.btn_primary}`}

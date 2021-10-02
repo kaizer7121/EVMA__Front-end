@@ -34,11 +34,11 @@
       width: 80%;
     }
 
-    @media only screen and (max-width: 900px) {
+    @media only screen and (max-width: 920px) {
       width: 95%;
     }
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 660px) {
       width: 70%;
     }
 
@@ -54,7 +54,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 660px) {
       display: none;
     }
   }
@@ -98,7 +98,7 @@
       }
     }
 
-    @media only screen and (max-width: 900px) {
+    @media only screen and (max-width: 920px) {
       background: rgba($color-white, 0.7);
       padding: 16px 24px 25px;
 
@@ -107,7 +107,7 @@
       }
     }
 
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 660px) {
       p {
         margin-bottom: -12px;
       }
@@ -123,11 +123,44 @@
       }
 
       label {
-          margin-bottom: 5px;
+        margin-bottom: 5px;
+      }
+
+      &__date {
+        &_input {
+          display: flex;
+          gap: 1%;
+          input {
+            width: 92%;
+            display: inline-block;
+            font-weight: 400;
+            font-size: 18px;
+            padding: 9px;
+            border-radius: 5px;
+            border: 1px solid $color-grey-dark-2;
+            @media only screen and (max-width: 660px) {
+              width: 100%;
+              background-color: rgba($color-white, 0.5);
+            }
+            @media only screen and (max-width: 540px) {
+              width: 90%;
+              background-color: rgba($color-white, 0.5);
+            }
+          }
+
+          &_age {
+            margin-left: auto;
+            width: 12% !important;
+            @media only screen and (max-width: 440px) {
+              padding: 0.5rem !important;
+              text-align: center;
+            }
+          }
+        }
       }
     }
 
-    @media only screen and (max-width: 900px) {
+    @media only screen and (max-width: 920px) {
       &__group {
         margin-bottom: 20px;
       }

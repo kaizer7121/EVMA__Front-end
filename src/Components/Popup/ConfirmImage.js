@@ -14,7 +14,7 @@ const ConfirmImage = (props) => {
     width: 50,
     x: 25,
     y: 25,
-    aspect: props.information.type === "cover" ? 16 / 9 : 1 / 1,
+    aspect: props.information.type === "cover" ? 17 / 10 : 1 / 1,
   });
   const [completedCrop, setCompletedCrop] = useState(null);
 
@@ -76,6 +76,10 @@ const ConfirmImage = (props) => {
     );
   }, [completedCrop]);
 
+  const closeConfirmImage = () => {
+    props.onClose();
+  };
+
   return (
     <Backdrop>
       <div className={`${styles.confirmImage}`}>
@@ -83,9 +87,7 @@ const ConfirmImage = (props) => {
           src="/images/icon/cancel-icon.png"
           alt="cancel"
           className={`${styles.confirmImage__cancelIcon}`}
-          onClick={() => {
-            props.onClose();
-          }}
+          onClick={closeConfirmImage}
         />
 
         <h1>Resize your image</h1>
@@ -115,7 +117,7 @@ const ConfirmImage = (props) => {
           onClick={() => onConfirm(previewCanvasRef.current, completedCrop)}
           className={`${styles.confirmImage__button}`}
         >
-          Confirm your
+          Confirm
         </button>
       </div>
     </Backdrop>

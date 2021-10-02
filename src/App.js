@@ -16,6 +16,7 @@ import Profile from "./Components/Profile/Profile";
 import ConfirmImage from "./Components/Popup/ConfirmImage";
 import { useEffect } from "react";
 import firebase from "./Firebase";
+import CreatePost from "./Components/Popup/CreatePost";
 
 function App() {
   // Handle firebase auth changed
@@ -48,22 +49,22 @@ function App() {
       </Route>
       <Route path="/home">
         <NavigationBar />
-        <SideNavigation />
+        <SideNavigation activatedItem={"HOME"}/>
         <ListEvent />
       </Route>
       <Route path="/organizations">
         <NavigationBar />
-        <SideNavigation />
+        <SideNavigation activatedItem={"ORGANIZTAION"}/>
         <ListOrganization />
       </Route>
       <Route path="/organization-detail">
         <NavigationBar />
-        <SideNavigation />
+        <SideNavigation activatedItem={"NONE"}/>
         <OrganizationDetail />
       </Route>
       <Route path="/event-detail">
         <NavigationBar />
-        <SideNavigation />
+        <SideNavigation activatedItem={"NONE"}/>
         <EventDetail />
       </Route>
       <Route path="/create">
@@ -74,9 +75,8 @@ function App() {
         <NavigationBar />
         <Profile />
       </Route>
-      <Route path="/test">
-        {/* <NavigationBar /> */}
-        <ConfirmImage />
+      <Route path="/test">        
+        <CreatePost />
       </Route>
       <Route path="*">
         <Redirect to="/home" />

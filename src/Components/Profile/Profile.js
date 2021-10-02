@@ -1,9 +1,28 @@
+import { useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { formatDate, parseDate } from "react-day-picker/moment";
 
 import styles from "./Profile.module.scss";
 
 const Profile = () => {
+  const [accountInformation, setAccountInformation] = useState({
+    email: "daohuuduc.910@gmail.com",
+    userAvatar: "",
+    userCover: "",
+    name: "",
+    birthDate: "",
+    phoneNumber: "",
+    address: "",
+    city: "",
+    jobTitle: "",
+    summary: "",
+  });
+  const [accountSecurity, setAccountSecurity] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
   return (
     <section className={`${styles.profile}`}>
       <section className={`${styles.profile__section}`}>
@@ -92,7 +111,9 @@ const Profile = () => {
           <input type="text" />
         </div>
 
-        <button className={`${styles.profile__section_button}`}>Save profile</button>
+        <button className={`${styles.profile__section_button}`}>
+          Save profile
+        </button>
         <hr />
       </section>
       <section className={`${styles.profile__section}`}>
@@ -104,10 +125,10 @@ const Profile = () => {
           <h3>New password:</h3>
           <input type="password" />
 
-          <h3>New password:</h3>
+          <h3>Confirm password:</h3>
           <input type="password" />
         </div>
-        <button className={`${styles.profile__section_button}`}>Change password</button>
+        <button className={`${styles.profile__section_button}`}>Confirm</button>
       </section>
     </section>
   );

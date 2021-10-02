@@ -25,6 +25,7 @@ const EventCreation = () => {
     image: "",
     organization: "Unknown",
     otherOrganizations: [""],
+    isShowAttendees: false,
   });
   const [croppingImage, setCroppingImage] = useState({ empty: true });
   const [eventError, setEventError] = useState({
@@ -264,6 +265,16 @@ const EventCreation = () => {
     }
   };
 
+  const changeToggleButtonHandler = (type) => {
+    if (type === "SHOW_ATTENDEES") {
+      const oldValue = eventInfo.isShowAttendees;
+      setEventInfo((prevValue) => ({
+        ...prevValue,
+        isShowAttendees: !oldValue,
+      }));
+    }
+  };
+
   return (
     <div>
       <CreationBar
@@ -276,6 +287,7 @@ const EventCreation = () => {
         onSavetoDraft={onSavetoDraft}
         changeMultiInput={changeMultiInput}
         changeMultiInputValue={changeMultiInputValue}
+        changeToggleButtonHandler={changeToggleButtonHandler}
       />
       <InitEvent information={eventInfo} />
       {croppingImage && !croppingImage.empty && (

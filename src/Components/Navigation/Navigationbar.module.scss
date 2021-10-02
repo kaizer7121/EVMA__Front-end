@@ -19,7 +19,12 @@
     font-weight: 700;
     margin-right: 3rem;
     margin-left: 5rem;
-    color: $color-primary-dark;
+    cursor: pointer;
+
+    a {
+      color: $color-primary-dark;
+      text-decoration: none;
+    }
   }
 
   &__items {

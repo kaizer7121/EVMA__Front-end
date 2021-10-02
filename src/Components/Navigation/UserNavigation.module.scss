@@ -146,11 +146,13 @@
   position: relative;
   display: inline-block;
 
-  &__button {
-    margin-top: 0.2rem;
+  label {
+    cursor: pointer;
+  }
 
-    &:hover {
-      cursor: pointer;
+  &__button {
+    &_checkBox {
+      display: none;
     }
   }
 
@@ -160,11 +162,10 @@
     top: 2.5rem;
     background-color: $color-white;
     box-shadow: 2px 2px 5px rgba($color-black, 0.2);
-    z-index: 1;
-    opacity: 0;
-    transition: all 0.4s;
     width: 1300%;
     border-radius: 5%;
+    height: 0;
+    display: none;
 
     a {
       font-size: 1rem;
@@ -212,8 +213,12 @@
     }
   }
 
-  &:hover &__content {
-    opacity: 1;
+  &:hover {
+    cursor: pointer;
+  }
+  &__button_checkBox:checked + .dropdown__content {
+    height: auto;
+    display: inline-block;
   }
 
   @media only screen and (max-width: $bp-extraLarge) {

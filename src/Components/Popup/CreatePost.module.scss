@@ -1,0 +1,320 @@
+@import "../SASS_Abstract/variable";
+
+.createPost {
+  position: absolute;
+  width: 30vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: $color-white;
+  box-shadow: 0px 0px 20px rgba($color-black, 0.2);
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  max-height: 97vh;
+  overflow-y: auto;
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 35vw;
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 42vw;
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    width: 50vw;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    width: 60vw;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    width: 70vw;
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    min-height: 70vh;
+    width: 85vw;
+  }
+
+  h1 {
+    font-size: 3rem;
+    text-align: center;
+    color: $color-primary;
+    border-bottom: 2px solid $color-secondary-light;
+    margin-top: 0;
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 3.2rem;
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      font-size: 3.3rem;
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      font-size: 4.2rem;
+    }
+  }
+
+  &__cancelIcon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 25px;
+    cursor: pointer;
+
+    @media only screen and (max-width: $bp-smaller) {
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 20px;
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      top: 1.8rem;
+      right: 1.8rem;
+      width: 15px;
+    }
+  }
+
+  &__topic {
+    font-size: 2rem;
+    color: $color-tertiary-light;
+    text-align: left;
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 2.2rem;
+    }
+    @media only screen and (max-width: $bp-large) {
+      font-size: 2.3rem;
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      font-size: 3rem;
+    }
+  }
+
+  &__detail {
+    padding: 0 1rem;
+    margin-top: -2rem;
+    &_input {
+      textarea {
+        width: 100%;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid $color-black;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border: 2px solid $color-primary;
+        }
+      }
+    }
+    &_emoji {
+      transition: all 0.1s;
+      text-align: right;
+      margin-top: 1rem;
+      img {
+        width: 30px;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &:active {
+          transform: scale(1.1);
+        }
+      }
+    }
+    &_emojiPicker {
+      position: absolute;
+      z-index: 100;
+      right: 0;
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      &_input {
+        textarea {
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      &_input {
+        textarea {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    @media only screen and (max-width: $bp-small) {
+      &_input {
+        textarea {
+          font-size: 1.4rem;
+        }
+      }
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_input {
+        textarea {
+          font-size: 1.7rem;
+        }
+      }
+    }
+  }
+
+  //COVER
+  &__cover {
+    position: relative;
+    text-align: center;
+    img {
+      width: 100%;
+      border: 1px solid rgba($color-black, 0.2);
+    }
+  }
+
+  &__image {
+    position: relative;
+    p {
+      width: 100%;
+      position: absolute;
+      z-index: 1;
+      color: $color-white;
+      top: 39%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      font-weight: 500;
+      display: none;
+      cursor: pointer;
+    }
+    img {
+      border-radius: 5px;
+      border: 0.1px solid $color-black;
+      transition: all 0.1s;
+      cursor: pointer;
+    }
+    &:hover {
+      img {
+        border: 0.1px solid transparent;
+        filter: brightness(0.5);
+        transform: scale(0.995);
+      }
+    }
+    &:hover > p {
+      display: block;
+    }
+    &:active {
+      img {
+        filter: brightness(0.6);
+        transform: scale(0.998);
+      }
+    }
+  }
+
+  &__blank {
+    width: 100%;
+    height: 20vh;
+    border: 1px solid $color-black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  &__fileUpload {
+    background: $color-tertiary-light;
+    border-radius: 1rem;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: -1rem auto 1rem;
+    padding: 0.6rem 1.6rem;
+    position: relative;
+    display: inline-block;
+
+    &:hover,
+    &:focus {
+      background: $color-tertiary-dark;
+    }
+
+    &:active {
+      background: $color-tertiary-light;
+    }
+
+    &__upload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      height: 3rem;
+      cursor: pointer;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__fileUpload {
+      font-size: 1.2rem;
+      padding: 0.7rem 1.8rem;
+
+      &__upload {
+        height: 3.1rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__fileUpload {
+      font-size: 1.3rem;
+      padding: 0.8rem 1.9rem;
+
+      &__upload {
+        height: 3.2rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__blank {
+      height: 25vh;
+      font-size: 2.4rem;
+    }
+
+    &__fileUpload {
+      font-size: 1.7rem;
+      padding: 1rem 2.2rem;
+
+      &__upload {
+        height: 3.7rem;
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__fileUpload {
+      font-size: 2rem;
+      padding: 1.2rem 2.4rem;
+
+      &__upload {
+        height: 4rem;
+      }
+    }
+  }
+
+  //BUTTON
+  &__button {
+    margin: 1rem auto;
+    width: 25%;
+    position: relative;
+    bottom: -1rem;
+
+    button {
+      padding: 0.8rem 0;
+    }
+  }
+}
