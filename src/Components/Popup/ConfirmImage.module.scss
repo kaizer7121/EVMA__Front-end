@@ -20,6 +20,8 @@
   animation-duration: 0.5s;
   animation-name: slidedown;
 
+  overflow: scroll;
+
   &__cancelIcon {
     cursor: pointer;
     position: absolute;

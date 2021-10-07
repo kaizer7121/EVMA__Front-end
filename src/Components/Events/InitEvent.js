@@ -1,6 +1,6 @@
 import styles from "./InitEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { getDate, validURL } from "../Service/functions.js";
+import { getDate, validURL } from "../../Service/functions";
 import { useEffect, useState } from "react";
 
 const InitEvent = (props) => {
@@ -64,8 +64,10 @@ const InitEvent = (props) => {
               </span>
             );
           })}
+          {locations.online.length > 0 && (
+            <span className={`${styles.detail__registerText} `}>URL: </span>
+          )}
 
-          <span className={`${styles.detail__registerText} `}>URL: </span>
           {locations.online.map((location, index) => {
             const isLast = index + 1 === locations.online.length;
             return isLast ? (
@@ -123,22 +125,30 @@ const InitEvent = (props) => {
               const isLast = index + 1 === props.information.hashtag.length;
               return isLast ? (
                 <span
-                key={`hashtag_${index}`}
+                  key={`hashtag_${index}`}
                   className={`${styles.detail__registerText}`}
                 >{`#${tag}`}</span>
               ) : (
                 <span
-                key={`hashtag_${index}`}
+                  key={`hashtag_${index}`}
                   className={`${styles.detail__registerText}`}
                 >{`#${tag}, `}</span>
               );
             })}
           <p></p>
-          <button
-            className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-          >
-            Join
-          </button>
+          <div className={`${styles.detail__buttons}`}>
+            <button
+              className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
+            >
+              Follow
+            </button>
+
+            <button
+              className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+            >
+              SHARE
+            </button>
+          </div>
         </div>
       </header>
       <hr />

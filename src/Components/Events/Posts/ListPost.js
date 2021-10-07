@@ -30,7 +30,7 @@ const DUMMY_DATA = [
   },
 ];
 
-const ListPost = () => {
+const ListPost = (props) => {
   const [isCreatingPost, setIsCreatingPost] = useState(false);
 
   const openPostCreation = () => {
@@ -50,16 +50,18 @@ const ListPost = () => {
       )}
       <section className={`${styles.listPost}`}>
         <div className={`${styles.listPost__button}`}>
-          <button
-            className={`${commonStyles.btn} ${commonStyles.btn_tertiary_light}`}
-            onClick={openPostCreation}
-          >
-            Create
-          </button>
+          {props.isOwnEvent && (
+            <button
+              className={`${commonStyles.btn} ${commonStyles.btn_tertiary_light}`}
+              onClick={openPostCreation}
+            >
+              Create
+            </button>
+          )}
         </div>
         <div className={styles.listPost__list}>
-          {DUMMY_DATA.map((post) => (
-            <Post information={post} />
+          {props.information.map((post) => (
+            <Post isOwnEvent={props.isOwnEvent}  information={post} />
           ))}
         </div>
       </section>

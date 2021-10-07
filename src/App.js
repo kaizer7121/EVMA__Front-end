@@ -1,22 +1,20 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import NavigationBar from "./Components/Navigation/Navigationbar";
-import SideNavigation from "./Components/Navigation/SideNavigation";
-import SignIn from "./Components/Auth/SignIn";
-import ListEvent from "./Components/Events/ListEvent";
-import SignUp from "./Components/Auth/SignUp";
 import ForgotPassword from "./Components/Auth/ForgotPassword";
-import EventDetail from "./Components/Events/EventDetail";
-import EventCreation from "./Components/Events/EventCreation";
-import ListOrganization from "./Components/Organizations/ListOrganization";
-import OrganizationDetail from "./Components/Organizations/OrganizationDetail";
 
 import "./App.scss";
-import Profile from "./Components/Profile/Profile";
-import ConfirmImage from "./Components/Popup/ConfirmImage";
+
 import { useEffect } from "react";
 import firebase from "./Firebase";
 import CreatePost from "./Components/Popup/CreatePost";
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import AllEventPage from "./Pages/AllEventPage";
+import ListOrganizationPage from "./Pages/ListOrganizationPage";
+import OrganizationDetailPage from "./Pages/OrganizationDetailPage";
+import EventDetaiPage from "./Pages/EventDetaiPage";
+import EventCreationPage from "./Pages/EventCreationPage";
+import ProfilePage from "./Pages/ProfilePage";
 
 function App() {
   // Handle firebase auth changed
@@ -28,58 +26,53 @@ function App() {
         if (!user) {
           return console.log("Log out");
         }
-        console.log(user.displayName);
-        console.log("======================");
-        const token = await user.getIdToken();
-        console.log(token);
+        // console.log(user.displayName);
+        // console.log("======================");
+        // const token = await user.getIdToken();
+        // console.log(token);
       });
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
+
+  useEffect(() => {
+    console.log("EFFECT");
+    const token = localStorage.getItem("TOKEN");
   }, []);
 
   return (
     <Switch>
       <Route path="/sign-in">
-        <SignIn />
+        <SignInPage />
       </Route>
       <Route path="/sign-up">
-        <SignUp />
+        <SignUpPage />
       </Route>
       <Route path="/forgot-password">
         <ForgotPassword />
       </Route>
-      <Route path="/home">
-        <NavigationBar />
-        <SideNavigation activatedItem={"HOME"}/>
-        <ListEvent />
+      <Route exact path="/event">
+        <AllEventPage />
       </Route>
-      <Route path="/organizations">
-        <NavigationBar />
-        <SideNavigation activatedItem={"ORGANIZTAION"}/>
-        <ListOrganization />
+      <Route path="/event/:id">
+        <EventDetaiPage />
       </Route>
-      <Route path="/organization-detail">
-        <NavigationBar />
-        <SideNavigation activatedItem={"NONE"}/>
-        <OrganizationDetail />
+      <Route exact path="/organization">
+        <ListOrganizationPage />
       </Route>
-      <Route path="/event-detail">
-        <NavigationBar />
-        <SideNavigation activatedItem={"NONE"}/>
-        <EventDetail />
+      <Route path="/organization/:id">
+        <OrganizationDetailPage />
       </Route>
       <Route path="/create">
-        <NavigationBar />
-        <EventCreation />
+        <EventCreationPage />
       </Route>
       <Route path="/profile">
-        <NavigationBar />
-        <Profile />
+        <ProfilePage />
       </Route>
-      <Route path="/test">        
+      <Route path="/test">
         <CreatePost />
       </Route>
       <Route path="*">
-        <Redirect to="/home" />
+        <Redirect to="/event" />
       </Route>
     </Switch>
   );

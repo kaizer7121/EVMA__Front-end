@@ -5,7 +5,8 @@ import { StyledFirebaseAuth } from "react-firebaseui";
 import firebase, { uiConfig } from "../../Firebase";
 import "firebaseui/dist/firebaseui.css";
 import { useEffect, useState } from "react";
-import { validateEmail } from "../Service/functions";
+import { validateEmail } from "../../Service/functions";
+import { signIn } from "../../Service/api/authApi";
 
 const SignIn = () => {
   const [userInfo, setUserInfo] = useState({
@@ -61,10 +62,27 @@ const SignIn = () => {
     return !(email || password);
   };
 
-  const signInHandler = (event) => {
+  const signInHandler = async (event) => {
     event.preventDefault();
     if (checkValidInfo()) {
-      console.log(userInfo);
+      try {
+        const response = await signIn(userInfo);
+        console.log(response);
+        // firebase
+        //   .auth()
+        //   .signInAnonymously()
+        //   .then(() => {
+        //     console.log("Login anonymous successfully")
+        //   })
+        //   .catch((error) => {
+        //     var errorCode = error.code;
+        //     var errorMessage = error.message;
+        //     // ...
+        //   });
+        localStorage.setItem("TOKEN", response.token);
+      } catch (error) {
+        console.log("Fail when signup " + error);
+      }
     } else {
       setUserInfo((prevValue) => ({ ...prevValue, password: "" }));
     }

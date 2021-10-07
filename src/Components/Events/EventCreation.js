@@ -4,9 +4,14 @@ import CreationBar from "./CreationBar";
 import InitEvent from "./InitEvent";
 
 import ConfirmImage from "../Popup/ConfirmImage";
-import { uploadImgToStorage } from "../Service/firebaseFunctions";
+import {
+  getURLImage,
+  uploadImgToStorage,
+} from "../../Service/firebaseFunctions";
+import { createEvent } from "../../Service/api/eventApi";
+import { useHistory } from "react-router";
 
-const EventCreation = () => {
+const EventCreation = (props) => {
   const allInputs = { imgUrl: "" };
   const [imageAsFile, setImageAsFile] = useState("");
   const [imageAsUrl, setImageAsUrl] = useState(allInputs);
@@ -19,13 +24,13 @@ const EventCreation = () => {
     locationName: [""],
     locationDetail: [""],
     hashtag: [""],
-    categories: ["Education", "Online"],
+    categories: [],
     summary: "",
     content: "",
     image: "",
     organization: "Unknown",
     otherOrganizations: [""],
-    isShowAttendees: false,
+    isOnlineEvent: false,
   });
   const [croppingImage, setCroppingImage] = useState({ empty: true });
   const [eventError, setEventError] = useState({
@@ -37,9 +42,22 @@ const EventCreation = () => {
     summary: false,
     content: false,
     image: false,
+    hashtag: false,
   });
+
+  const history = useHistory();
+
   const inputValue = (value, type) => {
-    setEventInfo((prevValue) => ({ ...prevValue, [type]: value }));
+    if (type === "categories") {
+      const newCategories = [...eventInfo.categories];
+      newCategories.push(value);
+      setEventInfo((prevValue) => ({
+        ...prevValue,
+        categories: newCategories,
+      }));
+    } else {
+      setEventInfo((prevValue) => ({ ...prevValue, [type]: value }));
+    }
   };
 
   const addEmoji = (emoji, type) => {
@@ -48,9 +66,7 @@ const EventCreation = () => {
   };
 
   const uploadImage = (e, type) => {
-    console.log(e.target.files);
     if (e.target.files && e.target.files.length > 0) {
-      console.log("UPLOAD");
       setCroppingImage({ files: e.target.files, type });
     }
     // const value =
@@ -65,13 +81,11 @@ const EventCreation = () => {
   const onConfirmCroppedImg = (blob) => {
     const imgSrc = URL.createObjectURL(blob);
     setEventInfo((prevValue) => ({ ...prevValue, image: imgSrc }));
-    console.log("TEST:");
     setImageAsFile(blob);
     setCroppingImage({ empty: true });
   };
 
   const checkValidEventHandler = () => {
-    let isError = false;
     let title = false;
     let start = false;
     let end = false;
@@ -80,6 +94,7 @@ const EventCreation = () => {
     let summary = false;
     let content = false;
     let image = false;
+    let hashtag = false;
 
     if (
       eventInfo.title === undefined ||
@@ -87,7 +102,6 @@ const EventCreation = () => {
       eventInfo.title.length > 50
     ) {
       title = true;
-      isError = true;
     }
     if (
       eventInfo.startDate === undefined ||
@@ -96,46 +110,44 @@ const EventCreation = () => {
       eventInfo.startTime.length === 0
     ) {
       start = true;
-      isError = true;
     }
     if (
       (eventInfo.endDate.length === 0 && eventInfo.endTime.length !== 0) ||
       (eventInfo.endDate.length !== 0 && eventInfo.endTime.length === 0)
     ) {
-      console.log(eventInfo.endTime !== undefined);
       end = true;
-      isError = true;
     }
-    if (eventInfo.location === undefined || eventInfo.location.length === 0) {
-      location = true;
-      isError = true;
-    }
+    eventInfo.locationName.forEach((info, index) => {
+      if (info.length === 0 || eventInfo.locationDetail[index].length === 0) {
+        location = true;
+      }
+    });
+    eventInfo.hashtag.forEach((tag, index) => {
+      if (index > 0 && tag.length === 0) hashtag = true;
+    });
     if (
       eventInfo.categories === undefined ||
-      eventInfo.categories.length === 0
+      eventInfo.categories.length === 0 ||
+      eventInfo.categories.length > 10
     ) {
       categories = true;
-      isError = true;
     }
     if (
       eventInfo.summary === undefined ||
       eventInfo.summary.length === 0 ||
-      eventInfo.summary.length > 140
+      eventInfo.summary.length > 250
     ) {
       summary = true;
-      isError = true;
     }
     if (
       eventInfo.content === undefined ||
       eventInfo.content.length === 0 ||
-      eventInfo.content.length > 2500
+      eventInfo.content.length > 4000
     ) {
       content = true;
-      isError = true;
     }
     if (eventInfo.image === undefined || eventInfo.image.length === 0) {
       image = true;
-      isError = true;
     }
 
     setEventError({
@@ -147,25 +159,86 @@ const EventCreation = () => {
       summary,
       content,
       image,
+      hashtag,
     });
-
-    return isError;
+    return !(
+      title ||
+      start ||
+      end ||
+      location ||
+      categories ||
+      summary ||
+      content ||
+      image ||
+      hashtag
+    );
   };
 
-  const onSubmitEvent = async () => {
-    const isValid = !checkValidEventHandler();
+  const onSubmitEvent = async (type) => {
+    const isValid = checkValidEventHandler();
+    getURLImage("test");
     if (isValid) {
-      console.log("SEND REQUEST TO CREATE");
-      const fileName = "cover.png";
-      const imageAsUrl = await uploadImgToStorage(imageAsFile, fileName);
-      console.log(imageAsUrl);
-      setImageAsUrl(imageAsUrl);
-    }
-  };
-  const onSavetoDraft = () => {
-    const isValid = !checkValidEventHandler();
-    if (isValid) {
-      console.log("SEND REQUEST TO SAVE");
+      // Process category
+      const categoryIds = [];
+      eventInfo.categories.forEach((categoryName) => {
+        props.categoriesInDB.forEach((categoryInfo) => {
+          if (categoryName === categoryInfo.name) {
+            categoryIds.push(categoryInfo.id);
+          }
+        });
+      });
+
+      // Process hashtag
+      const tags =
+        eventInfo.hashtag[0] !== ""
+          ? eventInfo.hashtag.map((tag) => `#${tag}`)
+          : [];
+
+      // Process date
+      let startDateAndTime = new Date(eventInfo.startDate);
+      const startTimeSplit = eventInfo.startTime.split(":");
+      startDateAndTime.setHours(+startTimeSplit[0] + 7, startTimeSplit[1]);
+      startDateAndTime = startDateAndTime.toISOString();
+
+      let endDateAndTime = null;
+
+      if (
+        !eventError.end &&
+        eventInfo.endDate.toString().length > 0 &&
+        eventInfo.endTime.length > 0
+      ) {
+        endDateAndTime = new Date(eventInfo.endDate);
+        const endTimeSplit = eventInfo.endTime.split(":");
+        endDateAndTime.setHours(+endTimeSplit[0] + 7, endTimeSplit[1]);
+        endDateAndTime = endDateAndTime.toISOString();
+      }
+
+      const requestData = {
+        title: eventInfo.title,
+        categoryIds,
+        tags,
+        organizerNames: [
+          eventInfo.organization,
+          ...eventInfo.otherOrganizations,
+        ],
+        online: eventInfo.isOnlineEvent,
+        startDate: startDateAndTime,
+        endDate: endDateAndTime,
+        statusId: type === "PUBLISH" ? 1 : 3,
+        summary: eventInfo.summary,
+        content: eventInfo.content,
+      };
+      try {
+        const responseData = await createEvent(requestData);
+        const fileName = responseData.coverURL;
+        uploadImgToStorage(imageAsFile, fileName).then((img) => {
+          history.push("/event");
+        });
+      } catch (error) {
+        console.log("Error when create event " + error);
+      }
+    } else {
+      console.log("FAIL");
     }
   };
 
@@ -266,11 +339,11 @@ const EventCreation = () => {
   };
 
   const changeToggleButtonHandler = (type) => {
-    if (type === "SHOW_ATTENDEES") {
-      const oldValue = eventInfo.isShowAttendees;
+    if (type === "ONLINE_EVENT") {
+      const oldValue = eventInfo.isOnlineEvent;
       setEventInfo((prevValue) => ({
         ...prevValue,
-        isShowAttendees: !oldValue,
+        isOnlineEvent: !oldValue,
       }));
     }
   };
@@ -278,13 +351,13 @@ const EventCreation = () => {
   return (
     <div>
       <CreationBar
+        categoriesInDB={props.categoriesInDB}
         eventError={eventError}
         inputValue={inputValue}
         addEmoji={addEmoji}
         uploadImage={uploadImage}
         information={eventInfo}
         onSubmit={onSubmitEvent}
-        onSavetoDraft={onSavetoDraft}
         changeMultiInput={changeMultiInput}
         changeMultiInputValue={changeMultiInputValue}
         changeToggleButtonHandler={changeToggleButtonHandler}

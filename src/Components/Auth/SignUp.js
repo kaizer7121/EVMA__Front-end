@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
 import { useState } from "react";
@@ -6,10 +6,11 @@ import {
   calculateAge,
   validateEmail,
   validateName,
-} from "../Service/functions.js";
+} from "../../Service/functions";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
+import { signUp } from "../../Service/api/authApi";
 
 const SignUp = () => {
   const [registerInfo, setRegisterInfo] = useState({
@@ -18,14 +19,20 @@ const SignUp = () => {
     confirmPassword: "",
     fullName: "",
     dateOfBirth: "",
+    role: "",
   });
   const [userYearOld, setUserYearOld] = useState("");
   const [errorRegister, setErrorRegister] = useState({
     email: false,
+    isDuplicateEmail: false,
     password: false,
     confirmPassword: false,
     fullName: false,
+    dateOfBirth: false,
   });
+
+  const history = useHistory();
+
   const inputHanlder = (event) => {
     const type = event.target.id;
     const value = event.target.value;
@@ -47,6 +54,7 @@ const SignUp = () => {
     let password = false;
     let confirmPassword = false;
     let fullName = false;
+    let dateOfBirth = false;
     if (!validateEmail(registerInfo.email)) {
       email = true;
     }
@@ -59,20 +67,38 @@ const SignUp = () => {
     if (!validateName(registerInfo.fullName)) {
       fullName = true;
     }
+    if (userYearOld < 16) {
+      dateOfBirth = true;
+    }
     setErrorRegister({
       email,
       password,
       confirmPassword,
       fullName,
+      dateOfBirth,
     });
 
-    return !(email || password || confirmPassword || fullName);
+    return !(email || password || confirmPassword || fullName || dateOfBirth);
   };
 
-  const signUpHandler = (event) => {
+  const signUpHandler = async (event) => {
     event.preventDefault();
     if (checkValidInfo()) {
-      console.log(registerInfo);
+      try {
+        signUp(registerInfo).then((response) => {
+          if (
+            response.data &&
+            response.data.message === "Data integrity violation"
+          ) {
+            setErrorRegister((prevValue) => ({
+              ...prevValue,
+              isDuplicateEmail: true,
+            }));
+          }
+        });
+      } catch (error) {
+        console.log(error.response);
+      }
     } else {
       setRegisterInfo((prevValue) => ({
         ...prevValue,
@@ -91,7 +117,13 @@ const SignUp = () => {
           <p>
             Already have account ? <Link to="/sign-in">Sign in</Link>
           </p>
+
           <form className={`${commonStyles.form}`} onSubmit={signUpHandler}>
+            {errorRegister.isDuplicateEmail && (
+              <p className={`${commonStyles.form__error}`}>
+                Your email is already existed
+              </p>
+            )}
             <div className={`${styles.register__form__group}`}>
               <label htmlFor="email">Email</label>
               <input
@@ -158,11 +190,22 @@ const SignUp = () => {
                 />
               </div>
 
-              {errorRegister.fullName && (
+              {errorRegister.dateOfBirth && (
                 <p className={`${commonStyles.form__error}`}>
                   Date format must be correct and user must older than 16
                 </p>
               )}
+            </div>
+            <label for="cars">Choose a car:</label>
+            <div className={`${styles.register__form__group}`}>
+              <select
+                id="role"
+                className={`${commonStyles.form__input} ${commonStyles.form__input_large}`}
+                onClick={inputHanlder}
+              >
+                <option value="Attendees">Attendees</option>
+                <option value="Event Organizer">Event Organizer</option>
+              </select>
             </div>
             <div className={`${styles.register__form__group}`}>
               <label htmlFor="full-name">Full Name</label>

@@ -57,6 +57,18 @@
     }
   }
 
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 5%;
+
+    button {
+      &:last-of-type {
+        margin-right: 2rem;
+      }
+    }
+  }
+
   &__category {
     margin-top: 0;
     padding: 0.4rem 0.6rem;

@@ -1,0 +1,110 @@
+@import "../SASS_Abstract/variable";
+
+.cpEvent {
+  // border: 1px solid $color-grey-light-2;
+  box-shadow: 0px 0px 30px rgba($color-black, 0.1);
+  border-radius: 9px;
+  width: 47%;
+  position: relative;
+  margin-bottom: 4rem;
+
+  &__status {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: $color-primary;
+    padding: 0.6rem;
+    border-radius: 5px;
+
+    color: $color-white;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  &__inline {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+
+  &__category {
+    display: inline-block;
+    background-color: $color-tertiary-light;
+    color: $color-white;
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+
+    &:not(:last-of-type) {
+      margin-right: 0.5rem;
+    }
+  }
+
+  img {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: $color-primary;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    color: $color-primary-light;
+  }
+
+  p {
+    font-weight: 500;
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__status {
+      font-size: 1.3rem;
+    }
+
+    &__category {
+      padding: 0.3rem 0.5rem;
+      border-radius: 2px;
+    }
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+
+    &__status {
+      font-size: 1.5rem;
+    }
+
+    &__category {
+      padding: 0.4rem 0.6rem;
+      border-radius: 2px;
+    }
+    h1 {
+      font-size: 1.9rem;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+    }
+
+    p {
+      font-size: 1.4rem;
+    }
+  }
+}

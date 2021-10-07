@@ -3,7 +3,9 @@ import ListPost from "./Posts/ListPost";
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { useState } from "react";
-import { validURL } from "../Service/functions";
+import { validURL } from "../../Service/functions";
+import { useEffect } from "react/cjs/react.development";
+import { getURLImage } from "../../Service/firebaseFunctions";
 
 const DUMMY_DATA = {
   title: "Diễn Đàn Sinh Viên Nghiên Cứu Khoa Học",
@@ -37,28 +39,39 @@ const DUMMY_DATA = {
   image:
     "https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.6435-9/106504737_2722347444536344_728271756182488456_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=8631f5&_nc_ohc=sojVDo3kAzUAX_VsoLg&_nc_ht=scontent.fsgn3-1.fna&oh=caf9c7e799dd4228b712c0e7df4f523c&oe=6179C8A8",
 };
+let locations = { offline: [], online: [] };
 
-const EventDetail = () => {
+const EventDetail = (props) => {
+  const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
+  const isOwnEvent = true;
   const [displayType, setDisplayType] = useState("detail");
+  const descriptionArr = props.information.content.split("\n");
 
-  const descriptionArr = DUMMY_DATA.description.split("\n");
+  useEffect(() => {
+    const listOffline = [];
+    const listOnline = [];
+    props.information.addresses.forEach((location) => {
+      if (location.url) {
+        listOnline.push({
+          locationName: location.name,
+          locationDetail: location.fullText,
+        });
+      } else {
+        listOffline.push({
+          locationName: location.name,
+          locationDetail: location.fullText,
+        });
+      }
+      locations = { offline: listOffline, online: listOnline };
+    });
+  }, [props.information.addresses]);
 
-  let locations = { offline: [], online: [] };
-  const listOffline = [];
-  const listOnline = [];
-  DUMMY_DATA.locationDetail.forEach((location, index) => {
-    if (validURL(location)) {
-      listOnline.push({
-        locationName: DUMMY_DATA.locationName[index],
-        locationDetail: DUMMY_DATA.locationDetail[index],
-      });
-    } else {
-      listOffline.push({
-        locationName: DUMMY_DATA.locationName[index],
-        locationDetail: DUMMY_DATA.locationDetail[index],
-      });
-    }
-    locations = { offline: listOffline, online: listOnline };
+  useEffect(() => {
+    const getURLImg = async () => {
+      const fileName = props.information.coverURL;
+      await getURLImage(fileName, setCoverURL);
+    };
+    getURLImg();
   });
 
   const changeDisplayType = (type) => {
@@ -69,7 +82,7 @@ const EventDetail = () => {
 
   const mainContent = (
     <div className={`${styles.detail__body}`}>
-      <h1 className={`${styles.detail__title}`}>{DUMMY_DATA.title}</h1>
+      <h1 className={`${styles.detail__title}`}>{props.information.title}</h1>
       {descriptionArr.map((sentence, index) => (
         <p
           key={`sentence_${index}`}
@@ -86,11 +99,17 @@ const EventDetail = () => {
       <header className={`${styles.detail__header}`}>
         <div className={`${styles.detail__poster}`}>
           <div className={`${styles.detail__status}`}>Progressing</div>
-          <img src={DUMMY_DATA.image} alt="Poster" />
+          <img src={coverURL} alt="Poster" />
         </div>
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
-          <p className={`${styles.detail__registerText}`}>{DUMMY_DATA.date}</p>
+          <p className={`${styles.detail__registerText}`}>{`${
+            props.information.startDate
+          } ${
+            props.information.endDate !== null
+              ? `- ${props.information.endDate}`
+              : ""
+          }`}</p>
 
           <h3 className={`${styles.detail__topic}`}>Location</h3>
           <br />
@@ -100,14 +119,20 @@ const EventDetail = () => {
                 key={`offline_${index}`}
                 className={`${styles.detail__registerText}`}
               >
-                {(location.locationName !== "" ||
-                  location.locationDetail !== "") &&
-                  `${location.locationName}: ${location.locationDetail}`}
+                {`${location.locationName}: ${
+                  location.locationDetail !== null ? (
+                    `${location.locationDetail}`
+                  ) : (
+                    <span>Location</span>
+                  )
+                }`}
                 <br />
               </span>
             );
           })}
-          <span className={`${styles.detail__registerText} `}>URL: </span>
+          {locations.online.length > 0 && (
+            <span className={`${styles.detail__registerText} `}>URL: </span>
+          )}
           {locations.online.map((location, index) => {
             const isLast = index + 1 === locations.online.length;
             return isLast ? (
@@ -116,9 +141,11 @@ const EventDetail = () => {
                 href={location.locationDetail}
                 className={`${styles.detail__registerText} `}
               >
-                <span
-                  key={`online_name_${index}`}
-                >{`${location.locationName}`}</span>
+                <span key={`online_name_${index}`}>{`${
+                  location.locationName !== null
+                    ? `${location.locationName}`
+                    : "link"
+                }`}</span>
               </a>
             ) : (
               <span key={`online_${index}`}>
@@ -127,9 +154,11 @@ const EventDetail = () => {
                   href={location.locationDetail}
                   className={`${styles.detail__registerText} `}
                 >
-                  <span
-                    key={`online_name_${index}`}
-                  >{`${location.locationName}`}</span>
+                  <span key={`online_name_${index}`}>{`${
+                    location.locationName !== null
+                      ? `${location.locationName}`
+                      : "link"
+                  }`}</span>
                 </a>
                 <span key={`online_blank_${index}`}>{`, ${" "}`} </span>
               </span>
@@ -140,22 +169,21 @@ const EventDetail = () => {
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Categories:
           </h3>
-          {DUMMY_DATA.categories.map((category, index) => (
+          {props.information.categories.map((category, index) => (
             <p
               key={`category__${index}`}
               className={`${styles.detail__category}`}
             >
-              {category}
+              {category.name}
             </p>
           ))}
           <h3 className={`${styles.detail__topic}`}>Organization:</h3>
           <p className={`${styles.detail__registerText}`}>
-            {DUMMY_DATA.organization}
-            {DUMMY_DATA.otherOrganizations &&
-              DUMMY_DATA.otherOrganizations[0] !== "" &&
-              DUMMY_DATA.otherOrganizations.map(
-                (organization) => `, ${organization}`
-              )}
+            {props.information.organizerNames.map((organizerName, index) => {
+              const isLast =
+                index === props.information.organizerNames.length - 1;
+              return isLast ? organizerName : `${organizerName}, `;
+            })}
           </p>
           <h3 className={`${styles.detail__topic} ${styles.mb_small}`}>
             Hashtags:
@@ -177,11 +205,27 @@ const EventDetail = () => {
             })}
           <p></p>
           <div className={`${styles.detail__buttons}`}>
-            <button
-              className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-            >
-              Follow
-            </button>
+            {!isOwnEvent && (
+              <button
+                className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
+              >
+                Follow
+              </button>
+            )}
+            {isOwnEvent && (
+              <>
+                <button
+                  className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
+                >
+                  Delete
+                </button>
+                <button
+                  className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark} ${styles.btn_small}`}
+                >
+                  Edit
+                </button>
+              </>
+            )}
 
             <button
               className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
@@ -215,7 +259,9 @@ const EventDetail = () => {
         </div>
       </section>
       {displayType === "detail" && mainContent}
-      {displayType === "posts" && <ListPost />}
+      {displayType === "posts" && (
+        <ListPost isOwnEvent={isOwnEvent} information={props.listPost} />
+      )}
     </section>
   );
 };

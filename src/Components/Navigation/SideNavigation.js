@@ -20,7 +20,7 @@ const SideNavigation = (props) => {
 
         <li className={`${styles.sideNav__item} ${activatedItem === "ORGANIZTAION" && styles.sideNav__item__active}`}>
           <Link
-            to="/organizations"
+            to="/organization"
             className={`${styles.sideNav__link}`}
           >
             <span>All Organization</span>

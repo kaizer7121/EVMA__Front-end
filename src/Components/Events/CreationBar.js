@@ -25,6 +25,7 @@ const CreationBar = (props) => {
     hashtag: 1,
     otherOrganizations: 1,
   });
+  const [selectedCategory, setSelectedCategory] = useState("default");
   useEffect(() => {
     setNumberOfMultiInput((prevValue) => ({
       ...prevValue,
@@ -82,16 +83,15 @@ const CreationBar = (props) => {
   };
 
   const uploadImage = (e, type) => {
-    console.log("UPLOAD");
     props.uploadImage(e, type);
   };
 
-  const onSubmit = () => {
-    props.onSubmit();
+  const onSubmit = (type) => {
+    props.onSubmit(type);
   };
 
-  const onSavetoDraft = () => {
-    props.onSavetoDraft();
+  const onSelectCategory = (event) => {
+    setSelectedCategory(event.target.value);
   };
 
   return (
@@ -206,10 +206,21 @@ const CreationBar = (props) => {
           format
         </p>
       )}
-
+      <div className={`${styles.creationBar__toggleButton}`}>
+        <span>Online event</span>
+        <label className={`${commonStyles.switch}`}>
+          <input
+            type="checkbox"
+            checked={props.information.isOnlineEvent}
+            onChange={() => props.changeToggleButtonHandler("ONLINE_EVENT")}
+          />
+          <span
+            className={`${commonStyles.slider} ${commonStyles.round}`}
+          ></span>
+        </label>
+      </div>
       <h3 className={`${styles.creationBar__topic}`}>Location:</h3>
       {props.information.locationName.map((location, index) => {
-        console.log(location);
         return (
           <section key={index} className={`${styles.creationBar__multiInput}`}>
             <label
@@ -253,6 +264,13 @@ const CreationBar = (props) => {
           </section>
         );
       })}
+      {props.eventError.location && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallNegative}`}
+        >
+          Location must not be empty
+        </p>
+      )}
       {numberOfMultiInput.location > 1 && (
         <p
           className={`${styles.creationBar__multiInput_remove}`}
@@ -272,13 +290,6 @@ const CreationBar = (props) => {
       >
         Add more location (+)
       </p>
-      {props.eventError.location && (
-        <p
-          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallNegative}`}
-        >
-          Location must not be empty
-        </p>
-      )}
 
       <h3 className={`${styles.creationBar__topic}`}>Hashtag:</h3>
       {props.information.hashtag.map((location, index) => {
@@ -307,6 +318,14 @@ const CreationBar = (props) => {
           </section>
         );
       })}
+      <p></p>
+      {props.eventError.hashtag && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          Additional hastag must not be empty
+        </p>
+      )}
       {numberOfMultiInput.hashtag > 1 && (
         <p
           className={`${styles.creationBar__multiInput_remove}`}
@@ -326,21 +345,44 @@ const CreationBar = (props) => {
       >
         Add more hashtag (+)
       </p>
-
       <section className={`${styles.creationBar__categories}`}>
         <h3 className={`${styles.creationBar__topic}`}>Categories:</h3>
-        <p className={`${styles.creationBar__category}`}>Education</p>
-        <p className={`${styles.creationBar__category}`}>Online</p>
-        <div className={`${styles.creationBar__addCategory}`}>
-          <img src="/images/icon/plus-icon.png" alt="Add" />
-          <span>Add</span>
+        {props.information.categories.map((category) => (
+          <p className={`${styles.creationBar__category}`}>{category}</p>
+        ))}
+        <div className={`${styles.creationBar__categorySelection}`}>
+          <select
+            className={`${styles.creationBar__selectCategory}`}
+            value={selectedCategory}
+            onChange={onSelectCategory}
+          >
+            <option value="default" selected disabled hidden>
+              Choose category
+            </option>
+            {props.categoriesInDB.map((category) => (
+              <option id={category.id} key={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <div
+            className={`${styles.creationBar__addCategory}`}
+            onClick={() => {
+              if (selectedCategory !== "default") {
+                inputValue(selectedCategory, "categories");
+              }
+            }}
+          >
+            <img src="/images/icon/plus-icon.png" alt="Add" />
+            <span>Add</span>
+          </div>
         </div>
       </section>
       {props.eventError.categories && (
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
         >
-          Number of category must between (0 - 10)
+          Number of category must between (1 - 10)
         </p>
       )}
 
@@ -426,7 +468,7 @@ const CreationBar = (props) => {
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative}`}
         >
-          Summary must not empty and not exceed 140 characters
+          Summary must not empty and not exceed 250 characters
         </p>
       )}
       <section className={`${styles.creationBar__description}`}>
@@ -464,7 +506,7 @@ const CreationBar = (props) => {
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative}`}
         >
-          Content must not empty and not exceed 2500 characters
+          Content must not empty and not exceed 4000 characters
         </p>
       )}
       <section className={`${styles.creationBar__cover}`}>
@@ -493,19 +535,6 @@ const CreationBar = (props) => {
           This event don't have cover image
         </p>
       )}
-      <div className={`${styles.creationBar__toggleButton}`}>
-        <span>Show number of attendees</span>
-        <label className={`${commonStyles.switch}`}>
-          <input
-            type="checkbox"
-            checked={props.information.isShowAttendees}
-            onChange={() => props.changeToggleButtonHandler("SHOW_ATTENDEES")}
-          />
-          <span
-            className={`${commonStyles.slider} ${commonStyles.round}`}
-          ></span>
-        </label>
-      </div>
       <section className={`${styles.creationBar__buttons}`}>
         <button
           className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__cancel}`}
@@ -514,13 +543,17 @@ const CreationBar = (props) => {
         </button>
         <button
           className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__saveDraft}`}
-          onClick={onSavetoDraft}
+          onClick={() => {
+            onSubmit("DRAFT");
+          }}
         >
           Save to draft
         </button>
         <button
           className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__submit}`}
-          onClick={onSubmit}
+          onClick={() => {
+            onSubmit("PUBLISH");
+          }}
         >
           Submit
         </button>
