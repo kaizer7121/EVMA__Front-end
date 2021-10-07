@@ -15,29 +15,26 @@ import OrganizationDetailPage from "./Pages/OrganizationDetailPage";
 import EventDetaiPage from "./Pages/EventDetaiPage";
 import EventCreationPage from "./Pages/EventCreationPage";
 import ProfilePage from "./Pages/ProfilePage";
+import {useSelector} from "react-redux"
 
 function App() {
+  const token = useSelector((state) => state.token.token);
   // Handle firebase auth changed
-  useEffect(() => {
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged(async (user) => {
-        // setIsSignedIn(!!user);
-        if (!user) {
-          return console.log("Log out");
-        }
-        // console.log(user.displayName);
-        // console.log("======================");
-        // const token = await user.getIdToken();
-        // console.log(token);
-      });
-    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
-
-  useEffect(() => {
-    console.log("EFFECT");
-    const token = localStorage.getItem("TOKEN");
-  }, []);
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase
+  //     .auth()
+  //     .onAuthStateChanged(async (user) => {
+  //       // setIsSignedIn(!!user);
+  //       if (!user) {
+  //         return console.log("Log out");
+  //       }
+  //       // console.log(user.displayName);
+  //       // console.log("======================");
+  //       // const token = await user.getIdToken();
+  //       // console.log(token);
+  //     });
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
 
   return (
     <Switch>

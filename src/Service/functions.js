@@ -70,3 +70,22 @@ export const convertDate = (date) => {
     options
   )} at ${date.toLocaleTimeString("en-US")}`;
 };
+
+export const converISOToDate = (isoDate) => {
+  const [date, isoTime] = isoDate.split("T");
+  const fullTime = isoTime.split("Z");
+  const [hour, minute, second] = fullTime[0].split(":");
+  const fullDate = new Date(date);
+  fullDate.setHours(hour, minute, second);
+
+  return fullDate;
+};
+
+export const converISOToSimpleDate = (isoDate) => {
+  const [date, isoTime] = isoDate.split("T");
+  const fullTime = isoTime.split("Z");
+
+  const fullDate = `${date}, ${fullTime[0]}`;
+
+  return fullDate;
+};

@@ -10,12 +10,10 @@ const OrganizationDetailPage = () => {
   const [organizationDetail, setOrganizationDetail] = useState({});
   const urlParam = useParams();
   useEffect(() => {
-    console.log("EFFECT");
     const organizationID = urlParam.id;
     const getDetailInfo = async () => {
       const organizationDetail = await getOrganizationDetail(organizationID);
       setOrganizationDetail(organizationDetail);
-      console.log(organizationDetail)
     };
     getDetailInfo();
   }, [urlParam.id]);
@@ -23,7 +21,7 @@ const OrganizationDetailPage = () => {
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"NONE"} />
-      <OrganizationDetail information={organizationDetail} />
+      <OrganizationDetail id={urlParam.id} information={organizationDetail} />
     </>
   );
 };

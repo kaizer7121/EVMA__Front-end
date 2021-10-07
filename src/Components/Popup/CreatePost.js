@@ -4,12 +4,16 @@ import Backdrop from "./Backdrop";
 import styles from "./CreatePost.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import Picker from "emoji-picker-react";
+import { converISOToDate } from "../../Service/functions";
 
 const CreatePost = (props) => {
   const [postInfo, setPostInfo] = useState({
     content: "",
     image: "",
     imgSrc: "",
+  });
+  const [errorPost, setErrorPost] = useState({
+    content: false,
   });
   const [isChoosingEmoji, setIsChoosingEmoji] = useState(false);
 
@@ -39,6 +43,22 @@ const CreatePost = (props) => {
     setPostInfo((prevValue) => ({ ...prevValue, image: "", imgSrc: "" }));
   };
 
+  const checkValidData = () => {
+    let content = false;
+    if (postInfo.content.length <= 0 || postInfo.content.length > 2500) {
+      content = true;
+    }
+
+    setErrorPost({ content });
+    return !content;
+  };
+
+  const onSubmit = () => {
+    if (checkValidData()) {
+      props.onConfirm(postInfo);
+    }
+  };
+
   return (
     <Backdrop>
       <section className={`${styles.createPost}`}>
@@ -61,6 +81,11 @@ const CreatePost = (props) => {
               onChange={onChangeContent}
               value={postInfo.content}
             />
+            {errorPost.content && (
+              <p className={`${styles.createPost__error}`}>
+                The number of character must between 1 - 2500
+              </p>
+            )}
             <div
               className={`${styles.createPost__detail_emoji}`}
               onClick={onToggleEmojiPicker}
@@ -113,7 +138,7 @@ const CreatePost = (props) => {
           <div className={`${styles.createPost__button}`}>
             <button
               className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
-              //   onClick={onSubmit}
+              onClick={onSubmit}
             >
               Submit
             </button>

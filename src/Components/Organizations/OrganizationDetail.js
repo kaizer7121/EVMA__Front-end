@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useEffect } from "react/cjs/react.development";
+import {
+  getAllEvent,
+  getAllEventByProfileID,
+} from "../../Service/api/eventApi";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import CompactedEvent from "../Events/CompactedEvent";
 import styles from "./OrganizationDetail.module.scss";
@@ -19,10 +23,69 @@ const OrganizationDetail = (props) => {
   const [backgroundURL, setBackgroundURL] = useState(
     "/images/default-cover.jpg"
   );
-
+  const [listEvent, setListEvent] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 0,
+    maxPage: 1,
+  });
+  console.log(listEvent);
   const description = props.information.summary
     ? props.information.summary.split("\n")
     : [];
+
+  const trackScrolling = useCallback(() => {
+    const wrappedElement = document.getElementById("header");
+
+    if (wrappedElement && pagination.page - 1 !== pagination.maxPage) {
+      const isBottom =
+        wrappedElement.getBoundingClientRect().bottom * 0.9 <=
+        window.innerHeight;
+
+      if (isBottom) {
+        setPagination((prevValue) => ({
+          ...prevValue,
+          page: pagination.page + 1,
+        }));
+      }
+    } else {
+      window.removeEventListener("scroll", trackScrolling);
+    }
+  }, [pagination.page, pagination.maxPage]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", trackScrolling);
+
+    if (pagination.page - 1 === pagination.maxPage) {
+      window.removeEventListener("scroll", trackScrolling);
+    }
+    return function cleanup() {
+      window.removeEventListener("scroll", trackScrolling);
+    };
+  }, [trackScrolling, pagination.page, pagination.maxPage]);
+
+  useEffect(() => {
+    const fetchAllRelatedEvent = async () => {
+      try {
+        const params = {
+          page: pagination.page,
+        };
+        const organizationID = props.id;
+        const response = await getAllEventByProfileID(organizationID, params);
+        setPagination((prevValue) => ({
+          ...prevValue,
+          maxPage: response.totalPageNum,
+        }));
+        console.log("RESPONSE");
+        setListEvent((prevValue) => [...prevValue, ...response.content]);
+      } catch (err) {
+        console.log("Fail when get all event: " + err);
+      }
+    };
+    if (pagination.page - 1 < pagination.maxPage) {
+      fetchAllRelatedEvent();
+    }
+  }, [pagination.page, pagination.maxPage, props.id]);
+
   useEffect(() => {
     const getURLAvatar = async () => {
       const fileName = props.information.avatarURL;
@@ -32,7 +95,7 @@ const OrganizationDetail = (props) => {
       const fileName = props.information.backgroundURL;
       await getURLImage(fileName, setBackgroundURL);
     };
-    
+
     getURLAvatar();
     getURLBackGround();
   }, [props.information.avatarURL, props.information.backgroundURL]);
@@ -68,9 +131,9 @@ const OrganizationDetail = (props) => {
             Related events:{" "}
           </h3>
           <div className={`${styles.organizationDetail__relatedEvent}`}>
-            <CompactedEvent />
-            <CompactedEvent />
-            <CompactedEvent />
+            {listEvent.map((event) => (
+              <CompactedEvent key={`CPEVENT_${event.id}`} information={event} />
+            ))}
           </div>
         </div>
       </div>

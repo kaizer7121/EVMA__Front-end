@@ -30,7 +30,7 @@ export const getAllCategoryFromDB = () => {
   return axiosClient.get(url);
 };
 
-export const getAllEventByProfileID = (profileID) => {
-  const url = `/api/events/byOrgainzer/${profileID}`;
+export const getAllEventByProfileID = (profileID, params) => {
+  const url = `/api/events/byOrganizer/${profileID}`;
   return axiosClient.get(url);
 };

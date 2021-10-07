@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { convertDate } from "../../../Service/functions";
+import { converISOToDate, convertDate } from "../../../Service/functions";
 import styles from "./Post.module.scss";
 import commonStyles from "../../Auth/Auth.module.scss";
 
@@ -8,7 +8,7 @@ const Post = (props) => {
 
   const summrayContent = props.information.content.slice(0, 800);
   const fullContent = props.information.content;
-
+  const date = convertDate(converISOToDate(props.information.createdDate));
   const changeView = () => {
     setViewFullContent(!viewFullContent);
   };
@@ -17,7 +17,7 @@ const Post = (props) => {
     <div className={`${styles.post}`}>
       <header className={`${styles.post__header}`}>
         {/* <span>{convertDate(props.information.date)}</span> */}
-        <span>{props.information.createdDate}</span>
+        <span>{date}</span>
         {props.isOwnEvent && (
           <>
             {" "}

@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from "react";
 
 import styles from "./ListEvent.module.scss";
 import { getAllEvent } from "../../Service/api/eventApi";
-import { getURLImage } from "../../Service/firebaseFunctions";
 
 // const DUMMY_DATA = [
 //   {
@@ -84,20 +83,6 @@ const ListEvent = () => {
           ...prevValue,
           maxPage: response.totalPageNum,
         }));
-
-        // const listImgURL = [];
-        // await response.content.map(async (event) => {
-        //   const fileName = event.coverURL;
-        //   const firebaseURL = await getURLImage(fileName);
-        //   setTimeout(() => )
-        //   listImgURL.push(firebaseURL);
-        //   console.log(firebaseURL);
-        //   // if (firebaseURL) {
-        //   //   setCoverURL(firebaseURL);
-        //   // }
-        // });
-        // console.log(listImgURL);
-
         setListEvent((prevValue) => [...prevValue, ...response.content]);
       } catch (err) {
         console.log("Fail when get all event: " + err);
@@ -108,8 +93,6 @@ const ListEvent = () => {
     }
   }, [pagination.page, pagination.maxPage]);
 
-  console.log("==========");
-  console.log(listEvent);
   return (
     <div className={`${styles.listEvent}`} id="header">
       {listEvent.length > 0 &&

@@ -3,7 +3,12 @@ import ListPost from "./Posts/ListPost";
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { useState } from "react";
-import { validURL } from "../../Service/functions";
+import {
+  converISOToDate,
+  converISOToSimpleDate,
+  convertDate,
+  validURL,
+} from "../../Service/functions";
 import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 
@@ -46,7 +51,10 @@ const EventDetail = (props) => {
   const isOwnEvent = true;
   const [displayType, setDisplayType] = useState("detail");
   const descriptionArr = props.information.content.split("\n");
-
+  const startDate = converISOToSimpleDate(props.information.startDate);
+  const endDate = props.information.endDate
+    ? converISOToSimpleDate(props.information.endDate)
+    : null;
   useEffect(() => {
     const listOffline = [];
     const listOnline = [];
@@ -103,12 +111,8 @@ const EventDetail = (props) => {
         </div>
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
-          <p className={`${styles.detail__registerText}`}>{`${
-            props.information.startDate
-          } ${
-            props.information.endDate !== null
-              ? `- ${props.information.endDate}`
-              : ""
+          <p className={`${styles.detail__registerText}`}>{`${startDate} ${
+            props.information.endDate !== null ? `- ${endDate}` : ""
           }`}</p>
 
           <h3 className={`${styles.detail__topic}`}>Location</h3>

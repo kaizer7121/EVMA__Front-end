@@ -86,6 +86,7 @@ const SignUp = () => {
     if (checkValidInfo()) {
       try {
         signUp(registerInfo).then((response) => {
+          console.log(response);
           if (
             response.data &&
             response.data.message === "Data integrity violation"
@@ -94,6 +95,9 @@ const SignUp = () => {
               ...prevValue,
               isDuplicateEmail: true,
             }));
+          }
+          if (response.status === 200) {
+            history.push("/sign-in");
           }
         });
       } catch (error) {
