@@ -29,3 +29,15 @@ export const changePassword = (data) => {
   const url = "/changePassword";
   return axiosClient.post(url, { data: data });
 };
+
+export const getProfilebyID = (profileID) => {
+  const url = `/api/profiles/${profileID}`;
+
+  return axiosClient.get(url);
+};
+
+export const updateProfile = (data, userID) => {
+  const url = `/api/profiles/${userID}`;
+
+  return axiosClient.put(url, data);
+};

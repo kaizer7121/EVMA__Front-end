@@ -19,7 +19,6 @@ const ConfirmImage = (props) => {
   const [completedCrop, setCompletedCrop] = useState(null);
 
   const onLoad = useCallback((img) => {
-    console.log(img);
     imgRef.current = img;
   }, []);
 
@@ -39,7 +38,6 @@ const ConfirmImage = (props) => {
       const reader = new FileReader();
       reader.addEventListener("load", () => setUpImg(reader.result));
       reader.readAsDataURL(files[0]);
-      console.log(files[0]);
     }
   });
 

@@ -69,9 +69,6 @@ const EventCreation = (props) => {
     if (e.target.files && e.target.files.length > 0) {
       setCroppingImage({ files: e.target.files, type });
     }
-    // const value =
-    //   "https://scontent.fsgn8-1.fna.fbcdn.net/v/t39.30808-6/242145009_222288139941640_6679877824071632444_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=340051&_nc_ohc=GDEukTT17DoAX-iw0PH&tn=AcLQveYFpgLxAnDM&_nc_ht=scontent.fsgn8-1.fna&oh=632f09b64830fbf22d075142cd6e8141&oe=614D4AD3";
-    // setEventInfo((prevValue) => ({ ...prevValue, image: value }));
   };
 
   const onCloseCropping = () => {
@@ -231,7 +228,7 @@ const EventCreation = (props) => {
       try {
         const responseData = await createEvent(requestData);
         const fileName = responseData.coverURL;
-        uploadImgToStorage(imageAsFile, fileName).then((img) => {
+        uploadImgToStorage(imageAsFile, fileName).then(() => {
           history.push("/event");
         });
       } catch (error) {

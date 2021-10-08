@@ -11,7 +11,10 @@ const Event = (props) => {
   useEffect(() => {
     const getURLImg = async () => {
       const fileName = props.information.coverURL;
-      await getURLImage(fileName, setCoverURL);
+      const url = await getURLImage(fileName);
+      if (url) {
+        setCoverURL(url);
+      }
     };
     getURLImg();
   }, [props.information.coverURL]);

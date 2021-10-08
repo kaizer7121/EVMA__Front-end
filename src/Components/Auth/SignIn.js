@@ -5,11 +5,12 @@ import { StyledFirebaseAuth } from "react-firebaseui";
 import firebase, { uiConfig } from "../../Firebase";
 import "firebaseui/dist/firebaseui.css";
 import { useEffect, useState } from "react";
-import { validateEmail } from "../../Service/functions";
+import { signInWithFullImage, validateEmail } from "../../Service/functions";
 import { signIn } from "../../Service/api/authApi";
 import { useDispatch } from "react-redux";
 import { profileAction } from "../../Store/profileSlice";
 import { tokenAction } from "../../Store/tokenSlice";
+import { useSelector } from "react-redux";
 
 const SignIn = () => {
   const [userInfo, setUserInfo] = useState({
@@ -22,25 +23,26 @@ const SignIn = () => {
     wrongInfo: false,
   });
   const [rememberUser, setRememberUser] = useState(false);
-  const [isHaveGoogleToken, setIsHaveGoogleToken] = useState(false);
+  // const [isHaveGoogleToken, setIsHaveGoogleToken] = useState(false);
+  const token = useSelector((state) => state.token.token);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged((user) => {
-        setIsHaveGoogleToken(!!user);
-      });
-    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase
+  //     .auth()
+  //     .onAuthStateChanged((user) => {
+  //       setIsHaveGoogleToken(!!user);
+  //     });
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
 
   useEffect(() => {
-    if (isHaveGoogleToken) {
-      console.log("SEND REQUEST");
+    if (token) {
+      history.replace("/home");
     }
-  }, [isHaveGoogleToken]);
+  }, [token, history]);
 
   const inputHanlder = (event) => {
     const type = event.target.id;
@@ -74,12 +76,18 @@ const SignIn = () => {
     if (checkValidInfo()) {
       try {
         const response = await signIn(userInfo);
-
-        if (response.status === 200) {
+        console.log(response);
+        if (response.status === "Login success") {
           const { profile, token } = response;
-          dispatch(profileAction.signIn(profile));
+
+          // dispatch(profileAction.signInToEvma(profile));
+          await signInWithFullImage(profile, dispatch)
           dispatch(tokenAction.addToken(token));
-          history.push("/home");
+
+          if (!rememberUser) {
+            localStorage.setItem("RELOAD_LEFT", 1);
+          }
+          // history.push("/home");
         } else {
           setErrorInfo((prevValue) => ({ ...prevValue, wrongInfo: true }));
         }

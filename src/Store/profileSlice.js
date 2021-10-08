@@ -11,13 +11,13 @@ const profileSlice = createSlice({
     address: "",
     phoneNumber: "",
     summary: "",
-    avatarURL: "",
-    backgroundURL: "",
+    avatarURL: "/images/default-avatar.png",
+    backgroundURL: "/images/default-cover.jpg",
     role: "",
     dob: "",
   },
   reducers: {
-    signIn(state, action) {
+    signInToEvma(state, action) {
       const {
         id,
         name,
@@ -32,6 +32,9 @@ const profileSlice = createSlice({
         role,
         dob,
       } = action.payload;
+
+      const roleName = !role ? "Attendees" : role.authority;
+
       state.id = id;
       state.name = name;
       state.email = email;
@@ -42,8 +45,10 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
-      state.role = role;
+      state.role = roleName;
       state.dob = dob;
+
+      localStorage.setItem("USER_ID", id);
     },
     signOut(state) {
       state.id = "";
@@ -58,6 +63,40 @@ const profileSlice = createSlice({
       state.backgroundURL = "";
       state.role = "";
       state.dob = "";
+
+      console.log("DELETE ID");
+      localStorage.removeItem("USER_ID");
+    },
+
+    uploadImages(state, action) {
+      const { avatarURL, backgroundURL } = action.payload;
+      state.avatarURL = avatarURL;
+      state.backgroundURL = backgroundURL;
+    },
+    updateProfile(state, action) {
+      const {
+        name,
+        email,
+        city,
+        jobTitle,
+        address,
+        phoneNumber,
+        summary,
+        avatarURL,
+        backgroundURL,
+        dob,
+      } = action.payload;
+
+      state.name = name;
+      state.email = email;
+      state.city = city;
+      state.jobTitle = jobTitle;
+      state.address = address;
+      state.phoneNumber = phoneNumber;
+      state.summary = summary;
+      state.avatarURL = avatarURL;
+      state.backgroundURL = backgroundURL;
+      state.dob = dob;
     },
   },
 });

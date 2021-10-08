@@ -79,10 +79,12 @@ const ListEvent = () => {
           page: pagination.page,
         };
         const response = await getAllEvent(params);
-        setPagination((prevValue) => ({
-          ...prevValue,
-          maxPage: response.totalPageNum,
-        }));
+        if (response.totalPageNum) {
+          setPagination((prevValue) => ({
+            ...prevValue,
+            maxPage: response.totalPageNum,
+          }));
+        }
         setListEvent((prevValue) => [...prevValue, ...response.content]);
       } catch (err) {
         console.log("Fail when get all event: " + err);

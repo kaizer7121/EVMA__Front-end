@@ -1,7 +1,7 @@
 import { Link, useHistory } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   calculateAge,
   validateEmail,
@@ -11,6 +11,8 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
 import { signUp } from "../../Service/api/authApi";
+import { useSelector } from "react-redux";
+import tokenSlice from "../../Store/tokenSlice";
 
 const SignUp = () => {
   const [registerInfo, setRegisterInfo] = useState({
@@ -30,8 +32,14 @@ const SignUp = () => {
     fullName: false,
     dateOfBirth: false,
   });
-
+  const token = useSelector((state) => state.token.token);
   const history = useHistory();
+
+  useEffect(() => {
+    if (token) {
+      history.replace("/home");
+    }
+  }, [token, history]);
 
   const inputHanlder = (event) => {
     const type = event.target.id;
@@ -86,7 +94,6 @@ const SignUp = () => {
     if (checkValidInfo()) {
       try {
         signUp(registerInfo).then((response) => {
-          console.log(response);
           if (
             response.data &&
             response.data.message === "Data integrity violation"
@@ -96,7 +103,7 @@ const SignUp = () => {
               isDuplicateEmail: true,
             }));
           }
-          if (response.status === 200) {
+          if (!isNaN(response)) {
             history.push("/sign-in");
           }
         });
@@ -200,7 +207,7 @@ const SignUp = () => {
                 </p>
               )}
             </div>
-            <label for="cars">Choose a car:</label>
+            <label htmlForfor="cars">Choose a car:</label>
             <div className={`${styles.register__form__group}`}>
               <select
                 id="role"

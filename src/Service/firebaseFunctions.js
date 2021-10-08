@@ -18,21 +18,13 @@ export const uploadImgToStorage = async (imageAsFile, fileName) => {
 
 export const getURLImage = async (imgName, action) => {
   try {
-    storage
-      .ref()
-      .child(`images/${imgName}`)
-      .getDownloadURL()
-      .then((url) => {
-        if (action) {
-          action(url);
-        }
+    const url = await storage.ref().child(`images/${imgName}`).getDownloadURL();
+    if (action) {
+      action(url);
+    }
 
-        return url;
-      })
-      .catch(() => {
-        return "";
-      });
+    return url;
   } catch (error) {
-    return "";
+    return null;
   }
 };

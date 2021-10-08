@@ -2,9 +2,12 @@ import { useState } from "react";
 import { converISOToDate, convertDate } from "../../../Service/functions";
 import styles from "./Post.module.scss";
 import commonStyles from "../../Auth/Auth.module.scss";
+import { useEffect } from "react";
+import { getURLImage } from "../../../Service/firebaseFunctions";
 
 const Post = (props) => {
   const [viewFullContent, setViewFullContent] = useState(false);
+  const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
 
   const summrayContent = props.information.content.slice(0, 800);
   const fullContent = props.information.content;
@@ -12,6 +15,17 @@ const Post = (props) => {
   const changeView = () => {
     setViewFullContent(!viewFullContent);
   };
+
+  useEffect(() => {
+    const getURLImg = async () => {
+      const fileName = props.information.imageURL;
+      const url = await getURLImage(fileName);
+      if (url) {
+        setCoverURL(url);
+      }
+    };
+    getURLImg();
+  }, [props.information.imageURL]);
 
   return (
     <div className={`${styles.post}`}>
@@ -56,7 +70,7 @@ const Post = (props) => {
               <p>
                 {summrayContent} <span onClick={changeView}>...More</span>
               </p>
-              <img src={props.information.imageURL} alt="post_image" />
+              <img src={coverURL} alt="post_image" />
             </div>
           )}
         </div>

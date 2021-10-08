@@ -60,6 +60,61 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+
+    &_sign {
+      font-size: 1.2rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.08s;
+
+      a {
+        text-decoration: none;
+        color: $color-tertiary-light;
+
+        &:active,
+        &:visited {
+          color: $color-tertiary-light;
+        }
+      }
+
+      &:active {
+        transform: translateY(0.5px);
+      }
+    }
+
+    &_divide {
+      margin: 0 0.5rem;
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      &_sign {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-larger) {
+      &_sign {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      &_sign {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      &_sign {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_sign {
+        font-size: 1.7rem;
+      }
+    }
   }
 
   &__avatar {
@@ -210,6 +265,18 @@
     &_logout {
       color: $color-danger;
       font-weight: 500;
+      font-size: 1rem;
+      margin: 0;
+      padding: 1.2rem 1rem;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      text-transform: capitalize;
+      border-radius: 5%;
+
+      &:hover {
+        background-color: $color-primary-light;
+      }
     }
   }
 
@@ -228,6 +295,10 @@
       z-index: 100;
     }
     a {
+      font-size: 1.2rem;
+    }
+
+    &_logout {
       font-size: 1.2rem;
     }
   }

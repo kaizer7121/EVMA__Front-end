@@ -15,10 +15,16 @@ import OrganizationDetailPage from "./Pages/OrganizationDetailPage";
 import EventDetaiPage from "./Pages/EventDetaiPage";
 import EventCreationPage from "./Pages/EventCreationPage";
 import ProfilePage from "./Pages/ProfilePage";
-import {useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import { profileAction } from "./Store/profileSlice";
+import { tokenAction } from "./Store/tokenSlice";
+import { getProfilebyID } from "./Service/api/authApi";
+import { signInWithFullImage } from "./Service/functions";
 
 function App() {
   const token = useSelector((state) => state.token.token);
+
+  const dispatch = useDispatch();
   // Handle firebase auth changed
   // useEffect(() => {
   //   const unregisterAuthObserver = firebase
@@ -35,6 +41,31 @@ function App() {
   //     });
   //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   // }, []);
+
+  useEffect(() => {
+    const userID = localStorage.getItem("USER_ID");
+    console.log("EFFECT");
+    if (!token || !userID) {
+      console.log("DELETE ACCOUNT");
+      dispatch(profileAction.signOut());
+      dispatch(tokenAction.deleteToken());
+    } else {
+      getProfilebyID(userID).then((profile) => {
+        // dispatch(profileAction.signInToEvma(profile));
+        signInWithFullImage(profile, dispatch)
+      });
+    }
+    const left = localStorage.getItem("RELOAD_LEFT");
+    console.log(left);
+    if (left === "0") {
+      dispatch(profileAction.signOut());
+      dispatch(tokenAction.deleteToken());
+      localStorage.removeItem("RELOAD_LEFT");
+    }
+    if (left === "1") {
+      localStorage.setItem("RELOAD_LEFT", 0);
+    }
+  }, [token, dispatch]);
 
   return (
     <Switch>

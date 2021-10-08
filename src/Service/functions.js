@@ -1,3 +1,6 @@
+import { profileAction } from "../Store/profileSlice";
+import { getURLImage } from "./firebaseFunctions";
+
 export const getDate = (fullDate) => {
   if (fullDate) {
     var today = fullDate;
@@ -48,8 +51,13 @@ export const validateName = (name) => {
 };
 
 export const validatePassword = (password) => {
-  // var regex = /^([a-zA-Z ]){1,50}$/;
-  // return regex.test(name);
+  var regex = /^([a-zA-Z ]){1,50}$/;
+  return regex.test(password);
+};
+
+export const validatePhone = (phoneNumber) => {
+  const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+  return regex.test(phoneNumber);
 };
 
 export const calculateAge = (birthday) => {
@@ -81,11 +89,60 @@ export const converISOToDate = (isoDate) => {
   return fullDate;
 };
 
-export const converISOToSimpleDate = (isoDate) => {
+export const converISOToOnlyDate = (isoDate) => {
   const [date, isoTime] = isoDate.split("T");
-  const fullTime = isoTime.split("Z");
-
-  const fullDate = `${date}, ${fullTime[0]}`;
+  const fullDate = new Date(date);
 
   return fullDate;
+};
+
+export const converISOToSimpleDate = (isoDate) => {
+  if (isoDate) {
+    const [date, isoTime] = isoDate.split("T");
+    const fullTime = isoTime.split("Z");
+
+    const fullDate = `${date}, ${fullTime[0]}`;
+
+    return fullDate;
+  } else {
+    return "";
+  }
+};
+
+// ================= REDUX FUNCTION =================
+
+export const signInWithFullImage = async (profile, dispatch) => {
+  const { id } = profile;
+  const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
+  const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
+
+  const fullData = {
+    ...profile,
+    avatarURL: avatarURLFirebase
+      ? avatarURLFirebase
+      : "/images/default-avatar.png",
+    backgroundURL: backgroundURLFirebase
+      ? backgroundURLFirebase
+      : "/images/default-cover.jpg",
+  };
+
+  dispatch(profileAction.signInToEvma(fullData));
+};
+
+export const updateProfileWithFullImage = async (profile, dispatch) => {
+  // const { id } = profile;
+  // const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
+  // const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
+
+  // const fullData = {
+  //   ...profile,
+  //   avatarURL: avatarURLFirebase
+  //     ? avatarURLFirebase
+  //     : "/images/default-avatar.png",
+  //   backgroundURL: backgroundURLFirebase
+  //     ? backgroundURLFirebase
+  //     : "/images/default-cover.jpg",
+  // };
+
+  dispatch(profileAction.updateProfile(profile));
 };

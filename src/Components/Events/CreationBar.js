@@ -359,11 +359,12 @@ const CreationBar = (props) => {
             <option value="default" selected disabled hidden>
               Choose category
             </option>
-            {props.categoriesInDB.map((category) => (
-              <option id={category.id} key={category.id}>
-                {category.name}
-              </option>
-            ))}
+            {props.categoriesInDB &&
+              props.categoriesInDB.map((category) => (
+                <option id={category.id} key={category.id}>
+                  {category.name}
+                </option>
+              ))}
           </select>
           <div
             className={`${styles.creationBar__addCategory}`}

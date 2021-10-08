@@ -89,11 +89,17 @@ const OrganizationDetail = (props) => {
   useEffect(() => {
     const getURLAvatar = async () => {
       const fileName = props.information.avatarURL;
-      await getURLImage(fileName, setAvatarURL);
+      const url = await getURLImage(fileName);
+      if (url) {
+        setAvatarURL(url);
+      }
     };
     const getURLBackGround = async () => {
       const fileName = props.information.backgroundURL;
-      await getURLImage(fileName, setBackgroundURL);
+      const url = await getURLImage(fileName);
+      if (url) {
+        setBackgroundURL(url);
+      }
     };
 
     getURLAvatar();

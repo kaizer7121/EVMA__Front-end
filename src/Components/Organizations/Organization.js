@@ -4,7 +4,6 @@ import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import styles from "./Organization.module.scss";
 
-
 const Organization = (props) => {
   const [avatarURL, setAvatarURL] = useState("/images/default-avatar.png");
 
@@ -13,7 +12,10 @@ const Organization = (props) => {
   useEffect(() => {
     const getURLImg = async () => {
       const fileName = props.information.avatarURL;
-      await getURLImage(fileName, setAvatarURL);
+      const url = await getURLImage(fileName);
+      if (url) {
+        setAvatarURL(url);
+      }
     };
     getURLImg();
   }, [props.information.avatarURL]);
@@ -27,11 +29,7 @@ const Organization = (props) => {
       key={`ORGANIZATION_${props.information.id} `}
       className={`${styles.organization}`}
     >
-      <img
-        src={avatarURL}
-        alt="logo"
-        onClick={showOrganizationDetail}
-      />
+      <img src={avatarURL} alt="logo" onClick={showOrganizationDetail} />
       <div className={styles.organization__information}>
         <h3 onClick={showOrganizationDetail}>{props.information.name}</h3>
         <p>{props.information.summary}</p>

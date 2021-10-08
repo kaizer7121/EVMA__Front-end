@@ -11,8 +11,9 @@ const ListOrganizationPage = () => {
     try {
       const getListOrganization = async () => {
         const list = await getAllOrganization();
-        setListOrganization(list.content);
-        console.log(list.content);
+        if (list && list.content) {
+          setListOrganization(list.content);
+        }
       };
       getListOrganization();
     } catch (error) {
