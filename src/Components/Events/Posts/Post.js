@@ -18,14 +18,24 @@ const Post = (props) => {
 
   useEffect(() => {
     const getURLImg = async () => {
-      const fileName = props.information.imageURL;
+      const fileName = `postImg_${props.information.id}`;
       const url = await getURLImage(fileName);
-      if (url) {
-        setCoverURL(url);
-      }
+      setCoverURL(url);
     };
     getURLImg();
-  }, [props.information.imageURL]);
+  }, [props.information.id]);
+
+  const onEditPost = () => {
+    const initData = {
+      content: props.information.content,
+      createdDate: props.information.createdDate,
+      eventId: props.information.eventId,
+      postId: props.information.id,
+      imgSrc: coverURL ? coverURL : "",
+    };
+
+    props.onEditEvent(initData);
+  };
 
   return (
     <div className={`${styles.post}`}>
@@ -37,6 +47,7 @@ const Post = (props) => {
             {" "}
             <button
               className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark}`}
+              onClick={onEditPost}
             >
               Edit
             </button>
@@ -48,13 +59,17 @@ const Post = (props) => {
           </>
         )}
       </header>
-      {props.information.imageURL.length === 0 ? (
+      {!coverURL || coverURL === 0 ? (
         <div className={`${styles.post_detail}`}>
           {viewFullContent ? (
-            <p>{fullContent}</p>
+            <p>
+              {fullContent}
+              <span onClick={changeView}>Less</span>
+            </p>
           ) : (
             <p>
-              {summrayContent} <span onClick={changeView}>...More</span>
+              {summrayContent}
+              <span onClick={changeView}>...More</span>
             </p>
           )}
         </div>
@@ -62,8 +77,11 @@ const Post = (props) => {
         <div className={`${styles.post_detail}`}>
           {viewFullContent ? (
             <div>
-              <p>{fullContent}</p>
-              <img src={props.information.imageURL} alt="post_image" />
+              <p>
+                {fullContent} <span onClick={changeView}>Less</span>
+              </p>
+
+              <img src={coverURL} alt="post_image" />
             </div>
           ) : (
             <div className={`${styles.post_detail_cut}`}>

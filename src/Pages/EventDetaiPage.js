@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useEffect } from "react/cjs/react.development";
 import EventDetail from "../Components/Events/EventDetail";
 import NavigationBar from "../Components/Navigation/Navigationbar";
@@ -7,6 +7,7 @@ import SideNavigation from "../Components/Navigation/SideNavigation";
 import { getEventByID, getEventPost } from "../Service/api/eventApi";
 
 const EventDetaiPage = () => {
+  window.scrollTo(0, 0);
   const [eventDetail, setEventDetail] = useState({
     id: "",
     title: "",
@@ -27,7 +28,10 @@ const EventDetaiPage = () => {
     content: "",
   });
   const [listPost, setListPost] = useState([]);
+
+  const history = useHistory();
   const urlParam = useParams();
+
   useEffect(() => {
     const eventID = urlParam.id;
 
@@ -35,17 +39,23 @@ const EventDetaiPage = () => {
     const getDetailInfo = async () => {
       const eventDetail = await getEventByID(eventID);
       console.log(eventDetail);
+      if (!eventDetail || !eventDetail.id) {
+        history.push("/event");
+      }
       setEventDetail(eventDetail);
     };
     getDetailInfo();
 
     // Get list post
+    const params = {
+      size: 50,
+    };
     const getListPost = async () => {
       const list = await getEventPost(eventID);
-      setListPost(list.content);
+      setListPost(list.content, params);
     };
     getListPost();
-  }, [urlParam.id]);
+  }, [urlParam.id, history]);
 
   return (
     <>

@@ -8,16 +8,6 @@ import { getURLImage } from "../../Service/firebaseFunctions";
 import CompactedEvent from "../Events/CompactedEvent";
 import styles from "./OrganizationDetail.module.scss";
 
-const DUMMY_DATA = {
-  title: "Diễn Đàn Sinh Viên Nghiên Cứu Khoa Học",
-  shortDescription:
-    "⭐ Diễn đàn Sinh viên Nghiên cứu Khoa học 2021 do Dự án Tập huấn NCKH/CLB Nghiên cứu Tâm lý học - Giáo dục học tổ chức. Nội dung trao đổi & báo cáo kết quả NCKH" +
-    " của học viên tham gia chuỗi tập huấn NCKH SPE. Xoay quanh những vấn đề mang tính thời sự hiện nay trong lĩnh vực Tâm lý & Giáo dục 🎫",
-  categories: ["Science", "Education", "Psychology"],
-  image:
-    "https://scontent.fsgn3-1.fna.fbcdn.net/v/t1.6435-9/106504737_2722347444536344_728271756182488456_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=8631f5&_nc_ohc=sojVDo3kAzUAX_VsoLg&_nc_ht=scontent.fsgn3-1.fna&oh=caf9c7e799dd4228b712c0e7df4f523c&oe=6179C8A8",
-};
-
 const OrganizationDetail = (props) => {
   const [avatarURL, setAvatarURL] = useState("/images/default-avatar.png");
   const [backgroundURL, setBackgroundURL] = useState(
@@ -26,9 +16,8 @@ const OrganizationDetail = (props) => {
   const [listEvent, setListEvent] = useState([]);
   const [pagination, setPagination] = useState({
     page: 0,
-    maxPage: 1,
+    end: false,
   });
-  console.log(listEvent);
   const description = props.information.summary
     ? props.information.summary.split("\n")
     : [];
@@ -36,7 +25,7 @@ const OrganizationDetail = (props) => {
   const trackScrolling = useCallback(() => {
     const wrappedElement = document.getElementById("header");
 
-    if (wrappedElement && pagination.page - 1 !== pagination.maxPage) {
+    if (wrappedElement) {
       const isBottom =
         wrappedElement.getBoundingClientRect().bottom * 0.9 <=
         window.innerHeight;
@@ -50,14 +39,11 @@ const OrganizationDetail = (props) => {
     } else {
       window.removeEventListener("scroll", trackScrolling);
     }
-  }, [pagination.page, pagination.maxPage]);
+  }, [pagination.page]);
 
   useEffect(() => {
     window.addEventListener("scroll", trackScrolling);
 
-    if (pagination.page - 1 === pagination.maxPage) {
-      window.removeEventListener("scroll", trackScrolling);
-    }
     return function cleanup() {
       window.removeEventListener("scroll", trackScrolling);
     };
@@ -73,29 +59,28 @@ const OrganizationDetail = (props) => {
         const response = await getAllEventByProfileID(organizationID, params);
         setPagination((prevValue) => ({
           ...prevValue,
-          maxPage: response.totalPageNum,
+          end: true,
         }));
-        console.log("RESPONSE");
         setListEvent((prevValue) => [...prevValue, ...response.content]);
       } catch (err) {
         console.log("Fail when get all event: " + err);
       }
     };
-    if (pagination.page - 1 < pagination.maxPage) {
+    if (!pagination.end) {
       fetchAllRelatedEvent();
     }
-  }, [pagination.page, pagination.maxPage, props.id]);
+  }, [trackScrolling, pagination.end, pagination.page, props.id]);
 
   useEffect(() => {
     const getURLAvatar = async () => {
-      const fileName = props.information.avatarURL;
+      const fileName = `userAvatar_${props.information.id}`;
       const url = await getURLImage(fileName);
       if (url) {
         setAvatarURL(url);
       }
     };
     const getURLBackGround = async () => {
-      const fileName = props.information.backgroundURL;
+      const fileName = `userBackground_${props.information.id}`;
       const url = await getURLImage(fileName);
       if (url) {
         setBackgroundURL(url);
@@ -104,7 +89,7 @@ const OrganizationDetail = (props) => {
 
     getURLAvatar();
     getURLBackGround();
-  }, [props.information.avatarURL, props.information.backgroundURL]);
+  }, [props.information.id]);
 
   return (
     <div className={`${styles.organizationDetail}`}>
@@ -126,8 +111,8 @@ const OrganizationDetail = (props) => {
             Description:{" "}
           </h3>
           <p className={`${styles.organizationDetail__description_param}`}></p>
-          {description.map((sentence) => (
-            <p className={`${styles.organizationDetail__description_param}`}>
+          {description.map((sentence, index) => (
+            <p key={`SENTENCE_${index}`} className={`${styles.organizationDetail__description_param}`}>
               {sentence}
             </p>
           ))}

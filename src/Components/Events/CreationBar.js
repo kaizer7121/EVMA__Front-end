@@ -94,6 +94,10 @@ const CreationBar = (props) => {
     setSelectedCategory(event.target.value);
   };
 
+  const onCancel = () => {
+    props.onCancel();
+  };
+
   return (
     <div className={`${styles.creationBar}`}>
       <h1 className={`${styles.creationBar__title}`}>Create event</h1>
@@ -129,7 +133,7 @@ const CreationBar = (props) => {
               if (date === undefined) date = "";
               inputValue(date, "startDate");
             }}
-            value={props.information.date}
+            value={props.information.startDate}
           />
           <span className={`${styles.creationBar__datePicker__label}`}>
             Date
@@ -172,7 +176,7 @@ const CreationBar = (props) => {
               if (date === undefined) date = "";
               inputValue(date, "endDate");
             }}
-            value={props.information.date}
+            value={props.information.endDate}
           />
           <span className={`${styles.creationBar__datePicker__label}`}>
             Date
@@ -346,9 +350,15 @@ const CreationBar = (props) => {
         Add more hashtag (+)
       </p>
       <section className={`${styles.creationBar__categories}`}>
-        <h3 className={`${styles.creationBar__topic}`}>Categories:</h3>
-        {props.information.categories.map((category) => (
-          <p className={`${styles.creationBar__category}`}>{category}</p>
+        <h3 className={`${styles.creationBar__topic}`}>
+          Categories:<small>(Click to remove)</small>
+        </h3>
+        {props.information.categories.map((category,index) => (
+          <>
+            <p className={`${styles.creationBar__category}`} onClick={() => {
+              props.removeCategory(index)
+            }}>{category}</p>
+          </>
         ))}
         <div className={`${styles.creationBar__categorySelection}`}>
           <select
@@ -539,6 +549,7 @@ const CreationBar = (props) => {
       <section className={`${styles.creationBar__buttons}`}>
         <button
           className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__cancel}`}
+          onClick={onCancel}
         >
           Cancel
         </button>
@@ -556,7 +567,7 @@ const CreationBar = (props) => {
             onSubmit("PUBLISH");
           }}
         >
-          Submit
+          Publish
         </button>
       </section>
     </div>

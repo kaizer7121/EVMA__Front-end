@@ -6,12 +6,17 @@ import ListOrganization from "../Components/Organizations/ListOrganization";
 import { getAllOrganization } from "../Service/api/organizationApi";
 
 const ListOrganizationPage = () => {
+  window.scrollTo(0, 0);
   const [listOrganization, setListOrganization] = useState([]);
   useEffect(() => {
     try {
       const getListOrganization = async () => {
-        const list = await getAllOrganization();
+        const params = {
+          size: 50,
+        };
+        const list = await getAllOrganization(params);
         if (list && list.content) {
+          console.log(list.content)
           setListOrganization(list.content);
         }
       };

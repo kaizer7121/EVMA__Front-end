@@ -1,36 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CreationBar from "./CreationBar";
 import InitEvent from "./InitEvent";
 
 import ConfirmImage from "../Popup/ConfirmImage";
-import {
-  getURLImage,
-  uploadImgToStorage,
-} from "../../Service/firebaseFunctions";
-import { createEvent } from "../../Service/api/eventApi";
+import { uploadImgToStorage } from "../../Service/firebaseFunctions";
+import { createEvent, editEvent } from "../../Service/api/eventApi";
 import { useHistory } from "react-router";
+import {
+  converISOToOnlyDate,
+  converISOToOnlyTime,
+  validURL,
+} from "../../Service/functions";
+import { useSelector } from "react-redux";
 
 const EventCreation = (props) => {
-  const allInputs = { imgUrl: "" };
+  const profileName = useSelector((state) => state.profile.name);
+  const type = props.initialInformation ? "Edit" : "Create";
+  // const allInputs = { imgUrl: "" };
   const [imageAsFile, setImageAsFile] = useState("");
-  const [imageAsUrl, setImageAsUrl] = useState(allInputs);
+  // const [imageAsUrl, setImageAsUrl] = useState(allInputs);
   const [eventInfo, setEventInfo] = useState({
-    title: "",
-    startDate: "",
+    title: type === "Edit" ? props.initialInformation.title : "",
+    startDate:
+      type === "Edit"
+        ? converISOToOnlyDate(props.initialInformation.startDate)
+        : "",
     startTime: "",
-    endDate: "",
+    endDate:
+      type === "Edit" && props.initialInformation.endDate
+        ? converISOToOnlyDate(props.initialInformation.endDate)
+        : "",
     endTime: "",
-    locationName: [""],
-    locationDetail: [""],
-    hashtag: [""],
-    categories: [],
-    summary: "",
-    content: "",
-    image: "",
-    organization: "Unknown",
-    otherOrganizations: [""],
-    isOnlineEvent: false,
+    locationName:
+      type === "Edit" ? props.initialInformation.initLocationName : [""],
+    locationDetail:
+      type === "Edit" ? props.initialInformation.initLocationDetail : [""],
+    hashtag: type === "Edit" ? props.initialInformation.tags : [""],
+    categories: type === "Edit" ? props.initialInformation.categories : [],
+    summary: type === "Edit" ? props.initialInformation.summary : "",
+    content: type === "Edit" ? props.initialInformation.content : "",
+    image: type === "Edit" ? props.initialInformation.coverURL : "",
+    organization: props.profileName,
+    otherOrganizations:
+      type === "Edit" ? props.initialInformation.otherOrganizations : [""],
+    isOnlineEvent: type === "Edit" ? props.initialInformation.online : false,
   });
   const [croppingImage, setCroppingImage] = useState({ empty: true });
   const [eventError, setEventError] = useState({
@@ -46,6 +60,9 @@ const EventCreation = (props) => {
   });
 
   const history = useHistory();
+  useEffect(() => {
+    setEventInfo((prevValue) => ({ ...prevValue, organization: profileName }));
+  }, [profileName]);
 
   const inputValue = (value, type) => {
     if (type === "categories") {
@@ -171,9 +188,19 @@ const EventCreation = (props) => {
     );
   };
 
+  const onCancel = () => {
+    history.goBack();
+  };
+
+  const removeCategory = (index) => {
+    const newCategories = [...eventInfo.categories];
+    newCategories.splice(index, 1);
+    console.log(newCategories);
+    setEventInfo((prevValue) => ({ ...prevValue, categories: newCategories }));
+  };
+
   const onSubmitEvent = async (type) => {
     const isValid = checkValidEventHandler();
-    getURLImage("test");
     if (isValid) {
       // Process category
       const categoryIds = [];
@@ -210,6 +237,16 @@ const EventCreation = (props) => {
         endDateAndTime = endDateAndTime.toISOString();
       }
 
+      // Process addresses
+      const addresses = [];
+      eventInfo.locationDetail.forEach((location, index) => {
+        addresses.push({
+          name: eventInfo.locationName[index],
+          fullText: eventInfo.locationDetail[index],
+          url: validURL(location),
+        });
+      });
+
       const requestData = {
         title: eventInfo.title,
         categoryIds,
@@ -224,13 +261,40 @@ const EventCreation = (props) => {
         statusId: type === "PUBLISH" ? 1 : 3,
         summary: eventInfo.summary,
         content: eventInfo.content,
+        addresses,
       };
+
       try {
-        const responseData = await createEvent(requestData);
-        const fileName = responseData.coverURL;
-        uploadImgToStorage(imageAsFile, fileName).then(() => {
-          history.push("/event");
-        });
+        const actionType = props.initialInformation ? "Edit" : "Create";
+        let responseData = {};
+        let fileName = "";
+        if (actionType === "Edit") {
+          const eventID = props.initialInformation.id;
+          responseData = await editEvent(requestData, eventID);
+          fileName = `EventCover_${eventID}`;
+        } else if (actionType === "Create") {
+          responseData = await createEvent(requestData);
+          fileName = responseData.coverURL;
+        }
+        if (responseData.status !== 400) {
+          const message =
+            actionType === "Edit" ? "Edit successfully" : "Create successfully";
+          if (imageAsFile && imageAsFile.size > 0) {
+            uploadImgToStorage(imageAsFile, fileName).then(() => {
+              console.log(responseData);
+              if (!alert(message)) {
+                history.push("/event");
+              }
+            });
+          } else {
+            console.log(responseData);
+            if (!alert(message)) {
+              history.push("/event");
+            }
+          }
+        } else {
+          alert("Something wrong went send request to server");
+        }
       } catch (error) {
         console.log("Error when create event " + error);
       }
@@ -355,6 +419,8 @@ const EventCreation = (props) => {
         uploadImage={uploadImage}
         information={eventInfo}
         onSubmit={onSubmitEvent}
+        onCancel={onCancel}
+        removeCategory={removeCategory}
         changeMultiInput={changeMultiInput}
         changeMultiInputValue={changeMultiInputValue}
         changeToggleButtonHandler={changeToggleButtonHandler}

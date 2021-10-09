@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
-export const getAllOrganization = () => {
+export const getAllOrganization = (params) => {
   const url = "/api/profiles/organizers";
-  return axiosClient.get(url);
+  return axiosClient.get(url, { params });
 };
 
 export const getOrganizationDetail = (organizationID) => {

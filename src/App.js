@@ -20,6 +20,7 @@ import { profileAction } from "./Store/profileSlice";
 import { tokenAction } from "./Store/tokenSlice";
 import { getProfilebyID } from "./Service/api/authApi";
 import { signInWithFullImage } from "./Service/functions";
+import ConfirmDelete from "./Components/Popup/ConfirmDelete";
 
 function App() {
   const token = useSelector((state) => state.token.token);
@@ -52,7 +53,7 @@ function App() {
     } else {
       getProfilebyID(userID).then((profile) => {
         // dispatch(profileAction.signInToEvma(profile));
-        signInWithFullImage(profile, dispatch)
+        signInWithFullImage(profile, dispatch);
       });
     }
     const left = localStorage.getItem("RELOAD_LEFT");
@@ -93,11 +94,14 @@ function App() {
       <Route path="/create">
         <EventCreationPage />
       </Route>
+      <Route path="/edit/:id">
+        <EventCreationPage />
+      </Route>
       <Route path="/profile">
         <ProfilePage />
       </Route>
       <Route path="/test">
-        <CreatePost />
+        <ConfirmDelete />
       </Route>
       <Route path="*">
         <Redirect to="/event" />

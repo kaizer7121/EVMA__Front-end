@@ -59,7 +59,7 @@ const UserNavigation = () => {
             </span>
             <span className={`${styles.userNav__user_divide}`}>|</span>
             <span className={`${styles.userNav__user_sign}`}>
-              <Link to="/sign-up">Sign out</Link>
+              <Link to="/sign-up">Sign up</Link>
             </span>
           </div>
         </div>

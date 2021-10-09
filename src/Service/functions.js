@@ -96,6 +96,14 @@ export const converISOToOnlyDate = (isoDate) => {
   return fullDate;
 };
 
+export const converISOToOnlyTime = (isoDate) => {
+  const [date, isoTime] = isoDate.split("T");
+  const fullTime = isoTime.split("Z");
+  const [hour, minute, second] = fullTime[0].split(":");
+  const returnTime = `${hour}:${minute}`;
+  return returnTime;
+};
+
 export const converISOToSimpleDate = (isoDate) => {
   if (isoDate) {
     const [date, isoTime] = isoDate.split("T");

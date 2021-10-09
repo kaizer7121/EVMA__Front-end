@@ -7,10 +7,12 @@ import Picker from "emoji-picker-react";
 import { converISOToDate } from "../../Service/functions";
 
 const CreatePost = (props) => {
+  const actionType = props.initData.isEmpty ? "Create" : "Edit";
+
   const [postInfo, setPostInfo] = useState({
-    content: "",
-    image: "",
-    imgSrc: "",
+    content: actionType === "Edit" ? props.initData.content : "",
+    image: actionType === "Edit" ? "Init" : "",
+    imgSrc: actionType === "Edit" ? props.initData.imgSrc : "",
   });
   const [errorPost, setErrorPost] = useState({
     content: false,
@@ -41,6 +43,9 @@ const CreatePost = (props) => {
 
   const removeImage = () => {
     setPostInfo((prevValue) => ({ ...prevValue, image: "", imgSrc: "" }));
+    if (postInfo.image === "Init") {
+      props.onRemoveImg();
+    }
   };
 
   const checkValidData = () => {

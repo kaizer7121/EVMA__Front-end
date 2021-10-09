@@ -14,11 +14,14 @@ const CompactedEvent = (props) => {
 
   useEffect(() => {
     const getURLImg = async () => {
-      const fileName = props.information.coverURL;
-      await getURLImage(fileName, setBackgroundURL);
+      const fileName = `EventCover_${props.information.id}`;
+      const url = await getURLImage(fileName);
+      if (url) {
+        setBackgroundURL(url);
+      }
     };
     getURLImg();
-  }, [props.information.coverURL]);
+  }, [props.information.id]);
 
   const goToDetailEvent = () => {
     history.push(`/event/${props.information.id}`);

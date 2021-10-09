@@ -7,6 +7,7 @@ import OrganizationDetail from "../Components/Organizations/OrganizationDetail";
 import { getOrganizationDetail } from "../Service/api/organizationApi";
 
 const OrganizationDetailPage = () => {
+  window.scrollTo(0, 0);
   const [organizationDetail, setOrganizationDetail] = useState({});
   const urlParam = useParams();
   useEffect(() => {

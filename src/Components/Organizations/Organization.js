@@ -11,14 +11,14 @@ const Organization = (props) => {
 
   useEffect(() => {
     const getURLImg = async () => {
-      const fileName = props.information.avatarURL;
+      const fileName = `userAvatar_${props.information.id}`;
       const url = await getURLImage(fileName);
       if (url) {
         setAvatarURL(url);
       }
     };
     getURLImg();
-  }, [props.information.avatarURL]);
+  }, [props.information.id]);
 
   const showOrganizationDetail = () => {
     history.push(`/organization/${props.information.id}`);

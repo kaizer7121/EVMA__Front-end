@@ -1,7 +1,6 @@
 import { storage } from "../Firebase";
 
 export const uploadImgToStorage = async (imageAsFile, fileName) => {
-  // console.log(fileName);
   const uploadTask = storage.ref(`/images/${fileName}`).put(imageAsFile);
   uploadTask.on(
     "state_changed",
@@ -16,15 +15,27 @@ export const uploadImgToStorage = async (imageAsFile, fileName) => {
   );
 };
 
-export const getURLImage = async (imgName, action) => {
+export const getURLImage = async (imgName) => {
   try {
     const url = await storage.ref().child(`images/${imgName}`).getDownloadURL();
-    if (action) {
-      action(url);
-    }
 
     return url;
   } catch (error) {
     return null;
   }
+};
+
+export const deleteImageFile = async (imgName) => {
+  const response = await storage
+    .ref()
+    .child(`images/${imgName}`)
+    .delete()
+    .then(() => {
+      return "SUCCESS";
+    })
+    .catch((error) => {
+      return error;
+    });
+
+  return response;
 };
