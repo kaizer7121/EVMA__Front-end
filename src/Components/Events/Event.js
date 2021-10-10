@@ -2,32 +2,62 @@ import { Link } from "react-router-dom";
 
 import styles from "./Event.module.scss";
 
+import { useEffect, useState } from "react";
+import { getURLImage } from "../../Service/firebaseFunctions";
+
 const Event = (props) => {
-  const shortDescriptionArr = props.shortDescription.split("\n");
+  const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
+  const shortDescriptionArr = props.information.summary.split("\n");
+  useEffect(() => {
+    const getURLImg = async () => {
+      const fileName = props.information.coverURL;
+      const url = await getURLImage(fileName);
+      if (url) {
+        setCoverURL(url);
+      }
+    };
+    getURLImg();
+  }, [props.information.coverURL]);
 
   return (
     <section className={`${styles.event}`}>
-      <h1 className={`${styles.event__title}`}>{props.title}</h1>
+      <div className={`${styles.event__status}`}>
+        {props.information.status.name}
+      </div>
+      <h1 className={`${styles.event__title}`}>{props.information.title}</h1>
       <div className={`${styles.event__information}`}>
         <div className={`${styles.event__detail}`}>
           <div>
-            <h3 className={`${styles.event__topic}`}>Short description: </h3>
-            {shortDescriptionArr.map((sentence) => (
-              <p className={`${styles.event__shortDescription}`}>{sentence}</p>
+            <h3 className={`${styles.event__topic}`}>Summary: </h3>
+            {shortDescriptionArr.map((sentence, index) => (
+              <p
+                key={`SENTENCE_${index}`}
+                className={`${styles.event__shortDescription}`}
+              >
+                {sentence}
+              </p>
             ))}
           </div>
           <div>
             <h3 className={`${styles.event__topic}`}>Categories: </h3>
-            {props.categories.map((category) => (
-              <p className={`${styles.event__category}`}>{category}</p>
+            {props.information.categories.map((category) => (
+              <p
+                key={`CATEGORY_${category.id}`}
+                className={`${styles.event__category}`}
+              >
+                {category.name}
+              </p>
             ))}
           </div>
-          <Link to="/event-detail" className={`${styles.event__btnText}`}>
+          <Link
+            to={`/event/${props.information.id}`}
+            className={`${styles.event__btnText}`}
+          >
             Learn more &rarr;
           </Link>
         </div>
         <div className={`${styles.event__poster}`}>
-          <img src={props.image} alt="Poster" />
+          <img src={coverURL} alt="Poster" />
         </div>
       </div>
     </section>

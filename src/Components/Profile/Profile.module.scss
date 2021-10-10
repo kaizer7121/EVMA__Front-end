@@ -170,7 +170,7 @@
       }
     }
 
-    input {
+    input, textarea {
       box-sizing: border-box;
       padding: 0.5rem 1.2rem;
       margin: -1rem 0 1rem;
@@ -185,6 +185,7 @@
         border: 2px solid $color-primary;
       }
     }
+
 
     &_row {
       display: flex;
@@ -362,5 +363,12 @@
         width: 320px;
       }
     }
+  }
+
+  &__error {
+    color: $color-danger;
+    transform: scale(0.85);
+    font-weight: 400 !important;
+    margin-top: -0.5rem;
   }
 }

@@ -1,0 +1,48 @@
+@import "../../SASS_Abstract/variable";
+
+.listPost {
+  min-height: 70vh;
+  background-color: $color-white;
+  margin-top: 2rem;
+
+  &__button {
+    text-align: right;
+    margin-bottom: 3rem;
+    button {
+      width: 14%;
+      padding: 10px;
+
+      @media only screen and (max-width: $bp-extraLarge) {
+        width: 16%;
+      }
+
+      @media only screen and (max-width: $bp-large) {
+        width: 17%;
+        padding: 8px;
+      }
+
+      @media only screen and (max-width: $bp-smaller) {
+        width: 24%;
+        padding: 6px;
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  &__list {
+    width: 80%;
+    margin: 0 auto;
+
+    @media only screen and (max-width: $bp-larger) {
+      width: 85%;
+    }
+
+    @media only screen and (max-width: $bp-large) {
+      width: 95%;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      width: 100%;
+    }
+  }
+}

@@ -1,24 +1,41 @@
+import { useState } from "react";
+import { useHistory } from "react-router";
+import { useEffect } from "react/cjs/react.development";
+import { getURLImage } from "../../Service/firebaseFunctions";
 import styles from "./Organization.module.scss";
 
-const DUMMY_DATA = {
-  name: "F-Code",
-  sumary:
-    "F-code là CLB về học thuật, là nơi tập trung của những con người có chung niềm đam mê về lập trình, nhưng ngoài code ra thì các thành viên của CLB vẫn có những niềm đam mê và sở thích khác",
-  avatar:
-    "https://scontent.fsgn8-2.fna.fbcdn.net/v/t39.30808-6/241277567_2935941399955753_2523832604141178857_n.png?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=hEQOfPorBzEAX9QLz0Z&_nc_ht=scontent.fsgn8-2.fna&oh=489b1b6b0df44fbe4231a9ddb83bfbfb&oe=615233B9",
-};
-
 const Organization = (props) => {
+  const [avatarURL, setAvatarURL] = useState("/images/default-avatar.png");
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const getURLImg = async () => {
+      const fileName = `userAvatar_${props.information.id}`;
+      const url = await getURLImage(fileName);
+      if (url) {
+        setAvatarURL(url);
+      }
+    };
+    getURLImg();
+  }, [props.information.id]);
+
+  const showOrganizationDetail = () => {
+    history.push(`/organization/${props.information.id}`);
+  };
+
   return (
-    <div className={`${styles.organization}`}>
-      <img src={DUMMY_DATA.avatar} alt="logo" />
+    <div
+      key={`ORGANIZATION_${props.information.id} `}
+      className={`${styles.organization}`}
+    >
+      <img src={avatarURL} alt="logo" onClick={showOrganizationDetail} />
       <div className={styles.organization__information}>
-        <h3>{DUMMY_DATA.name}</h3>
-        <p>{DUMMY_DATA.sumary}</p>
+        <h3 onClick={showOrganizationDetail}>{props.information.name}</h3>
+        <p>{props.information.summary}</p>
       </div>
       <div className={styles.organization__button}>
         <button
-          type="submit"
           className={`${styles.organization__button__btn} ${styles.organization__button__btn_primary}`}
         >
           Follow

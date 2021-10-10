@@ -1,10 +1,14 @@
+import { Link } from "react-router-dom";
+
 import styles from "./Navigationbar.module.scss";
 import UserNavigation from "./UserNavigation";
 
 const Navbar = () => {
   return (
     <div className={`${styles.navBar}`}>
-      <div className={`${styles.navBar__title}`}>EVMA</div>
+      <div className={`${styles.navBar__title}`}>
+        <Link to="/home">EVMA</Link>
+      </div>
       <ul className={`${styles.navBar__items}`}>
         <li className={`${styles.navBar__item}`}>
           <a href="#" className={`${styles.navBar__link}`}>

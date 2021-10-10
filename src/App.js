@@ -1,85 +1,110 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 
-import NavigationBar from "./Components/Navigation/Navigationbar";
-import SideNavigation from "./Components/Navigation/SideNavigation";
-import SignIn from "./Components/Auth/SignIn";
-import ListEvent from "./Components/Events/ListEvent";
-import SignUp from "./Components/Auth/SignUp";
 import ForgotPassword from "./Components/Auth/ForgotPassword";
-import EventDetail from "./Components/Events/EventDetail";
-import EventCreation from "./Components/Events/EventCreation";
-import ListOrganization from "./Components/Organizations/ListOrganization";
-import OrganizationDetail from "./Components/Organizations/OrganizationDetail";
 
 import "./App.scss";
-import Profile from "./Components/Profile/Profile";
-import ConfirmImage from "./Components/Popup/ConfirmImage";
+
 import { useEffect } from "react";
 import firebase from "./Firebase";
+import CreatePost from "./Components/Popup/CreatePost";
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import AllEventPage from "./Pages/AllEventPage";
+import ListOrganizationPage from "./Pages/ListOrganizationPage";
+import OrganizationDetailPage from "./Pages/OrganizationDetailPage";
+import EventDetaiPage from "./Pages/EventDetaiPage";
+import EventCreationPage from "./Pages/EventCreationPage";
+import ProfilePage from "./Pages/ProfilePage";
+import { useDispatch, useSelector } from "react-redux";
+import { profileAction } from "./Store/profileSlice";
+import { tokenAction } from "./Store/tokenSlice";
+import { getProfilebyID } from "./Service/api/authApi";
+import { signInWithFullImage } from "./Service/functions";
+import ConfirmDelete from "./Components/Popup/ConfirmDelete";
 
 function App() {
+  const token = useSelector((state) => state.token.token);
+
+  const dispatch = useDispatch();
   // Handle firebase auth changed
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase
+  //     .auth()
+  //     .onAuthStateChanged(async (user) => {
+  //       // setIsSignedIn(!!user);
+  //       if (!user) {
+  //         return console.log("Log out");
+  //       }
+  //       // console.log(user.displayName);
+  //       // console.log("======================");
+  //       // const token = await user.getIdToken();
+  //       // console.log(token);
+  //     });
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
+
   useEffect(() => {
-    const unregisterAuthObserver = firebase
-      .auth()
-      .onAuthStateChanged(async (user) => {
-        // setIsSignedIn(!!user);
-        if (!user) {
-          return console.log("Log out");
-        }
-        console.log(user.displayName);
-        console.log("======================");
-        const token = await user.getIdToken();
-        console.log(token);
+    const userID = localStorage.getItem("USER_ID");
+    console.log("EFFECT");
+    if (!token || !userID) {
+      console.log("DELETE ACCOUNT");
+      dispatch(profileAction.signOut());
+      dispatch(tokenAction.deleteToken());
+    } else {
+      getProfilebyID(userID).then((profile) => {
+        // dispatch(profileAction.signInToEvma(profile));
+        signInWithFullImage(profile, dispatch);
       });
-    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
+    }
+    const left = localStorage.getItem("RELOAD_LEFT");
+    console.log(left);
+    if (left === "0") {
+      dispatch(profileAction.signOut());
+      dispatch(tokenAction.deleteToken());
+      localStorage.removeItem("RELOAD_LEFT");
+    }
+    if (left === "1") {
+      localStorage.setItem("RELOAD_LEFT", 0);
+    }
+  }, [token, dispatch]);
 
   return (
     <Switch>
       <Route path="/sign-in">
-        <SignIn />
+        <SignInPage />
       </Route>
       <Route path="/sign-up">
-        <SignUp />
+        <SignUpPage />
       </Route>
       <Route path="/forgot-password">
         <ForgotPassword />
       </Route>
-      <Route path="/home">
-        <NavigationBar />
-        <SideNavigation />
-        <ListEvent />
+      <Route exact path="/event">
+        <AllEventPage />
       </Route>
-      <Route path="/organizations">
-        <NavigationBar />
-        <SideNavigation />
-        <ListOrganization />
+      <Route path="/event/:id">
+        <EventDetaiPage />
       </Route>
-      <Route path="/organization-detail">
-        <NavigationBar />
-        <SideNavigation />
-        <OrganizationDetail />
+      <Route exact path="/organization">
+        <ListOrganizationPage />
       </Route>
-      <Route path="/event-detail">
-        <NavigationBar />
-        <SideNavigation />
-        <EventDetail />
+      <Route path="/organization/:id">
+        <OrganizationDetailPage />
       </Route>
       <Route path="/create">
-        <NavigationBar />
-        <EventCreation />
+        <EventCreationPage />
+      </Route>
+      <Route path="/edit/:id">
+        <EventCreationPage />
       </Route>
       <Route path="/profile">
-        <NavigationBar />
-        <Profile />
+        <ProfilePage />
       </Route>
       <Route path="/test">
-        {/* <NavigationBar /> */}
-        <ConfirmImage />
+        <ConfirmDelete />
       </Route>
       <Route path="*">
-        <Redirect to="/home" />
+        <Redirect to="/event" />
       </Route>
     </Switch>
   );

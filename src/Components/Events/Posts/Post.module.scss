@@ -1,0 +1,153 @@
+@import "../../SASS_Abstract/variable";
+
+.post {
+  box-shadow: 0px 0px 20px rgba($color-primary, 0.2);
+  background-color: $color-grey-light-2;
+  border-radius: 10px;
+  margin-bottom: 5rem;
+  padding-bottom: 0.7rem;
+
+  &__header {
+    font-size: 1.4rem;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid $color-primary;
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-right: auto;
+    }
+
+    @media only screen and (max-width: $bp-smaller) {
+      span {
+        font-size: 1.7rem;
+      }
+    }
+
+    button {
+      width: 12%;
+      padding: 0.5rem;
+      box-sizing: border-box;
+
+      &:first-of-type {
+        margin-right: 2rem;
+      }
+
+      @media only screen and (max-width: $bp-medium) {
+        width: 14%;
+      }
+
+      @media only screen and (max-width: $bp-smaller) {
+        padding: 0.5rem 0.3rem;
+        font-size: 2rem;
+
+        &:first-of-type {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  &_detail {
+    padding: 0.5rem 1rem;
+    p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      font-weight: 400;
+      span {
+        font-size: 1.2rem;
+        color: $color-grey-dark-2;
+        cursor: pointer;
+
+        &:active {
+          color: $color-grey-dark-3;
+        }
+      }
+    }
+
+    &_cut {
+      max-height: 105vh;
+      overflow: hidden;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    &__header {
+      font-size: 1.5rem;
+    }
+
+    &_detail {
+      p {
+        font-size: 1.2rem;
+        span {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-larger) {
+    &__header {
+      font-size: 1.6rem;
+    }
+
+    &_detail {
+      p {
+        font-size: 1.3rem;
+        span {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    &__header {
+      font-size: 1.7rem;
+    }
+
+    &_detail {
+      p {
+        font-size: 1.4rem;
+        span {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    &__header {
+      font-size: 1.8rem;
+    }
+
+    &_detail {
+      p {
+        font-size: 1.5rem;
+        span {
+          font-size: 1.6rem;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: $bp-extraSmall) {
+    &__header {
+      font-size: 1.9rem;
+    }
+
+    &_detail {
+      p {
+        font-size: 1.6rem;
+        span {
+          font-size: 1.7rem;
+        }
+      }
+    }
+  }
+}

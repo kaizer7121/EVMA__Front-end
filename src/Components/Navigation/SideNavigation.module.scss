@@ -20,6 +20,7 @@
 
   @media only screen and (max-width: $bp-larger) {
     width: 18%;
+    margin-top: 8.5rem;
   }
 
   @media only screen and (max-width: $bp-large) {
@@ -29,22 +30,14 @@
 
   @media only screen and (max-width: $bp-medium) {
     display: flex;
-    margin-top: 6.8rem;
+    margin-top: 8.4rem;
     width: 100vw;
     box-shadow: 0 1px 6px rgba($color-black, 0.2);
     z-index: 10;
   }
 
   @media only screen and (max-width: $bp-small) {
-    margin-top: 6.8rem
-  }
-
-  @media only screen and (max-width: $bp-smaller) {
-    margin-top: 6.8rem
-  }
-
-  @media only screen and (max-width: $bp-extraSmall) {
-    margin-top: 6.9rem
+    margin-top: 8.4rem
   }
 
   &__item {
