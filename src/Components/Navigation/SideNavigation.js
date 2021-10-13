@@ -14,10 +14,7 @@ const SideNavigation = (props) => {
             activatedItem === "HOME" && styles.sideNav__item__active
           }`}
         >
-          <Link to="/home" className={`${styles.sideNav__link}`}>
-            {/* <svg class="side-nav__icon">
-              <use xlink:href="img/sprite.svg#icon-home"></use>
-            </svg> */}
+          <Link to="/event" className={`${styles.sideNav__link}`}>
             <span>All Event</span>
           </Link>
         </li>
@@ -34,11 +31,11 @@ const SideNavigation = (props) => {
 
         <li
           className={`${styles.sideNav__item} ${
-            activatedItem === "RECOMMEND" && styles.sideNav__item__active
+            activatedItem === "TYPE_3" && styles.sideNav__item__active
           }`}
         >
           {profile.role === "Event Organizer" ? (
-            <Link to="/event" className={`${styles.sideNav__link}`}>
+            <Link to="/ownEvent" className={`${styles.sideNav__link}`}>
               <span>Own event</span>
             </Link>
           ) : (

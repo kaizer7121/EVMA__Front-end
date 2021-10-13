@@ -126,6 +126,7 @@ const CreationBar = (props) => {
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
           <DayPickerInput
+            dayPickerProps={{ disabledDays: { before: new Date() } }}
             format={"DD/MM/yyyy"}
             formatDate={formatDate}
             parseDate={parseDate}
@@ -170,6 +171,7 @@ const CreationBar = (props) => {
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
           <DayPickerInput
+            dayPickerProps={{ disabledDays: { before: new Date() } }}
             format={"DD/MM/yyyy"}
             formatDate={formatDate}
             parseDate={parseDate}
@@ -373,7 +375,7 @@ const CreationBar = (props) => {
             value={selectedCategory}
             onChange={onSelectCategory}
           >
-            <option value="default" selected disabled hidden>
+            <option value="default" disabled hidden>
               Choose category
             </option>
             {props.categoriesInDB &&

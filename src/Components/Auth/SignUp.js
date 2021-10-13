@@ -204,7 +204,7 @@ const SignUp = () => {
 
               {errorRegister.dateOfBirth && (
                 <p className={`${commonStyles.form__error}`}>
-                  Date format must be correct and user must older than 16
+                  Date must be correct, age older than 16
                 </p>
               )}
             </div>
@@ -230,7 +230,7 @@ const SignUp = () => {
               />
               {errorRegister.fullName && (
                 <p className={`${commonStyles.form__error}`}>
-                  Full name must have 1-50 character and must not have number
+                  Full name only have characters (3 - 50)
                 </p>
               )}
             </div>

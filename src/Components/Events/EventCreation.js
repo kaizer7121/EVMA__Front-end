@@ -253,7 +253,7 @@ const EventCreation = (props) => {
         online: eventInfo.isOnlineEvent,
         startDate: startDateAndTime,
         endDate: endDateAndTime,
-        statusId: type === "PUBLISH" ? 1 : 3,
+        statusId: type === "PUBLISH" ? 1 : 2,
         summary: eventInfo.summary,
         content: eventInfo.content,
         addresses,
@@ -273,7 +273,7 @@ const EventCreation = (props) => {
         }
         if (responseData.status !== 400) {
           const message =
-            actionType === "Edit" ? "Edit successfully" : "Create successfully";
+            actionType === "Edit" ? "Edit successfully" : type === "PUBLISH" ? "Create successfully" : "Save to draft successfully" ;
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
               console.log(responseData);

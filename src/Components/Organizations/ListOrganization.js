@@ -11,8 +11,24 @@ const ListOrganization = (props) => {
     setCurrentList(props.listOrganization);
   }, [props.listOrganization]);
 
+  useEffect(() => {
+    const search = setTimeout(() => {
+      const searchedList = props.listOrganization.filter((organization) => {
+        return organization.name
+          .toUpperCase()
+          .includes(searchValue.toUpperCase());
+      });
+      setCurrentList(searchedList);
+    }, 500);
+
+    return function cleanup() {
+      clearTimeout(search);
+    };
+  }, [props.listOrganization, searchValue]);
+
   const changeSearchValue = (event) => {
-    setSearchValue(event.target.value);
+    const value = event.target.value;
+    setSearchValue(value);
   };
 
   const startSearch = () => {

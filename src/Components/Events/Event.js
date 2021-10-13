@@ -7,7 +7,8 @@ import { getURLImage } from "../../Service/firebaseFunctions";
 
 const Event = (props) => {
   const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
-  const shortDescriptionArr = props.information.summary.split("\n");
+  const shortDescriptionArr =
+    props.information.summary && props.information.summary.split("\n");
   useEffect(() => {
     const getURLImg = async () => {
       const fileName = props.information.coverURL;

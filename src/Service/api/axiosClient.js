@@ -1,13 +1,11 @@
 import axios from "axios";
 import queryString from "query-string";
 
-const token = localStorage.getItem("TOKEN");
-
 const axiosClient = axios.create({
   baseURL: "http://localhost:8080/support",
   headers: {
     // "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
+    // Authorization: `Bearer ${token}`,
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
@@ -24,5 +22,14 @@ axiosClient.interceptors.response.use(
     return err.response;
   }
 );
+
+axiosClient.interceptors.request.use(async (config) => {
+  const token = localStorage.getItem("TOKEN");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
 
 export default axiosClient;

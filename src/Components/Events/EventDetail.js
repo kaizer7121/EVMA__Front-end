@@ -133,9 +133,12 @@ const EventDetail = (props) => {
         </div>
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
-          <p className={`${styles.detail__registerText}`}>{`${startDate} ${
-            props.information.endDate !== null ? `- ${endDate}` : ""
-          }`}</p>
+          <p className={`${styles.detail__registerText}`}>
+            <>
+              Start: {startDate} <br />{" "}
+            </>
+            {props.information.endDate !== null ? `End: ${endDate}` : ""}
+          </p>
 
           <h3 className={`${styles.detail__topic}`}>Location</h3>
           <br />
@@ -230,7 +233,8 @@ const EventDetail = (props) => {
               );
             })}
           <p></p>
-          {props.information.status.name === "Published" && (
+          {(props.information.status.name === "Published" ||
+            props.information.status.name === "Draft") && (
             <div className={`${styles.detail__buttons}`}>
               {!isOwnEvent && (
                 <button
@@ -256,11 +260,13 @@ const EventDetail = (props) => {
                 </>
               )}
 
-              <button
-                className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
-              >
-                SHARE
-              </button>
+              {props.information.status.name !== "Draft" && (
+                <button
+                  className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+                >
+                  SHARE
+                </button>
+              )}
             </div>
           )}
         </div>

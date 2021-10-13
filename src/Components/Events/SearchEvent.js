@@ -88,7 +88,7 @@ const SearchEvent = () => {
       searchInfo.categories.length === 0 &&
       searchInfo.organizations.length === 0 &&
       searchInfo.hashtags.length === 0 &&
-      searchInfo.startDate.length === 0 && 
+      searchInfo.startDate.length === 0 &&
       searchInfo.endDate.length === 0
     );
   };
@@ -109,11 +109,13 @@ const SearchEvent = () => {
         tags: searchInfo.hashtags,
         organizers: searchInfo.organizations,
         startDate:
-          searchInfo.startDate.length > 0
+          searchInfo.startDate.toString().length > 0
             ? searchInfo.startDate.toISOString()
             : "",
         endDate:
-          searchInfo.endDate.length > 0 ? searchInfo.endDate.toISOString() : "",
+          searchInfo.endDate.toString().length > 0
+            ? searchInfo.endDate.toISOString()
+            : "",
         categories: [...categoryIds],
       };
       try {

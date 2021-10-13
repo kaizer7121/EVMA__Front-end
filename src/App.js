@@ -24,6 +24,8 @@ import {
 import ConfirmDeletePost from "./Components/Popup/ConfirmDeletePost";
 import SearchEventPage from "./Pages/SearchEventPage";
 import { getAllCategoryFromDB } from "./Service/api/eventApi";
+import OwnEventPage from "./Pages/OwnEventPage";
+import EventFilter from "./Components/Filter/EventFilter";
 
 function App() {
   const token = useSelector((state) => state.token.token);
@@ -86,12 +88,8 @@ function App() {
       dispatch(tokenAction.deleteToken());
       localStorage.removeItem("RELOAD_LEFT");
     }
-    if (left === "1" || left === "2") {
-      if (left === "1") {
-        localStorage.setItem("RELOAD_LEFT", 0);
-      } else if (left === "2") {
-        localStorage.setItem("RELOAD_LEFT", 1);
-      }
+    if (left === "1") {
+      localStorage.setItem("RELOAD_LEFT", 0);
     }
   }, [token, dispatch, listCategory]);
 
@@ -106,13 +104,17 @@ function App() {
       <Route path="/forgot-password">
         <ForgotPassword />
       </Route>
+
+      <Route exact path="/event/:id">
+        <EventDetaiPage />
+      </Route>
+      <Route exact path="/ownEvent/">
+        <OwnEventPage />
+      </Route>
       <Route exact path="/event">
         <AllEventPage />
       </Route>
-      <Route path="/event/:id">
-        <EventDetaiPage />
-      </Route>
-      <Route exact path="/organization">
+      <Route path="/organization">
         <ListOrganizationPage />
       </Route>
       <Route path="/organization/:id">
@@ -131,9 +133,9 @@ function App() {
         <SearchEventPage />
       </Route>
       <Route path="/test">
-        <ConfirmDeletePost />
+        <EventFilter />
       </Route>
-      <Route path="*">
+      <Route exact path="*">
         <Redirect to="/event" />
       </Route>
     </Switch>

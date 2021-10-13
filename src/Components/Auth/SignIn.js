@@ -81,14 +81,12 @@ const SignIn = () => {
         if (response.status === "Login success") {
           const { profile, token } = response;
 
-          // dispatch(profileAction.signInToEvma(profile));
           await signInWithFullImage(profile, dispatch);
           dispatch(tokenAction.addToken(token));
 
           if (!rememberUser) {
-            localStorage.setItem("RELOAD_LEFT", 2);
+            localStorage.setItem("RELOAD_LEFT", 1);
           }
-          history.go(0);
         } else {
           setErrorInfo((prevValue) => ({ ...prevValue, wrongInfo: true }));
         }

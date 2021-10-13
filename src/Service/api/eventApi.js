@@ -59,3 +59,8 @@ export const searchEvent = (data) => {
   const url = "/api/events/search?size=100";
   return axiosClient.post(url, data);
 };
+
+export const getEventByStatus = (organizationID, statusID) => {
+  const url = `api/events/byOrganizer/${organizationID}/${statusID}`;
+  return axiosClient.get(url);
+};

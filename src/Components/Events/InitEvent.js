@@ -45,9 +45,12 @@ const InitEvent = (props) => {
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
           <p className={`${styles.detail__registerText}`}>
-            {startDate}, {props.information.startTime}
+            <>
+              Start: {startDate}, {props.information.startTime}
+              <br/>
+            </>
             {endDate.length > 0 &&
-              ` - ${endDate}, ${props.information.endTime}`}
+              `End:  ${endDate}, ${props.information.endTime}`}
           </p>
           <h3 className={`${styles.detail__topic}`}>Location</h3>
           <br />
