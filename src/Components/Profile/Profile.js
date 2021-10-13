@@ -27,12 +27,12 @@ const Profile = () => {
     avatarURL: profile.avatarURL,
     backgroundURL: profile.backgroundURL,
     name: profile.name,
-    dob: converISOToOnlyDate(profile.dob),
-    phoneNumber: profile.phoneNumber,
-    address: profile.address,
-    city: profile.city,
-    jobTitle: profile.jobTitle,
-    summary: profile.summary,
+    dob: profile.dob ? profile.dob : "",
+    phoneNumber: profile.phoneNumber ? profile.phoneNumber : "",
+    address: profile.address ? profile.address.replace(",", ", ") : "",
+    city: profile.city ? profile.city : "",
+    jobTitle: profile.jobTitle ? profile.jobTitle : "",
+    summary: profile.summary ? profile.summary : "",
   });
   const [errorInformation, setErrorInformation] = useState({
     name: false,
@@ -64,7 +64,7 @@ const Profile = () => {
       name: profile.name,
       dob: converISOToOnlyDate(profile.dob),
       phoneNumber: profile.phoneNumber,
-      address: profile.address,
+      address: profile.address.replace(",", ", "),
       city: profile.city,
       jobTitle: profile.jobTitle,
       summary: profile.summary,
@@ -91,7 +91,6 @@ const Profile = () => {
 
   const onConfirmCroppedImg = (blob) => {
     const imgSrc = URL.createObjectURL(blob);
-    // setEventInfo((prevValue) => ({ ...prevValue, image: imgSrc }));
     if (croppingImage.type === "cover") {
       setAccountInformation((prevValue) => ({
         ...prevValue,
@@ -139,16 +138,24 @@ const Profile = () => {
     ) {
       dob = true;
     }
-    if (!validatePhone(accountInformation.phoneNumber)) {
+    if (
+      accountInformation.dob.length > 0 &&
+      !validatePhone(accountInformation.phoneNumber)
+    ) {
       phoneNumber = true;
     }
     if (
+      accountInformation.summary &&
       userRole === "Event Organizer" &&
       accountInformation.summary.length > 255
     ) {
       summary = true;
     }
-    if (accountInformation.address.length >= 50) {
+    if (
+      accountInformation.address &&
+      accountInformation.address.length >= 50 &&
+      validateName(accountInformation.address)
+    ) {
       address = true;
     }
     setErrorInformation({
@@ -171,41 +178,48 @@ const Profile = () => {
         email: accountInformation.email,
         city: accountInformation.city,
         jobTitle: accountInformation.jobTitle,
-        address: accountInformation.address,
+        address: accountInformation.address.replace(", ", ","),
         phoneNumber: accountInformation.phoneNumber,
         summary: accountInformation.summary,
         dob: accountInformation.dob.toISOString(),
       };
       try {
-        const repsone = await updateProfile(data, profile.id);
-        const avatarName = repsone.avatarURL;
-        const backgroundName = repsone.backgroundURL;
-        if (
-          imageAsFile.avatar &&
-          imageAsFile.avatar.size &&
-          imageAsFile.avatar.size > 0
-        ) {
-          await uploadImgToStorage(imageAsFile.avatar, avatarName);
-          console.log("UPLOAD AVATAR");
+        const repsonse = await updateProfile(data, profile.id);
+        const avatarName = repsonse.avatarURL;
+        const backgroundName = repsonse.backgroundURL;
+
+        if (repsonse.status !== 400 && repsonse.status !== 403) {
+          if (
+            imageAsFile.avatar &&
+            imageAsFile.avatar.size &&
+            imageAsFile.avatar.size > 0
+          ) {
+            await uploadImgToStorage(imageAsFile.avatar, avatarName);
+            console.log("UPLOAD AVATAR");
+          }
+          if (
+            imageAsFile.cover &&
+            imageAsFile.cover.size &&
+            imageAsFile.cover.size > 0
+          ) {
+            await uploadImgToStorage(imageAsFile.cover, backgroundName);
+          }
+          const profileData = {
+            ...repsonse,
+            avatarURL: accountInformation.avatarURL
+              ? accountInformation.avatarURL
+              : "/images/default-avatar.png",
+            backgroundURL: accountInformation.backgroundURL
+              ? accountInformation.backgroundURL
+              : "/images/default-cover.jpg",
+          };
+          await updateProfileWithFullImage(profileData, dispatch);
+          setIsUpdatedProfile(true);
+        } else {
+          alert("Some thing wrong with server when update profile");
+          console.log(repsonse);
+          // setIsUpdatedProfile(true);
         }
-        if (
-          imageAsFile.cover &&
-          imageAsFile.cover.size &&
-          imageAsFile.cover.size > 0
-        ) {
-          await uploadImgToStorage(imageAsFile.cover, backgroundName);
-        }
-        const profileData = {
-          ...repsone,
-          avatarURL: accountInformation.avatarURL
-            ? accountInformation.avatarURL
-            : "/images/default-avatar.png",
-          backgroundURL: accountInformation.backgroundURL
-            ? accountInformation.backgroundURL
-            : "/images/default-cover.jpg",
-        };
-        await updateProfileWithFullImage(profileData, dispatch);
-        setIsUpdatedProfile(true);
       } catch (error) {
         console.log("Error when update profile " + error);
       }

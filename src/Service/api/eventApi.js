@@ -35,6 +35,11 @@ export const editEventPost = (data, postID) => {
   return axiosClient.put(url, data);
 };
 
+export const deleteEventPost = (postID) => {
+  const url = `/api/posts/${postID}`;
+  return axiosClient.delete(url);
+};
+
 export const getAllCategoryFromDB = () => {
   const url = "/api/events/categories";
   return axiosClient.get(url);
@@ -48,4 +53,14 @@ export const getAllEventByProfileID = (profileID, params) => {
 export const changeEventStatus = (eventID, statusID) => {
   const url = `/api/events/${eventID}`;
   return axiosClient.patch(url, { statusId: statusID });
+};
+
+export const searchEvent = (data) => {
+  const url = "/api/events/search?size=100";
+  return axiosClient.post(url, data);
+};
+
+export const getEventByStatus = (organizationID, statusID) => {
+  const url = `api/events/byOrganizer/${organizationID}/${statusID}`;
+  return axiosClient.get(url);
 };

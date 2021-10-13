@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { signInWithFullImage, validateEmail } from "../../Service/functions";
 import { signIn } from "../../Service/api/authApi";
 import { useDispatch } from "react-redux";
-import { profileAction } from "../../Store/profileSlice";
 import { tokenAction } from "../../Store/tokenSlice";
 import { useSelector } from "react-redux";
 
@@ -40,7 +39,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (token) {
-      history.replace("/home");
+      history.push("/home");
     }
   }, [token, history]);
 
@@ -73,6 +72,8 @@ const SignIn = () => {
 
   const signInHandler = async (event) => {
     event.preventDefault();
+    console.log("CHECK:");
+    console.log(checkValidInfo());
     if (checkValidInfo()) {
       try {
         const response = await signIn(userInfo);
@@ -80,14 +81,12 @@ const SignIn = () => {
         if (response.status === "Login success") {
           const { profile, token } = response;
 
-          // dispatch(profileAction.signInToEvma(profile));
-          await signInWithFullImage(profile, dispatch)
+          await signInWithFullImage(profile, dispatch);
           dispatch(tokenAction.addToken(token));
 
           if (!rememberUser) {
             localStorage.setItem("RELOAD_LEFT", 1);
           }
-          // history.push("/home");
         } else {
           setErrorInfo((prevValue) => ({ ...prevValue, wrongInfo: true }));
         }

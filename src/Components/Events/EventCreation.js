@@ -7,11 +7,7 @@ import ConfirmImage from "../Popup/ConfirmImage";
 import { uploadImgToStorage } from "../../Service/firebaseFunctions";
 import { createEvent, editEvent } from "../../Service/api/eventApi";
 import { useHistory } from "react-router";
-import {
-  converISOToOnlyDate,
-  converISOToOnlyTime,
-  validURL,
-} from "../../Service/functions";
+import { converISOToOnlyDate, validURL } from "../../Service/functions";
 import { useSelector } from "react-redux";
 
 const EventCreation = (props) => {
@@ -195,7 +191,6 @@ const EventCreation = (props) => {
   const removeCategory = (index) => {
     const newCategories = [...eventInfo.categories];
     newCategories.splice(index, 1);
-    console.log(newCategories);
     setEventInfo((prevValue) => ({ ...prevValue, categories: newCategories }));
   };
 
@@ -258,7 +253,7 @@ const EventCreation = (props) => {
         online: eventInfo.isOnlineEvent,
         startDate: startDateAndTime,
         endDate: endDateAndTime,
-        statusId: type === "PUBLISH" ? 1 : 3,
+        statusId: type === "PUBLISH" ? 1 : 2,
         summary: eventInfo.summary,
         content: eventInfo.content,
         addresses,
@@ -278,7 +273,7 @@ const EventCreation = (props) => {
         }
         if (responseData.status !== 400) {
           const message =
-            actionType === "Edit" ? "Edit successfully" : "Create successfully";
+            actionType === "Edit" ? "Edit successfully" : type === "PUBLISH" ? "Create successfully" : "Save to draft successfully" ;
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
               console.log(responseData);

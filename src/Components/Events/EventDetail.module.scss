@@ -19,8 +19,24 @@
     color: $color-white;
     font-size: 1.2rem;
     font-weight: 600;
-    background-color: $color-primary;
     border-radius: 5px;
+
+    &_published {
+      background-color: $color-primary;
+    }
+
+    &_cancel {
+      background-color: $color-danger;
+    }
+
+    &_delete {
+      background-color: $color-grey-dark;
+    }
+
+    &_draft {
+      background-color: $color-grey-light-3;
+      color: $color-black;
+    }
   }
 
   hr {
@@ -69,7 +85,7 @@
     font-size: 1.3rem;
     color: $color-white;
     background-color: $color-tertiary-light;
-    border-radius: 5%;
+    border-radius: 5px;
     display: inline-block;
 
     &:not(:last-child) {
@@ -216,7 +232,7 @@
 
     &__buttons {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       gap: 10%;
     }
   }

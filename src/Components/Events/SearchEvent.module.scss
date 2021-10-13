@@ -1,0 +1,410 @@
+@import "../SASS_Abstract/variable";
+
+.category_color {
+  color: $color-white;
+  background-color: $color-tertiary-dark;
+}
+
+.organization_color {
+  color: $color-white;
+  background-color: $color-secondary-dark;
+}
+
+.hashtag_color {
+  color: $color-white;
+  background-color: $color-fourth-light;
+}
+
+.dayPicker {
+  color: aquamarine;
+  font-weight: bold;
+  font-size: 140%;
+}
+
+.searchEvent {
+  position: relative;
+  margin-top: 10rem;
+  margin-left: 28vw;
+  width: 60%;
+  min-height: 110vh;
+
+  @media only screen and (max-width: $bp-extraLarge) {
+    width: 65%;
+    margin-left: 25.5vw;
+  }
+  @media only screen and (max-width: $bp-larger) {
+    width: 70%;
+    margin-left: 24vw;
+  }
+  @media only screen and (max-width: $bp-medium) {
+    width: 100%;
+    margin-top: 15rem;
+    margin-left: 0vw;
+  }
+
+  &__searchName {
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0px 0px 30px rgba($color-black, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+
+    input {
+      width: 75%;
+      box-sizing: border-box;
+      padding: 0.7rem 0.2rem;
+      outline: none;
+      border: none;
+      border-bottom: 1px solid $color-grey-dark;
+      font-size: 1.2rem;
+    }
+
+    button {
+      width: 18%;
+      font-size: 1.4rem;
+      border-radius: 4px !important;
+      padding: 0.7rem 1rem !important;
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      input {
+        font-size: 1.3rem;
+      }
+      button {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      input {
+        font-size: 1.6rem;
+      }
+      button {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      input {
+        font-size: 2rem;
+      }
+      button {
+        font-size: 2.2rem;
+      }
+    }
+  }
+
+  &__searchDetail {
+    // background-color: $color-grey-light-1;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 2rem;
+    box-shadow: 0px 0px 30px rgba($color-black, 0.1);
+    padding: 0 1rem 1rem;
+    border-radius: 10px;
+
+    &_addButton {
+      margin-top: 0;
+      padding: 0.3rem 0.6rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: $color-white;
+      background-color: $color-grey-dark-3;
+      border-radius: 4px;
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.06s;
+      text-transform: uppercase;
+
+      img {
+        font-size: 2rem;
+        margin-right: 0.3rem;
+        transform: scale(1.1) translateY(-2px);
+      }
+
+      &:hover {
+        background-color: $color-grey-dark-2;
+        color: $color-grey-dark-3;
+      }
+
+      &:active {
+        color: $color-white;
+        background-color: $color-grey-dark-3;
+      }
+    }
+
+    &_type {
+      margin-bottom: 2rem;
+
+      &_topic {
+        display: flex;
+        align-items: center;
+        gap: 2%;
+        margin-bottom: 1rem;
+      }
+
+      &_select {
+        padding: 0.3rem 0.5rem;
+        font-weight: 500;
+        font-size: 1.1rem;
+        color: $color-grey-dark-3;
+        border-radius: 4px;
+        border: 2px solid $color-tertiary-light;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      &_input {
+        padding: 0.3rem 0.5rem;
+        font-weight: 500;
+        font-size: 1.1rem;
+        color: $color-grey-dark-3;
+        border: none;
+        border-bottom: 1px solid $color-tertiary-light;
+        background-color: inherit;
+        width: 18%;
+
+        &:focus {
+          outline: none;
+        }
+      }
+
+      h3 {
+        color: $color-tertiary-light;
+        font-size: 1.7rem;
+        margin-right: 1.5rem;
+        display: inline-block;
+      }
+    }
+    &_item {
+      margin-top: 0;
+      padding: 0.2rem 0.5rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+
+      border-radius: 7px;
+      display: inline-block;
+      cursor: pointer;
+      box-sizing: border-box;
+      position: relative;
+
+      &:not(:last-child) {
+        margin-right: 1.5rem;
+      }
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+
+      &:active {
+        transform: scale(0.99);
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      &_addButton {
+        font-size: 1.4rem;
+
+        img {
+          margin-right: 0.4rem;
+          transform: scale(1.1) translateY(-0.5px);
+        }
+      }
+
+      &_type {
+        &_select {
+          padding: 0.4rem 0.6rem;
+          font-size: 1.2rem;
+        }
+
+        &_input {
+          padding: 0.4rem 0.6rem;
+          font-size: 1.2rem;
+        }
+
+        h3 {
+          font-size: 1.8rem;
+          margin-right: 1.6rem;
+        }
+      }
+      &_item {
+        padding: 0.3rem 0.6rem 0.4rem;
+        font-size: 1.3rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      &_addButton {
+        font-size: 1.6rem;
+        padding: 0.6rem 0.8rem;
+
+        img {
+          margin-right: 0.6rem;
+          transform: scale(1.1) translateY(-0.5px);
+        }
+      }
+
+      &_type {
+        &_select {
+          padding: 0.6rem 0.8rem;
+          font-size: 1.4rem;
+        }
+
+        &_input {
+          padding: 0.6rem 0.8rem;
+          font-size: 1.4rem;
+          width: 24%;
+        }
+
+        h3 {
+          font-size: 2rem;
+          margin-right: 1.8rem;
+        }
+      }
+      &_item {
+        padding: 0.5rem 0.8rem 0.6rem;
+        font-size: 1.5rem;
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      &_addButton {
+        font-size: 2rem;
+        padding: 1.2rem 1.4rem;
+
+        img {
+          margin-right: 1rem;
+          transform: scale(1) translateY(1px);
+        }
+      }
+
+      &_type {
+        &_select {
+          padding: 1rem 1.2rem;
+          font-size: 2rem;
+        }
+
+        &_input {
+          padding: 1rem 1.2rem;
+          font-size: 2rem;
+          width: 28%;
+        }
+
+        h3 {
+          font-size: 2.4rem;
+          margin-right: 2.2rem;
+        }
+      }
+      &_item {
+        padding: 0.9rem 1.2rem 1rem;
+        font-size: 1.9rem;
+      }
+    }
+
+    &_datePicker {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 2%;
+
+      input {
+        position: relative;
+        display: flex;
+        border: none;
+        border-bottom: 1px solid $color-tertiary-light;
+        padding: 0.7rem 1rem;
+        margin: 1rem auto 0;
+
+        width: 80%;
+        font-weight: 500;
+        font-size: 1.2rem;
+
+        &:focus {
+          outline: none;
+        }
+
+        @media only screen and (max-width: $bp-medium) {
+          font-size: 1.4rem;
+        }
+        @media only screen and (max-width: $bp-extraSmall) {
+          margin-left: 1.8rem;
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+
+  &__error {
+    color: $color-danger;
+    font-weight: 500;
+    font-size: 1.1rem;
+
+    @media only screen and (max-width: $bp-larger) {
+      font-size: 1.2rem;
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      margin-left: 1rem;
+      font-size: 1.4rem;
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      margin-left: 1.2rem;
+      font-size: 2rem;
+    }
+  }
+
+  &__seperator {
+    margin: 4rem 0;
+    display: flex;
+    align-items: center;
+    gap: 2%;
+
+    span {
+      font-size: 2.2rem;
+      font-weight: 500;
+      transform: translateY(-5px);
+    }
+
+    hr {
+      width: 100%;
+      border: 1px solid $color-grey-dark;
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      span {
+        font-size: 2.3rem;
+        transform: translateY(-5px);
+      }
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      padding: 0 1rem;
+      span {
+        font-size: 2.5rem;
+        transform: translateY(-5px);
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraSmall) {
+      padding: 0 2rem;
+      span {
+        font-size: 3rem;
+        transform: translateY(-3px);
+      }
+    }
+  }
+
+  &__reuslt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5%;
+    justify-content: space-between;
+    border-radius: 10px;
+
+    // @media only screen and (max-width: $bp-smaller) {
+    //   flex-direction: column;
+    // }
+  }
+}

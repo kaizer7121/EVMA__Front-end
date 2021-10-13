@@ -1,3 +1,4 @@
+import { categoriesAction } from "../Store/categoriesStore";
 import { profileAction } from "../Store/profileSlice";
 import { getURLImage } from "./firebaseFunctions";
 
@@ -40,18 +41,26 @@ export const isValidHttpUrl = (string) => {
 };
 
 export const validateEmail = (email) => {
-  const re =
+  const regex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+  return regex.test(String(email).toLowerCase());
 };
 
 export const validateName = (name) => {
-  var regex = /^([a-zA-Z ]){1,50}$/;
+  const regexString =
+    "^[\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵ" +
+    "ặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]([-']?[\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚ" +
+    "ĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồ" +
+    "ổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)*( [\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮ" +
+    "ẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]([-']?[" +
+    "\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊ" +
+    "ỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)*)*$";
+  const regex = new RegExp(regexString);
   return regex.test(name);
 };
 
 export const validatePassword = (password) => {
-  var regex = /^([a-zA-Z ]){1,50}$/;
+  const regex = /^([a-zA-Z ]){1,50}$/;
   return regex.test(password);
 };
 
@@ -60,9 +69,24 @@ export const validatePhone = (phoneNumber) => {
   return regex.test(phoneNumber);
 };
 
+export const validateAddress = (address) => {
+  const regexString =
+    "^[\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾ" +
+    "ưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]([-'/" +
+    ".,]?[\\dA-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩ" +
+    "ẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)*( [\\dA-Z" +
+    "a-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽề" +
+    "ềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]([-'/.,]?[\\dA-Za-zÀÁÂÃ" +
+    "ÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊ" +
+    "ỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+)*)*$";
+  const regex = new RegExp(regexString);
+
+  return regex.test(address);
+};
+
 export const calculateAge = (birthday) => {
-  var ageDifMs = Date.now() - birthday.getTime();
-  var ageDate = new Date(ageDifMs);
+  const ageDifMs = Date.now() - birthday.getTime();
+  const ageDate = new Date(ageDifMs);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
 
@@ -90,6 +114,8 @@ export const converISOToDate = (isoDate) => {
 };
 
 export const converISOToOnlyDate = (isoDate) => {
+  console.log("ISO:");
+  console.log(isoDate);
   const [date, isoTime] = isoDate.split("T");
   const fullDate = new Date(date);
 
@@ -153,4 +179,8 @@ export const updateProfileWithFullImage = async (profile, dispatch) => {
   // };
 
   dispatch(profileAction.updateProfile(profile));
+};
+
+export const updateListCategoryToStore = async (listCategory, dispatch) => {
+  dispatch(categoriesAction.updateListCategories(listCategory));
 };

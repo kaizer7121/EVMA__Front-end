@@ -226,5 +226,9 @@
     flex-wrap: wrap;
     gap: 5%;
     justify-content: space-between;
+
+    @media only screen and (max-width: $bp-smaller) {
+      flex-direction: column;
+    }
   }
 }

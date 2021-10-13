@@ -5,8 +5,6 @@ import ForgotPassword from "./Components/Auth/ForgotPassword";
 import "./App.scss";
 
 import { useEffect } from "react";
-import firebase from "./Firebase";
-import CreatePost from "./Components/Popup/CreatePost";
 import SignInPage from "./Pages/SignInPage";
 import SignUpPage from "./Pages/SignUpPage";
 import AllEventPage from "./Pages/AllEventPage";
@@ -19,11 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { profileAction } from "./Store/profileSlice";
 import { tokenAction } from "./Store/tokenSlice";
 import { getProfilebyID } from "./Service/api/authApi";
-import { signInWithFullImage } from "./Service/functions";
-import ConfirmDelete from "./Components/Popup/ConfirmDelete";
+import {
+  signInWithFullImage,
+  updateListCategoryToStore,
+} from "./Service/functions";
+import ConfirmDeletePost from "./Components/Popup/ConfirmDeletePost";
+import SearchEventPage from "./Pages/SearchEventPage";
+import { getAllCategoryFromDB } from "./Service/api/eventApi";
+import OwnEventPage from "./Pages/OwnEventPage";
+import EventFilter from "./Components/Filter/EventFilter";
 
 function App() {
   const token = useSelector((state) => state.token.token);
+  const listCategory = useSelector((state) => state.categories.listCategory);
 
   const dispatch = useDispatch();
   // Handle firebase auth changed
@@ -46,15 +52,34 @@ function App() {
   useEffect(() => {
     const userID = localStorage.getItem("USER_ID");
     console.log("EFFECT");
+
+    if (listCategory[0] === "Empty") {
+      try {
+        getAllCategoryFromDB().then((response) => {
+          updateListCategoryToStore(response, dispatch);
+        });
+      } catch (error) {
+        console.log("FAIL WHEN GET CATEGORIES " + error);
+      }
+    }
     if (!token || !userID) {
       console.log("DELETE ACCOUNT");
       dispatch(profileAction.signOut());
       dispatch(tokenAction.deleteToken());
     } else {
-      getProfilebyID(userID).then((profile) => {
-        // dispatch(profileAction.signInToEvma(profile));
-        signInWithFullImage(profile, dispatch);
-      });
+      getProfilebyID(userID)
+        .then((profile) => {
+          if (profile) {
+            signInWithFullImage(profile, dispatch);
+          } else {
+            dispatch(profileAction.signOut());
+            dispatch(tokenAction.deleteToken());
+          }
+        })
+        .catch(() => {
+          dispatch(profileAction.signOut());
+          dispatch(tokenAction.deleteToken());
+        });
     }
     const left = localStorage.getItem("RELOAD_LEFT");
     console.log(left);
@@ -66,7 +91,7 @@ function App() {
     if (left === "1") {
       localStorage.setItem("RELOAD_LEFT", 0);
     }
-  }, [token, dispatch]);
+  }, [token, dispatch, listCategory]);
 
   return (
     <Switch>
@@ -79,13 +104,17 @@ function App() {
       <Route path="/forgot-password">
         <ForgotPassword />
       </Route>
+
+      <Route exact path="/event/:id">
+        <EventDetaiPage />
+      </Route>
+      <Route exact path="/ownEvent/">
+        <OwnEventPage />
+      </Route>
       <Route exact path="/event">
         <AllEventPage />
       </Route>
-      <Route path="/event/:id">
-        <EventDetaiPage />
-      </Route>
-      <Route exact path="/organization">
+      <Route path="/organization">
         <ListOrganizationPage />
       </Route>
       <Route path="/organization/:id">
@@ -100,10 +129,13 @@ function App() {
       <Route path="/profile">
         <ProfilePage />
       </Route>
-      <Route path="/test">
-        <ConfirmDelete />
+      <Route path="/search">
+        <SearchEventPage />
       </Route>
-      <Route path="*">
+      <Route path="/test">
+        <EventFilter />
+      </Route>
+      <Route exact path="*">
         <Redirect to="/event" />
       </Route>
     </Switch>

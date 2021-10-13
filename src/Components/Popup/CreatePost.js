@@ -4,7 +4,6 @@ import Backdrop from "./Backdrop";
 import styles from "./CreatePost.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import Picker from "emoji-picker-react";
-import { converISOToDate } from "../../Service/functions";
 
 const CreatePost = (props) => {
   const actionType = props.initData.isEmpty ? "Create" : "Edit";

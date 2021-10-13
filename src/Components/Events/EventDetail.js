@@ -3,12 +3,7 @@ import ListPost from "./Posts/ListPost";
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { useState } from "react";
-import {
-  converISOToDate,
-  converISOToSimpleDate,
-  convertDate,
-  validURL,
-} from "../../Service/functions";
+import { converISOToSimpleDate } from "../../Service/functions";
 import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import { useHistory } from "react-router";
@@ -84,6 +79,7 @@ const EventDetail = (props) => {
     const id = type === "Cancel" ? 3 : 4;
     const eventID = props.information.id;
     changeEventStatus(eventID, id);
+    window.location.reload();
     setChoosingDelete(false);
   };
 
@@ -105,16 +101,44 @@ const EventDetail = (props) => {
     <section className={`${styles.detail}`}>
       <header className={`${styles.detail__header}`}>
         <div className={`${styles.detail__poster}`}>
-          <div className={`${styles.detail__status}`}>
-            {props.information.status.name}
-          </div>
+          {props.information.status.name === "Published" && (
+            <div
+              className={`${styles.detail__status} ${styles.detail__status_published}`}
+            >
+              {props.information.status.name}
+            </div>
+          )}
+          {props.information.status.name === "Cancelled" && (
+            <div
+              className={`${styles.detail__status} ${styles.detail__status_cancel}`}
+            >
+              {props.information.status.name}
+            </div>
+          )}
+          {props.information.status.name === "Deleted" && (
+            <div
+              className={`${styles.detail__status} ${styles.detail__status_delete}`}
+            >
+              {props.information.status.name}
+            </div>
+          )}
+          {props.information.status.name === "Draft" && (
+            <div
+              className={`${styles.detail__status} ${styles.detail__status_draft}`}
+            >
+              {props.information.status.name}
+            </div>
+          )}
           <img src={coverURL} alt="Poster" />
         </div>
         <div className={`${styles.detail__register}`}>
           <h3 className={`${styles.detail__topic}`}>Date:</h3>
-          <p className={`${styles.detail__registerText}`}>{`${startDate} ${
-            props.information.endDate !== null ? `- ${endDate}` : ""
-          }`}</p>
+          <p className={`${styles.detail__registerText}`}>
+            <>
+              Start: {startDate} <br />{" "}
+            </>
+            {props.information.endDate !== null ? `End: ${endDate}` : ""}
+          </p>
 
           <h3 className={`${styles.detail__topic}`}>Location</h3>
           <br />
@@ -209,37 +233,42 @@ const EventDetail = (props) => {
               );
             })}
           <p></p>
-          <div className={`${styles.detail__buttons}`}>
-            {!isOwnEvent && (
-              <button
-                className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-              >
-                Follow
-              </button>
-            )}
-            {isOwnEvent && (
-              <>
+          {(props.information.status.name === "Published" ||
+            props.information.status.name === "Draft") && (
+            <div className={`${styles.detail__buttons}`}>
+              {!isOwnEvent && (
                 <button
-                  className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
-                  onClick={onDeleteEvent}
+                  className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
                 >
-                  Delete
+                  Follow
                 </button>
-                <button
-                  className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark} ${styles.btn_small}`}
-                  onClick={onEditEvent}
-                >
-                  Edit
-                </button>
-              </>
-            )}
+              )}
+              {isOwnEvent && (
+                <>
+                  <button
+                    className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
+                    onClick={onDeleteEvent}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark} ${styles.btn_small}`}
+                    onClick={onEditEvent}
+                  >
+                    Edit
+                  </button>
+                </>
+              )}
 
-            <button
-              className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
-            >
-              SHARE
-            </button>
-          </div>
+              {props.information.status.name !== "Draft" && (
+                <button
+                  className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+                >
+                  SHARE
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </header>
       <hr />
@@ -267,7 +296,11 @@ const EventDetail = (props) => {
       </section>
       {displayType === "detail" && mainContent}
       {displayType === "posts" && (
-        <ListPost isOwnEvent={isOwnEvent} information={props.listPost} />
+        <ListPost
+          eventStatus={props.information.status.name}
+          isOwnEvent={isOwnEvent}
+          information={props.listPost}
+        />
       )}
       {choosingDelete && (
         <ConfirmDelete onClose={onCloseDelete} onConfirm={onConfirmDelete} />
