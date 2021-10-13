@@ -107,19 +107,20 @@
       }
 
       img {
-        width: 18px;
-        height: 18px;
-        top: 25%;
         right: -2.5rem;
       }
     }
   }
 
   @media only screen and (max-width: $bp-small) {
-
     &__searchBar {
       input {
         font-size: 1.6rem;
+      }
+      img {
+        width: 16px;
+        height: 16px;
+        top: 19%;
       }
     }
   }
@@ -130,9 +131,9 @@
     margin-left: 1.5%;
 
     &__searchBar {
-        input {
-          font-size: 1.7rem;
-        }
+      input {
+        font-size: 1.7rem;
       }
+    }
   }
 }

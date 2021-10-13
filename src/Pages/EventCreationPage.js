@@ -4,15 +4,14 @@ import EventCreation from "../Components/Events/EventCreation";
 import NavigationBar from "../Components/Navigation/Navigationbar";
 import { getAllCategoryFromDB, getEventByID } from "../Service/api/eventApi";
 import { useSelector } from "react-redux";
-import { converISOToOnlyDate, converISOToOnlyTime } from "../Service/functions";
 import { getURLImage } from "../Service/firebaseFunctions";
 
 const EventCreationPage = () => {
   window.scrollTo(0, 0);
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
-
-  const [categoriesInDB, setCategoriesInDB] = useState([]);
+  const listCategory = useSelector((state) => state.categories.listCategory);
+  
   const [initialInformation, setInitialInformation] = useState({
     isEmpty: true,
   });
@@ -20,19 +19,10 @@ const EventCreationPage = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!token) {
+    if (!token || profile.role !== "Event Organizer") {
       history.replace("/event");
     }
-    const getCategoriesFromDB = async () => {
-      try {
-        const response = await getAllCategoryFromDB();
-        setCategoriesInDB(response);
-      } catch (error) {
-        console.log("FAIL WHEN GET CATEGORIES " + error);
-      }
-    };
-    getCategoriesFromDB();
-  }, []);
+  }, [history, token, profile.role]);
 
   useEffect(() => {
     if (params && params.id) {
@@ -40,7 +30,7 @@ const EventCreationPage = () => {
         try {
           const eventID = params.id;
           const response = await getEventByID(eventID);
-          if (response.userProfileId !== profile.id) {
+          if (!token || response.userProfileId !== profile.id) {
             history.replace("/event");
           }
 
@@ -92,21 +82,21 @@ const EventCreationPage = () => {
       };
       getEventInformation();
     }
-  }, [params, profile.name, history, profile.id]);
+  }, [params, profile.name, history, profile.id, token]);
   return (
     <>
       <NavigationBar />
       {!(params && params.id) && (
         <EventCreation
           profileName={profile.name}
-          categoriesInDB={categoriesInDB}
+          categoriesInDB={listCategory}
         />
       )}
       {params && params.id && !initialInformation.isEmpty && (
         <EventCreation
           profileName={profile.name}
           initialInformation={initialInformation}
-          categoriesInDB={categoriesInDB}
+          categoriesInDB={listCategory}
         />
       )}
     </>

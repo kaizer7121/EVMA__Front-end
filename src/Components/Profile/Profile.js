@@ -27,13 +27,14 @@ const Profile = () => {
     avatarURL: profile.avatarURL,
     backgroundURL: profile.backgroundURL,
     name: profile.name,
-    dob: converISOToOnlyDate(profile.dob),
-    phoneNumber: profile.phoneNumber,
-    address: profile.address,
-    city: profile.city,
-    jobTitle: profile.jobTitle,
-    summary: profile.summary,
+    dob: profile.dob ? profile.dob : "",
+    phoneNumber: profile.phoneNumber ? profile.phoneNumber : "",
+    address: profile.address ? profile.address : "",
+    city: profile.city ? profile.city : "",
+    jobTitle: profile.jobTitle ? profile.jobTitle : "",
+    summary: profile.summary ? profile.summary : "",
   });
+  console.log(accountInformation);
   const [errorInformation, setErrorInformation] = useState({
     name: false,
     dob: false,
@@ -57,6 +58,8 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("ISOOOOOOOOOOO DOB:");
+    console.log(profile.dob);
     setAccountInformation({
       email: profile.email,
       avatarURL: profile.avatarURL,
@@ -139,16 +142,20 @@ const Profile = () => {
     ) {
       dob = true;
     }
-    if (!validatePhone(accountInformation.phoneNumber)) {
+    if (
+      accountInformation.dob.length > 0 &&
+      !validatePhone(accountInformation.phoneNumber)
+    ) {
       phoneNumber = true;
     }
     if (
+      accountInformation.summary &&
       userRole === "Event Organizer" &&
       accountInformation.summary.length > 255
     ) {
       summary = true;
     }
-    if (accountInformation.address.length >= 50) {
+    if (accountInformation.address && accountInformation.address.length >= 50) {
       address = true;
     }
     setErrorInformation({
@@ -195,6 +202,8 @@ const Profile = () => {
         ) {
           await uploadImgToStorage(imageAsFile.cover, backgroundName);
         }
+        console.log("repsone:");
+        console.log(repsone);
         const profileData = {
           ...repsone,
           avatarURL: accountInformation.avatarURL

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { getURLImage } from "../../Service/firebaseFunctions";
-import profileSlice, { profileAction } from "../../Store/profileSlice";
-import tokenSlice, { tokenAction } from "../../Store/tokenSlice";
+import { profileAction } from "../../Store/profileSlice";
+import { tokenAction } from "../../Store/tokenSlice";
 import styles from "./UserNavigation.module.scss";
 
 const UserNavigation = () => {
@@ -11,7 +10,6 @@ const UserNavigation = () => {
   const token = useSelector((state) => state.token.token);
 
   const [isShowOption, setIsShowOption] = useState();
-  const [userProfile, setUserProfile] = useState(profile)
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -34,7 +32,6 @@ const UserNavigation = () => {
     };
   }, [isShowOption]);
 
-  
   const showOptionHandler = () => {
     setIsShowOption(!isShowOption);
   };
@@ -95,12 +92,15 @@ const UserNavigation = () => {
                 className={`${styles.dropdown__content}`}
                 onClick={selectOptionHandler}
               >
-                <Link
-                  to="/create"
-                  className={`${styles.dropdown__content_createEvent}`}
-                >
-                  Create an event
-                </Link>
+                {profile.role === "Event Organizer" && (
+                  <Link
+                    to="/create"
+                    className={`${styles.dropdown__content_createEvent}`}
+                  >
+                    Create an event
+                  </Link>
+                )}
+
                 <Link
                   to="/profile"
                   className={`${styles.dropdown__content_edit}`}

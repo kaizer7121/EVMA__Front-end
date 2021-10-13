@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { useEffect } from "react/cjs/react.development";
 import {
-  getAllEvent,
   getAllEventByProfileID,
 } from "../../Service/api/eventApi";
 import { getURLImage } from "../../Service/firebaseFunctions";

@@ -37,12 +37,16 @@ const Post = (props) => {
     props.onEditEvent(initData);
   };
 
+  const onDeletePost = () => {
+    props.onDelete(props.information.id);
+  };
+
   return (
     <div className={`${styles.post}`}>
       <header className={`${styles.post__header}`}>
         {/* <span>{convertDate(props.information.date)}</span> */}
         <span>{date}</span>
-        {props.isOwnEvent && (
+        {props.isOwnEvent && props.eventStatus === "Published" && (
           <>
             {" "}
             <button
@@ -53,6 +57,7 @@ const Post = (props) => {
             </button>
             <button
               className={`${commonStyles.btn} ${commonStyles.btn_danger}`}
+              onClick={onDeletePost}
             >
               Delete
             </button>
@@ -62,32 +67,47 @@ const Post = (props) => {
       {!coverURL || coverURL === 0 ? (
         <div className={`${styles.post_detail}`}>
           {viewFullContent ? (
-            <p>
-              {fullContent}
-              <span onClick={changeView}>Less</span>
-            </p>
+            <>
+              {fullContent.split("\n").map((content, index) => {
+                return <p key={`FULLCONTENT_${index}`}>{content}</p>;
+              })}
+              <p>
+                <span onClick={changeView}>Less</span>
+              </p>
+            </>
           ) : (
-            <p>
-              {summrayContent}
-              <span onClick={changeView}>...More</span>
-            </p>
+            <>
+              {summrayContent.split("\n").map((content, index) => {
+                return <p key={`SUMMARYCONTENT_${index}`}>{content}</p>;
+              })}
+              <p>
+                <span onClick={changeView}>...More</span>
+              </p>
+            </>
           )}
         </div>
       ) : (
         <div className={`${styles.post_detail}`}>
           {viewFullContent ? (
             <div>
+              {fullContent.split("\n").map((content, index) => {
+                return <p key={`FULLCONTENT_${index}`}>{content}</p>;
+              })}
               <p>
-                {fullContent} <span onClick={changeView}>Less</span>
+                <span onClick={changeView}>Less</span>
               </p>
 
               <img src={coverURL} alt="post_image" />
             </div>
           ) : (
             <div className={`${styles.post_detail_cut}`}>
+              {summrayContent.split("\n").map((content, index) => {
+                return <p key={`SUMMARYCONTENT_${index}`}>{content}</p>;
+              })}
               <p>
-                {summrayContent} <span onClick={changeView}>...More</span>
+                <span onClick={changeView}>...More</span>
               </p>
+
               <img src={coverURL} alt="post_image" />
             </div>
           )}

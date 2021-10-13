@@ -7,14 +7,21 @@ import styles from "./ListPost.module.scss";
 import commonStyles from "../../Auth/Auth.module.scss";
 import Post from "./Post";
 import { useParams } from "react-router";
-import { createEventPost, editEventPost } from "../../../Service/api/eventApi";
+import {
+  createEventPost,
+  deleteEventPost,
+  editEventPost,
+} from "../../../Service/api/eventApi";
 import {
   deleteImageFile,
   uploadImgToStorage,
 } from "../../../Service/firebaseFunctions";
+import ConfirmDeletePost from "../../Popup/ConfirmDeletePost";
 
 const ListPost = (props) => {
   const [isCreatingPost, setIsCreatingPost] = useState(false);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
+  const [idDeletedPost, setIdDeletedPost] = useState("");
   const [initData, setInitData] = useState({ isEmpty: true });
   const [removeImg, setRemoveImg] = useState(false);
 
@@ -32,8 +39,13 @@ const ListPost = (props) => {
 
   const confirmCreatePost = async (postInfo) => {
     const actionType = initData.isEmpty ? "Create" : "Edit";
-    const currentDate =
-      actionType === "Create" ? new Date() : initData.createdDate;
+    let currentDate = "";
+    if (actionType === "Create") {
+      currentDate = new Date();
+      currentDate.setHours(currentDate.getHours() + 7);
+    } else if (actionType === "Edit") {
+      currentDate = initData.createdDate;
+    }
     const data = {
       eventId: actionType === "Create" ? +urlParam.id : initData.eventId,
       content: postInfo.content,
@@ -50,18 +62,46 @@ const ListPost = (props) => {
         const imageAsFile = postInfo.image;
         const fileName = response.imageURL;
         await uploadImgToStorage(imageAsFile, fileName);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       } else {
         if (removeImg) {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
           await deleteImageFile(fileName);
+          window.location.reload();
         }
       }
-      setIsCreatingPost(false);
     } catch (error) {
       console.log("Error when create post: ");
       console.log(error);
       console.log(error.response);
+    }
+  };
+
+  const confirmDeletePost = (postID) => {
+    setIdDeletedPost(postID);
+    setIsDeletingPost(true);
+  };
+
+  const onCloseConfirmDeletePost = () => {
+    setIsDeletingPost(false);
+    setIsDeletingPost("");
+  };
+
+  const onDeletePost = async () => {
+    try {
+      await deleteEventPost(idDeletedPost);
+      const fileName = `postImg_${idDeletedPost}`;
+      await deleteImageFile(fileName);
+      setTimeout(() => {
+        window.location.reload();
+        setIsDeletingPost("");
+        setIsDeletingPost(false);
+      }, 50);
+    } catch (error) {
+      alert("Some thing wrong when delete post!");
     }
   };
 
@@ -84,24 +124,34 @@ const ListPost = (props) => {
           onRemoveImg={onRemoveImg}
         />
       )}
+      {isDeletingPost && (
+        <ConfirmDeletePost
+          onClose={onCloseConfirmDeletePost}
+          onConfirm={onDeletePost}
+        />
+      )}
       <section className={`${styles.listPost}`}>
-        <div className={`${styles.listPost__button}`}>
-          {props.isOwnEvent && (
-            <button
-              className={`${commonStyles.btn} ${commonStyles.btn_tertiary_light}`}
-              onClick={openPostCreation}
-            >
-              Create
-            </button>
-          )}
-        </div>
+        {props.eventStatus === "Published" && (
+          <div className={`${styles.listPost__button}`}>
+            {props.isOwnEvent && (
+              <button
+                className={`${commonStyles.btn} ${commonStyles.btn_tertiary_light}`}
+                onClick={openPostCreation}
+              >
+                Create
+              </button>
+            )}
+          </div>
+        )}
         <div className={styles.listPost__list}>
           {props.information.map((post) => (
             <Post
+              eventStatus={props.eventStatus}
               key={`POST_${post.id}`}
               isOwnEvent={props.isOwnEvent}
               information={post}
               onEditEvent={onEditEvent}
+              onDelete={confirmDeletePost}
             />
           ))}
         </div>

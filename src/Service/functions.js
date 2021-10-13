@@ -1,3 +1,4 @@
+import { categoriesAction } from "../Store/categoriesStore";
 import { profileAction } from "../Store/profileSlice";
 import { getURLImage } from "./firebaseFunctions";
 
@@ -90,6 +91,8 @@ export const converISOToDate = (isoDate) => {
 };
 
 export const converISOToOnlyDate = (isoDate) => {
+  console.log("ISO:");
+  console.log(isoDate);
   const [date, isoTime] = isoDate.split("T");
   const fullDate = new Date(date);
 
@@ -153,4 +156,8 @@ export const updateProfileWithFullImage = async (profile, dispatch) => {
   // };
 
   dispatch(profileAction.updateProfile(profile));
+};
+
+export const updateListCategoryToStore = async (listCategory, dispatch) => {
+  dispatch(categoriesAction.updateListCategories(listCategory));
 };

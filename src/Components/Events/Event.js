@@ -21,9 +21,34 @@ const Event = (props) => {
 
   return (
     <section className={`${styles.event}`}>
-      <div className={`${styles.event__status}`}>
-        {props.information.status.name}
-      </div>
+      {props.information.status.name === "Published" && (
+        <div
+          className={`${styles.event__status} ${styles.event__status_published}`}
+        >
+          {props.information.status.name}
+        </div>
+      )}
+      {props.information.status.name === "Cancelled" && (
+        <div
+          className={`${styles.event__status} ${styles.event__status_cancel}`}
+        >
+          {props.information.status.name}
+        </div>
+      )}
+      {props.information.status.name === "Deleted" && (
+        <div
+          className={`${styles.event__status} ${styles.event__status_delete}`}
+        >
+          {props.information.status.name}
+        </div>
+      )}
+      {props.information.status.name === "Draft" && (
+        <div
+          className={`${styles.event__status} ${styles.event__status_draft}`}
+        >
+          {props.information.status.name}
+        </div>
+      )}
       <h1 className={`${styles.event__title}`}>{props.information.title}</h1>
       <div className={`${styles.event__information}`}>
         <div className={`${styles.event__detail}`}>

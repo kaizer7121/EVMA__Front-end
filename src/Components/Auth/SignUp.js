@@ -12,7 +12,6 @@ import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
 import { signUp } from "../../Service/api/authApi";
 import { useSelector } from "react-redux";
-import tokenSlice from "../../Store/tokenSlice";
 
 const SignUp = () => {
   const [registerInfo, setRegisterInfo] = useState({
@@ -95,6 +94,7 @@ const SignUp = () => {
       try {
         signUp(registerInfo).then((response) => {
           if (
+            response &&
             response.data &&
             response.data.message === "Data integrity violation"
           ) {
@@ -184,6 +184,7 @@ const SignUp = () => {
               <label htmlFor="full-name">Date of birth (older than 16)</label>
               <div className={`${styles.register__form__group__date_input}`}>
                 <DayPickerInput
+                  format={"DD/MM/yyyy"}
                   formatDate={formatDate}
                   parseDate={parseDate}
                   placeholder=""
@@ -207,7 +208,7 @@ const SignUp = () => {
                 </p>
               )}
             </div>
-            <label htmlForfor="cars">Choose a car:</label>
+            <label htmlForfor="cars">Choose a role:</label>
             <div className={`${styles.register__form__group}`}>
               <select
                 id="role"
