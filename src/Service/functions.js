@@ -1,5 +1,7 @@
 import { categoriesAction } from "../Store/categoriesStore";
+import { notificationAction } from "../Store/notificationSlice";
 import { profileAction } from "../Store/profileSlice";
+import { tokenAction } from "../Store/tokenSlice";
 import { getURLImage } from "./firebaseFunctions";
 
 export const getDate = (fullDate) => {
@@ -143,24 +145,37 @@ export const converISOToSimpleDate = (isoDate) => {
   }
 };
 
+export const convertDateToCollectionName = (date) => {
+  const currentDate = new Date(date);
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
+  return `${currentDay}.${currentMonth}`;
+};
+
 // ================= REDUX FUNCTION =================
 
 export const signInWithFullImage = async (profile, dispatch) => {
-  const { id } = profile;
-  const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
-  const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
+  try {
+    const { id } = profile;
+    const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
+    const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
 
-  const fullData = {
-    ...profile,
-    avatarURL: avatarURLFirebase
-      ? avatarURLFirebase
-      : "/images/default-avatar.png",
-    backgroundURL: backgroundURLFirebase
-      ? backgroundURLFirebase
-      : "/images/default-cover.jpg",
-  };
+    const fullData = {
+      ...profile,
+      avatarURL: avatarURLFirebase
+        ? avatarURLFirebase
+        : "/images/default-avatar.png",
+      backgroundURL: backgroundURLFirebase
+        ? backgroundURLFirebase
+        : "/images/default-cover.jpg",
+    };
 
-  dispatch(profileAction.signInToEvma(fullData));
+    dispatch(profileAction.signInToEvma(fullData));
+  } catch (error) {
+    dispatch(profileAction.signOut());
+    dispatch(tokenAction.deleteToken());
+    alert("Some thing wrong with network");
+  }
 };
 
 export const updateProfileWithFullImage = async (profile, dispatch) => {
@@ -182,5 +197,42 @@ export const updateProfileWithFullImage = async (profile, dispatch) => {
 };
 
 export const updateListCategoryToStore = async (listCategory, dispatch) => {
-  dispatch(categoriesAction.updateListCategories(listCategory));
+  try {
+    if (listCategory && listCategory.length > 0) {
+      dispatch(categoriesAction.updateListCategories(listCategory));
+    }
+  } catch (error) {
+    alert("Some thing wrong with network");
+  }
+};
+
+export const addNotificationsWithImg = async (listNoti, dispatch) => {
+  if (listNoti && listNoti.length > 0) {
+    const listNotiWithImg = [];
+    Promise.all(
+      listNoti.map(async (noti) => {
+        if (noti.type === "Organization") {
+          const organizationImgURL = await getURLImage(
+            `userAvatar_${noti.notificationID}`
+          );
+          listNotiWithImg.push({
+            ...noti,
+            imgURL: organizationImgURL
+              ? organizationImgURL
+              : "/images/default-avatar.png",
+          });
+        } else if (noti.type === "Event") {
+          const eventImgURL = await getURLImage(
+            `EventCover_${noti.notificationID}`
+          );
+          listNotiWithImg.push({
+            ...noti,
+            imgURL: eventImgURL ? eventImgURL : "/images/default-avatar.png",
+          });
+        }
+      })
+    ).then(() => {
+      dispatch(notificationAction.addNotiInLast3Days(listNotiWithImg));
+    });
+  }
 };

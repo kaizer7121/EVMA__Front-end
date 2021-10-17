@@ -26,6 +26,16 @@ import SearchEventPage from "./Pages/SearchEventPage";
 import { getAllCategoryFromDB } from "./Service/api/eventApi";
 import OwnEventPage from "./Pages/OwnEventPage";
 import EventFilter from "./Components/Filter/EventFilter";
+import {
+  getAllNotiInLast3Days,
+  getListFollowFromUser,
+  ListenDataChangeFromFollowList,
+} from "./Service/firebaseFunctions";
+import { useState } from "react";
+import { notificationAction } from "./Store/notificationSlice";
+import ListNotification from "./Components/Notification/ListNotification";
+
+let isGetFollowList = false;
 
 function App() {
   const token = useSelector((state) => state.token.token);
@@ -48,7 +58,6 @@ function App() {
   //     });
   //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   // }, []);
-
   useEffect(() => {
     const userID = localStorage.getItem("USER_ID");
     console.log("EFFECT");
@@ -71,6 +80,33 @@ function App() {
         .then((profile) => {
           if (profile) {
             signInWithFullImage(profile, dispatch);
+            if (!isGetFollowList) {
+              isGetFollowList = true;
+              getListFollowFromUser("4").then(
+                async (snapshot) => {
+                  if (snapshot) {
+                    let { followedEvents, followedOrganizers } = snapshot;
+                    followedEvents = followedEvents.map(
+                      (eventID) => `${eventID}_e`
+                    );
+
+                    followedOrganizers = followedOrganizers.map(
+                      (organizationID) => `${organizationID}_o`
+                    );
+                    await getAllNotiInLast3Days(
+                      [...followedEvents],
+                      [...followedOrganizers],
+                      dispatch
+                    );
+                    await ListenDataChangeFromFollowList(
+                      [...followedEvents],
+                      [...followedOrganizers],
+                      dispatch
+                    );
+                  }
+                }
+              );
+            }
           } else {
             dispatch(profileAction.signOut());
             dispatch(tokenAction.deleteToken());
@@ -114,10 +150,10 @@ function App() {
       <Route exact path="/event">
         <AllEventPage />
       </Route>
-      <Route path="/organization">
+      <Route exact path="/organization">
         <ListOrganizationPage />
       </Route>
-      <Route path="/organization/:id">
+      <Route exact path="/organization/:id">
         <OrganizationDetailPage />
       </Route>
       <Route path="/create">
@@ -133,7 +169,7 @@ function App() {
         <SearchEventPage />
       </Route>
       <Route path="/test">
-        <EventFilter />
+        <ListNotification />
       </Route>
       <Route exact path="*">
         <Redirect to="/event" />

@@ -36,20 +36,22 @@ const CompactedEvent = (props) => {
         {props.information.status.name}
       </div>
       <img src={backgroundURL} alt="Cover" onClick={goToDetailEvent} />
-      <h1 onClick={goToDetailEvent}>{props.information.title}</h1>
-      <h3>Summary</h3>
-      {description.map((sentence, index) => (
-        <p key={`SENTENCE_${index}`}>{sentence}</p>
-      ))}
-      <h3 className={`${styles.cpEvent__inline}`}>Categories: </h3>
-      {props.information.categories.map((category) => (
-        <p
-          key={`CATEGORY_${category.id}`}
-          className={`${styles.cpEvent__category}`}
-        >
-          {category.name}
-        </p>
-      ))}
+      <div className={styles.cpEvent__detail}>
+        <h1 onClick={goToDetailEvent}>{props.information.title}</h1>
+        <h3>Summary</h3>
+        {description.map((sentence, index) => (
+          <p key={`SENTENCE_${index}`}>{sentence}</p>
+        ))}
+        <h3 className={`${styles.cpEvent__inline}`}>Categories: </h3>
+        {props.information.categories.map((category) => (
+          <p
+            key={`CATEGORY_${category.id}`}
+            className={`${styles.cpEvent__category}`}
+          >
+            {category.name}
+          </p>
+        ))}
+      </div>
     </div>
   );
 };

@@ -224,11 +224,21 @@
   &__relatedEvent {
     display: flex;
     flex-wrap: wrap;
-    gap: 5%;
     justify-content: space-between;
 
-    @media only screen and (max-width: $bp-smaller) {
+    @media only screen and (max-width: $bp-large) {
+      gap: 3%;
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      gap: 1%;
+    }
+
+    @media only screen and (max-width: $bp-small) {
       flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
     }
   }
 }
