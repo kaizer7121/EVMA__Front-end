@@ -50,7 +50,11 @@ const Organization = (props) => {
       try {
         const organizationID = props.information.id;
         const response = await followOrganization(organizationID);
-        dispatch(profileAction.addFollowedOrganizers([`${organizationID}_o`]));
+        if (response) {
+          dispatch(
+            profileAction.removeFollowedOrganization([`${organizationID}_o`])
+          );
+        }
       } catch (error) {
         console.log("Error when follow organization " + error);
       }
@@ -64,9 +68,11 @@ const Organization = (props) => {
       try {
         const organizationID = props.information.id;
         const response = await unfollowOrganization(organizationID);
-        dispatch(
-          profileAction.removeFollowedOrganization([`${organizationID}_o`])
-        );
+        if (response) {
+          dispatch(
+            profileAction.removeFollowedOrganization([`${organizationID}_o`])
+          );
+        }
       } catch (error) {
         console.log("Error when follow organization " + error);
       }

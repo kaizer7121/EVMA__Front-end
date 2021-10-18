@@ -84,7 +84,7 @@ function App() {
             signInWithFullImage(profile, dispatch);
             if (!isGetFollowList) {
               isGetFollowList = true;
-              getListFollowFromUser("4").then(async (snapshot) => {
+              getListFollowFromUser(profile.id).then(async (snapshot) => {
                 if (snapshot) {
                   let { followedEvents, followedOrganizers } = snapshot;
                   followedEvents = followedEvents.map(
