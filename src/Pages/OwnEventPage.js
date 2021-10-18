@@ -22,7 +22,6 @@ const OwnEventPage = () => {
   const [viewType, setViewType] = useState("All");
 
   const history = useHistory();
-  console.log("test");
 
   useEffect(() => {
     window.scrollTo(0, 0);

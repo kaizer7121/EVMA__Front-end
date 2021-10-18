@@ -43,6 +43,12 @@ const notificationSlice = createSlice({
     allowToStoreInstantOrganizationNoti(state) {
       state.isAllowToStoreInstantOrganizationNoti = true;
     },
+    preventToStoreInstantEventNoti(state) {
+      state.isAllowToStoreInstantEventNoti = false;
+    },
+    preventToStoreInstantOrganizationNoti(state) {
+      state.isAllowToStoreInstantOrganizationNoti = false;
+    },
     clearInstantEvent(state) {
       state.instantNotifications = [];
     },

@@ -61,7 +61,7 @@ const ListPost = (props) => {
         console.log("Upload");
         const imageAsFile = postInfo.image;
         const fileName = response.imageURL;
-        await uploadImgToStorage(imageAsFile, fileName);
+        uploadImgToStorage(imageAsFile, fileName);
         setTimeout(() => {
           window.location.reload();
         }, 500);
@@ -69,7 +69,9 @@ const ListPost = (props) => {
         if (removeImg) {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
-          await deleteImageFile(fileName);
+          deleteImageFile(fileName);
+          window.location.reload();
+        } else {
           window.location.reload();
         }
       }

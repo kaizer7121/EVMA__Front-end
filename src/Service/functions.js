@@ -105,6 +105,19 @@ export const convertDate = (date) => {
   )} at ${date.toLocaleTimeString("en-US")}`;
 };
 
+export const convertDate2 = (date) => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return `${date.toLocaleDateString(
+    undefined,
+    options
+  )} at ${date.toLocaleTimeString("en-US")}`;
+};
+
 export const converISOToDate = (isoDate) => {
   const [date, isoTime] = isoDate.split("T");
   const fullTime = isoTime.split("Z");
@@ -118,16 +131,16 @@ export const converISOToDate = (isoDate) => {
 export const converISOToOnlyDate = (isoDate) => {
   console.log("ISO:");
   console.log(isoDate);
-  const [date, isoTime] = isoDate.split("T");
+  const [date, ] = isoDate.split("T");
   const fullDate = new Date(date);
 
   return fullDate;
 };
 
 export const converISOToOnlyTime = (isoDate) => {
-  const [date, isoTime] = isoDate.split("T");
+  const [, isoTime] = isoDate.split("T");
   const fullTime = isoTime.split("Z");
-  const [hour, minute, second] = fullTime[0].split(":");
+  const [hour, minute, ] = fullTime[0].split(":");
   const returnTime = `${hour}:${minute}`;
   return returnTime;
 };

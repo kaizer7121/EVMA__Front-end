@@ -136,62 +136,96 @@ export const ListenDataChangeFromFollowList = async (
   if (followedEvents.length > 0) {
     while (followedEvents.length > 0) {
       const chunk = followedEvents.splice(0, step);
-      db.collection("InstantNotification")
-        .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
-        .onSnapshot(
-          (snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-              if (change.type === "added" || change.type === "modified") {
-                const instantEvent = change.doc.data();
-                dispatch(notificationAction.addInstantEvent(instantEvent));
-                addSingleNotificationWithImg(instantEvent, change.doc.id , dispatch);
-              }
-              // if (change.type === "modified") {
-              //   const instantEvent = change.doc.data();
-              //   dispatch(notificationAction.addInstantEvent(instantEvent));
-              //   dispatch(notificationAction.addNewNotification(instantEvent));
-              // }
+      const listenData = async (chunk) => {
+        console.log(chunk);
+        db.collection("InstantNotification")
+          .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
+          .onSnapshot(
+            (snapshot) => {
+              snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                  const instantEvent = change.doc.data();
+                  dispatch(notificationAction.addInstantEvent(instantEvent));
+                  addSingleNotificationWithImg(
+                    instantEvent,
+                    change.doc.id,
+                    dispatch
+                  );
+                }
+                if (change.type === "modified") {
+                  const instantEvent = change.doc.data();
+                  dispatch(notificationAction.addInstantEvent(instantEvent));
+                  addSingleNotificationWithImg(
+                    instantEvent,
+                    change.doc.id,
+                    dispatch
+                  );
+                }
+              });
               if (followedEvents.length === 0) {
                 dispatch(notificationAction.allowToStoreInstantEventNoti());
               }
-            });
-          },
-          (error) => {
-            console.log("Somethings wrong when listening data: " + error);
-          }
-        );
+            },
+            (error) => {
+              console.log("Somethings wrong when listening data: " + error);
+            }
+          );
+      };
+      await listenData(chunk);
+    }
+  } else {
+    if (followedEvents.length === 0) {
+      dispatch(notificationAction.allowToStoreInstantEventNoti());
     }
   }
 
   if (followedOrganizers.length > 0) {
+    console.log("if");
     while (followedOrganizers.length > 0) {
+      console.log("while");
+      console.log(followedOrganizers.length);
       const chunk = followedOrganizers.splice(0, step);
+      console.log(followedOrganizers.length);
       db.collection("InstantNotification")
         .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
         .onSnapshot(
           (snapshot) => {
             snapshot.docChanges().forEach((change) => {
-              if (change.type === "added" || change.type === "modified") {
+              if (followedOrganizers.length > 0) {
+                dispatch(
+                  notificationAction.preventToStoreInstantOrganizationNoti()
+                );
+              }
+              if (change.type === "added") {
+                console.log("added org");
                 const instantEvent = change.doc.data();
                 dispatch(notificationAction.addInstantEvent(instantEvent));
                 dispatch(notificationAction.addNewNotification(instantEvent));
               }
-              // if (change.type === "modified") {
-              //   const instantEvent = change.doc.data();
-              //   dispatch(notificationAction.addInstantEvent(instantEvent));
-              //   dispatch(notificationAction.addNewNotification(instantEvent));
-              // }
+              if (change.type === "modified") {
+                console.log("modified org");
+                const instantEvent = change.doc.data();
+                dispatch(notificationAction.addInstantEvent(instantEvent));
+                dispatch(notificationAction.addNewNotification(instantEvent));
+              }
               if (followedOrganizers.length === 0) {
                 dispatch(
                   notificationAction.allowToStoreInstantOrganizationNoti()
                 );
               }
             });
+            if (followedOrganizers.length === 0) {
+              dispatch(
+                notificationAction.allowToStoreInstantOrganizationNoti()
+              );
+            }
           },
           (error) => {
             console.log("Somethings wrong when listening data: " + error);
           }
         );
     }
+  } else {
+    dispatch(notificationAction.allowToStoreInstantOrganizationNoti());
   }
 };

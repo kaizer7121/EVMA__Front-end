@@ -1,7 +1,9 @@
 import SideNavigation from "../Components/Navigation/SideNavigation";
 import NavigationBar from "../Components/Navigation/Navigationbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ListFollow from "../Components/ListFollow/ListFollow";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 
 const DUMMY_DATA = {
   followedEvents: [
@@ -140,6 +142,21 @@ const DUMMY_DATA = {
 };
 
 const ListFollowPage = () => {
+  const profile = useSelector((state) => state.profile);
+  const token = useSelector((state) => state.token.token);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+  useEffect(() => {
+    if (!token || profile.role !== "Attendees") {
+      history.replace("/sign-in");
+    }
+  }, [history, token, profile.role]);
+
   return (
     <div>
       <NavigationBar />

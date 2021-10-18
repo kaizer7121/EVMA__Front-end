@@ -6,7 +6,7 @@
   right: 0;
   background-color: $color-white;
   box-shadow: 0px 0px 30px rgba($color-black, 0.2);
-  width: 320px;
+  width: 330px;
   border-radius: 7px;
   margin-top: 10px;
   padding: 10px;
@@ -25,7 +25,7 @@
   }
 
   @media only screen and (max-width: $bp-medium) {
-    width: 300px;
+    width: 310px;
     h1 {
       margin-top: 0;
       font-size: 24px;
@@ -33,7 +33,7 @@
   }
 
   @media only screen and (max-width: $bp-smaller) {
-    width: 260px;
+    width: 265px;
     right: 2rem;
     h1 {
       margin-top: 0;

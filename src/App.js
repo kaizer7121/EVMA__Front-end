@@ -84,35 +84,50 @@ function App() {
             signInWithFullImage(profile, dispatch);
             if (!isGetFollowList) {
               isGetFollowList = true;
-              getListFollowFromUser(profile.id).then(async (snapshot) => {
-                if (snapshot) {
-                  let { followedEvents, followedOrganizers } = snapshot;
-                  followedEvents = followedEvents.map(
-                    (eventID) => `${eventID}_e`
-                  );
+              getListFollowFromUser(profile.id.toString()).then(
+                async (snapshot) => {
+                  if (snapshot) {
+                    let { followedEvents, followedOrganizers } = snapshot;
+                    if (followedEvents) {
+                      followedEvents = followedEvents.map(
+                        (eventID) => `${eventID}_e`
+                      );
+                    } else {
+                      followedEvents = [];
+                    }
 
-                  followedOrganizers = followedOrganizers.map(
-                    (organizationID) => `${organizationID}_o`
-                  );
-                  dispatch(profileAction.clearFollowList());
-                  dispatch(
-                    profileAction.addFollowedEvents([...followedEvents])
-                  );
-                  dispatch(
-                    profileAction.addFollowedOrganizers([...followedOrganizers])
-                  );
-                  await getAllNotiInLast3Days(
-                    [...followedEvents],
-                    [...followedOrganizers],
-                    dispatch
-                  );
-                  await ListenDataChangeFromFollowList(
-                    [...followedEvents],
-                    [...followedOrganizers],
-                    dispatch
-                  );
+                    if (followedOrganizers) {
+                      followedOrganizers = followedOrganizers.map(
+                        (organizationID) => `${organizationID}_o`
+                      );
+                    } else {
+                      followedOrganizers = [];
+                    }
+
+                    dispatch(profileAction.clearFollowList());
+                    dispatch(
+                      profileAction.addFollowedEvents([...followedEvents])
+                    );
+                    dispatch(
+                      profileAction.addFollowedOrganizers([
+                        ...followedOrganizers,
+                      ])
+                    );
+                    await getAllNotiInLast3Days(
+                      [...followedEvents],
+                      [...followedOrganizers],
+                      dispatch
+                    );
+                    await ListenDataChangeFromFollowList(
+                      followedEvents,
+                      followedOrganizers,
+                      dispatch
+                    );
+
+                   
+                  }
                 }
-              });
+              );
             }
           } else {
             dispatch(profileAction.signOut());
