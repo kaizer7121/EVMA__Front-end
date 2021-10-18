@@ -2,6 +2,7 @@ import { storage } from "../Firebase";
 import { db } from "../Firebase";
 import {
   addNotificationsWithImg,
+  addSingleNotificationWithImg,
   convertDateToCollectionName,
 } from "./functions";
 import "firebase/firestore";
@@ -143,7 +144,7 @@ export const ListenDataChangeFromFollowList = async (
               if (change.type === "added" || change.type === "modified") {
                 const instantEvent = change.doc.data();
                 dispatch(notificationAction.addInstantEvent(instantEvent));
-                dispatch(notificationAction.addNewNotification(instantEvent));
+                addSingleNotificationWithImg(instantEvent, change.doc.id , dispatch);
               }
               // if (change.type === "modified") {
               //   const instantEvent = change.doc.data();

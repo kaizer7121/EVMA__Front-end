@@ -80,6 +80,18 @@
         border: 1px solid $color-primary;
       }
     }
+
+    &__btn_danger {
+      background-color: $color-danger;
+      color: white;
+      border: 1px solid transparent;
+
+      &:active {
+        color: $color-danger;
+        background-color: $color-white;
+        border: 1px solid $color-danger;
+      }
+    }
   }
 
   @media only screen and (max-width: $bp-extraLarge) {

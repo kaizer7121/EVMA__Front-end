@@ -8,9 +8,11 @@ const ProfilePage = () => {
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
 
-  window.scrollTo(0, 0);
-
   const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!token || !profile.id) {

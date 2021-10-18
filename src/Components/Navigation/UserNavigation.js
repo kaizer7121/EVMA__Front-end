@@ -77,21 +77,24 @@ const UserNavigation = () => {
       {token && (
         <div className={`${styles.userNav}`}>
           <div className={`${styles.userNav__user}`}>
-            <div
-              className={`${styles.userNav__iconBox}`}
-              onClick={OpenNotificationHandler}
-            >
-              <img
-                className={`${styles.userNav__icon}`}
-                src="/images/icon/notification.png"
-                alt="Noti"
-              />
-              {instantNotification.length > 0 && (
-                <span className={`${styles.userNav__notification}`}>
-                  {instantNotification.length}
-                </span>
-              )}
-            </div>
+            {profile.role === "Attendees" && (
+              <div
+                className={`${styles.userNav__iconBox}`}
+                onClick={OpenNotificationHandler}
+              >
+                <img
+                  className={`${styles.userNav__icon}`}
+                  src="/images/icon/notification.png"
+                  alt="Noti"
+                />
+                {instantNotification.length > 0 && (
+                  <span className={`${styles.userNav__notification}`}>
+                    {instantNotification.length}
+                  </span>
+                )}
+              </div>
+            )}
+
             <img
               src={profile.avatarURL}
               alt="User avatar"

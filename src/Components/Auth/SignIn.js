@@ -39,7 +39,8 @@ const SignIn = () => {
 
   useEffect(() => {
     if (token) {
-      history.push("/home");
+      // history.push("/home");
+      history.goBack();
     }
   }, [token, history]);
 

@@ -236,3 +236,45 @@ export const addNotificationsWithImg = async (listNoti, dispatch) => {
     });
   }
 };
+
+export const addSingleNotificationWithImg = async (
+  notification,
+  docID,
+  dispatch
+) => {
+  if (notification) {
+    const listDate = Object.getOwnPropertyNames(notification);
+    Object.values(notification).forEach(async (key, index) => {
+      const id = docID.split("_")[0];
+      notification = {
+        notificationID: id,
+        date: listDate[index],
+        message: key,
+        type: id === "o" ? "Organization" : "Event",
+      };
+    });
+    if (notification.type === "Organization") {
+      const organizationImgURL = await getURLImage(
+        `userAvatar_${notification.notificationID}`
+      );
+      const notificationWithImg = {
+        ...notification,
+        imgURL: organizationImgURL
+          ? organizationImgURL
+          : "/images/default-avatar.png",
+      };
+      dispatch(notificationAction.addNewNotification(notificationWithImg));
+    } else if (notification.type === "Event") {
+      const eventImgURL = await getURLImage(
+        `EventCover_${notification.notificationID}`
+      );
+      const notificationWithImg = {
+        ...notification,
+        imgURL: eventImgURL ? eventImgURL : "/images/default-avatar.png",
+      };
+      dispatch(notificationAction.addNewNotification(notificationWithImg));
+    }
+  }
+};
+
+

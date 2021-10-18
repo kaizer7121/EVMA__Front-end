@@ -34,6 +34,7 @@ import {
 import { useState } from "react";
 import { notificationAction } from "./Store/notificationSlice";
 import ListNotification from "./Components/Notification/ListNotification";
+import ListFollowPage from "./Pages/ListFollowPage";
 
 let isGetFollowList = false;
 
@@ -75,6 +76,7 @@ function App() {
       console.log("DELETE ACCOUNT");
       dispatch(profileAction.signOut());
       dispatch(tokenAction.deleteToken());
+      dispatch(profileAction.clearFollowList());
     } else {
       getProfilebyID(userID)
         .then((profile) => {
@@ -82,39 +84,46 @@ function App() {
             signInWithFullImage(profile, dispatch);
             if (!isGetFollowList) {
               isGetFollowList = true;
-              getListFollowFromUser("4").then(
-                async (snapshot) => {
-                  if (snapshot) {
-                    let { followedEvents, followedOrganizers } = snapshot;
-                    followedEvents = followedEvents.map(
-                      (eventID) => `${eventID}_e`
-                    );
+              getListFollowFromUser("4").then(async (snapshot) => {
+                if (snapshot) {
+                  let { followedEvents, followedOrganizers } = snapshot;
+                  followedEvents = followedEvents.map(
+                    (eventID) => `${eventID}_e`
+                  );
 
-                    followedOrganizers = followedOrganizers.map(
-                      (organizationID) => `${organizationID}_o`
-                    );
-                    await getAllNotiInLast3Days(
-                      [...followedEvents],
-                      [...followedOrganizers],
-                      dispatch
-                    );
-                    await ListenDataChangeFromFollowList(
-                      [...followedEvents],
-                      [...followedOrganizers],
-                      dispatch
-                    );
-                  }
+                  followedOrganizers = followedOrganizers.map(
+                    (organizationID) => `${organizationID}_o`
+                  );
+                  dispatch(profileAction.clearFollowList());
+                  dispatch(
+                    profileAction.addFollowedEvents([...followedEvents])
+                  );
+                  dispatch(
+                    profileAction.addFollowedOrganizers([...followedOrganizers])
+                  );
+                  await getAllNotiInLast3Days(
+                    [...followedEvents],
+                    [...followedOrganizers],
+                    dispatch
+                  );
+                  await ListenDataChangeFromFollowList(
+                    [...followedEvents],
+                    [...followedOrganizers],
+                    dispatch
+                  );
                 }
-              );
+              });
             }
           } else {
             dispatch(profileAction.signOut());
             dispatch(tokenAction.deleteToken());
+            dispatch(profileAction.clearFollowList());
           }
         })
         .catch(() => {
           dispatch(profileAction.signOut());
           dispatch(tokenAction.deleteToken());
+          dispatch(profileAction.clearFollowList());
         });
     }
     const left = localStorage.getItem("RELOAD_LEFT");
@@ -164,6 +173,9 @@ function App() {
       </Route>
       <Route path="/profile">
         <ProfilePage />
+      </Route>
+      <Route path="/listFollow">
+        <ListFollowPage />
       </Route>
       <Route path="/search">
         <SearchEventPage />

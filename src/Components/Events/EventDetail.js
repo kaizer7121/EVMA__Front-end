@@ -8,13 +8,20 @@ import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import { useHistory } from "react-router";
 import ConfirmDelete from "../Popup/ConfirmDelete";
-import { changeEventStatus } from "../../Service/api/eventApi";
-import { useSelector } from "react-redux";
+import {
+  changeEventStatus,
+  followEvent,
+  unfollowEvent,
+} from "../../Service/api/eventApi";
+import { useDispatch, useSelector } from "react-redux";
+import { profileAction } from "../../Store/profileSlice";
 
 let locations = { offline: [], online: [] };
 
 const EventDetail = (props) => {
   const profile = useSelector((state) => state.profile);
+  const { followedEvents } = profile;
+  const token = useSelector((state) => state.token.token);
   const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
   const isOwnEvent = props.information.userProfileId === profile.id;
   const [displayType, setDisplayType] = useState("detail");
@@ -24,8 +31,18 @@ const EventDetail = (props) => {
     ? converISOToSimpleDate(props.information.endDate)
     : null;
   const [choosingDelete, setChoosingDelete] = useState(false);
+  const [isFollow, setIsFollow] = useState(false);
 
+  const dispatch = useDispatch();
   const history = useHistory();
+
+  useEffect(() => {
+    const listID = followedEvents.map((docID) => {
+      const id = docID.split("_")[0];
+      return id;
+    });
+    setIsFollow(listID.includes(props.information.id.toString()));
+  }, [followedEvents, props.information.id]);
 
   useEffect(() => {
     const listOffline = [];
@@ -55,7 +72,7 @@ const EventDetail = (props) => {
       }
     };
     getURLImg();
-  });
+  }, [props.information.coverURL]);
 
   const changeDisplayType = (type) => {
     if (displayType !== type) {
@@ -81,6 +98,35 @@ const EventDetail = (props) => {
     changeEventStatus(eventID, id);
     window.location.reload();
     setChoosingDelete(false);
+  };
+
+  const followEventHandler = async () => {
+    if (!token) {
+      history.push("/sign-in");
+    } else {
+      try {
+        const eventID = props.information.id;
+        await followEvent(eventID);
+        dispatch(profileAction.addFollowedEvents([`${eventID}_e`]));
+      } catch (error) {
+        console.log("Error when follow event " + error);
+      }
+    }
+  };
+
+  const unfollowEventHandler = async () => {
+    if (!token) {
+      history.push("/sign-in");
+    } else {
+      try {
+        const eventID = props.information.id;
+        await unfollowEvent(eventID);
+        dispatch(profileAction.removeFollowedEvent([`${eventID}_e`]));
+        console.log("IS RUN")
+      } catch (error) {
+        console.log("Error when follow event " + error);
+      }
+    }
   };
 
   const mainContent = (
@@ -236,13 +282,22 @@ const EventDetail = (props) => {
           {(props.information.status.name === "Published" ||
             props.information.status.name === "Draft") && (
             <div className={`${styles.detail__buttons}`}>
-              {!isOwnEvent && (
-                <button
-                  className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-                >
-                  Follow
-                </button>
-              )}
+              {!isOwnEvent &&
+                (isFollow ? (
+                  <button
+                    className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
+                    onClick={unfollowEventHandler}
+                  >
+                    Unfollow
+                  </button>
+                ) : (
+                  <button
+                    className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
+                    onClick={followEventHandler}
+                  >
+                    Follow
+                  </button>
+                ))}
               {isOwnEvent && (
                 <>
                   <button

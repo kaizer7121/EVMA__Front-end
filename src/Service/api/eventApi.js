@@ -64,3 +64,13 @@ export const getEventByStatus = (organizationID, statusID) => {
   const url = `api/events/byOrganizer/${organizationID}/${statusID}`;
   return axiosClient.get(url);
 };
+
+export const followEvent = (eventID) => {
+  const url = `http://localhost:8080/support/api/followEvent?eventId=${eventID}`;
+  return axiosClient.get(url);
+};
+
+export const unfollowEvent = (eventID) => {
+  const url = `http://localhost:8080/support/api/unfollowEvent?eventId=${eventID}`;
+  return axiosClient.get(url);
+};

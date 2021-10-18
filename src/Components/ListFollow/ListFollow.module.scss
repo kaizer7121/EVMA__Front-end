@@ -1,0 +1,100 @@
+@import "../SASS_Abstract/variable";
+
+.listFollow {
+  width: 65%;
+  margin-left: 25%;
+  margin-top: 8%;
+  position: relative;
+  display: inline-block;
+  border-radius: 1%;
+
+  @media only screen and (max-width: $bp-larger) {
+    width: 72%;
+    margin-left: 23%;
+    margin-top: 11rem;
+  }
+
+  @media only screen and (max-width: $bp-large) {
+    width: 75%;
+    margin-left: 22%;
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    margin-top: 17rem;
+    width: 85%;
+    margin-left: 7.5%;
+  }
+
+  @media only screen and (max-width: $bp-small) {
+    margin-top: 15rem;
+    width: 95%;
+    margin-left: 2.5%;
+  }
+
+  @media only screen and (max-width: $bp-smaller) {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+
+  &_subNav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+    margin-bottom: 1rem;
+    box-shadow: 0px 2px 20px rgba($color-black, 0.1);
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border: 1px solid rgba($color-black, 0.1);
+    overflow: hidden;
+
+    &_item {
+      padding: 0.5rem 0;
+      transition: 0.1s all;
+      cursor: pointer;
+
+      background-color: rgba($color-grey-dark, 0.1);
+      color: $color-black;
+
+      &:first-of-type {
+        border-right: 2px solid $color-secondary-light;
+
+        border-radius: 0 0 0 5px;
+      }
+
+      &:hover {
+        color: rgba($color-tertiary-light, 0.7);
+        background-color: rgba($color-grey-light-3, 0.6);
+      }
+
+      &:active {
+        color: $color-tertiary-light;
+        background-color: $color-white;
+      }
+
+      &_choice {
+        background-color: $color-white;
+        color: $color-tertiary-light;
+
+        &:hover {
+          background-color: $color-white;
+          color: $color-tertiary-light;
+        }
+      }
+    }
+
+    @media only screen and (max-width: $bp-extraLarge) {
+      font-size: 1.3rem;
+    }
+    @media only screen and (max-width: $bp-small) {
+      font-size: 1.5rem;
+
+      &_item {
+        padding: 0.8rem;
+      }
+    }
+    @media only screen and (max-width: $bp-extraSmall) {
+      font-size: 1.7rem;
+    }
+  }
+}

@@ -11,7 +11,7 @@ const notificationSlice = createSlice({
   reducers: {
     addNotiInLast3Days(state, action) {
       const notifications = action.payload;
-      
+
       state.notifications = [...notifications];
     },
 
@@ -21,7 +21,6 @@ const notificationSlice = createSlice({
         state.isAllowToStoreInstantOrganizationNoti
       ) {
         const notification = action.payload;
-
         state.notifications = [...state.notifications, notification];
       }
     },

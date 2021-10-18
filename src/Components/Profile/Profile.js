@@ -64,7 +64,7 @@ const Profile = () => {
       name: profile.name,
       dob: converISOToOnlyDate(profile.dob),
       phoneNumber: profile.phoneNumber,
-      address: profile.address.replace(",", ", "),
+      address: profile.address && profile.address.replace(",", ", "),
       city: profile.city,
       jobTitle: profile.jobTitle,
       summary: profile.summary,

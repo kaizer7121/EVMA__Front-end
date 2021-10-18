@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import SignUp from "../Components/Auth/SignUp";
 
 const SignUpPage = () => {
-  window.scrollTo(0, 0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   return <SignUp />;
 };
 

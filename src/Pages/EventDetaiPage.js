@@ -7,7 +7,6 @@ import SideNavigation from "../Components/Navigation/SideNavigation";
 import { getEventByID, getEventPost } from "../Service/api/eventApi";
 
 const EventDetaiPage = () => {
-  window.scrollTo(0, 0);
   const [eventDetail, setEventDetail] = useState({
     id: "",
     title: "",
@@ -31,6 +30,10 @@ const EventDetaiPage = () => {
 
   const history = useHistory();
   const urlParam = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const eventID = urlParam.id;

@@ -7,16 +7,19 @@ import { useSelector } from "react-redux";
 import { getURLImage } from "../Service/firebaseFunctions";
 
 const EventCreationPage = () => {
-  window.scrollTo(0, 0);
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
   const listCategory = useSelector((state) => state.categories.listCategory);
-  
+
   const [initialInformation, setInitialInformation] = useState({
     isEmpty: true,
   });
   const params = useParams();
   const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!token || profile.role !== "Event Organizer") {

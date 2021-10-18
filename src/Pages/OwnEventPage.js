@@ -8,8 +8,6 @@ import SideNavigation from "../Components/Navigation/SideNavigation";
 import { getEventByStatus } from "../Service/api/eventApi";
 
 const OwnEventPage = () => {
-  window.scrollTo(0, 0);
-
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
 
@@ -25,6 +23,11 @@ const OwnEventPage = () => {
 
   const history = useHistory();
   console.log("test");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   useEffect(() => {
     if (!token || profile.role !== "Event Organizer") {
       history.replace("/event");

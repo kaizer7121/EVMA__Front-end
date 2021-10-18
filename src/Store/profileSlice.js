@@ -15,6 +15,8 @@ const profileSlice = createSlice({
     backgroundURL: "/images/default-cover.jpg",
     role: "",
     dob: "",
+    followedEvents: [],
+    followedOrganizations: [],
   },
   reducers: {
     signInToEvma(state, action) {
@@ -97,6 +99,40 @@ const profileSlice = createSlice({
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
       state.dob = dob;
+    },
+    addFollowedEvents(state, action) {
+      const followedEvents = action.payload;
+      state.followedEvents = [...state.followedEvents, ...followedEvents];
+    },
+    addFollowedOrganizers(state, action) {
+      const followedOrganizers = action.payload;
+
+      state.followedOrganizations = [
+        ...state.followedOrganizations,
+        ...followedOrganizers,
+      ];
+    },
+    removeFollowedEvent(state, action) {
+      const eventID = action.payload;
+      console.log("REMOVE");
+      const currentFollowedEvents = [...state.followedEvents];
+      const newFollowedEvents = currentFollowedEvents.filter((event) => {
+        return event !== eventID[0];
+      });
+      state.followedEvents = newFollowedEvents;
+    },
+    removeFollowedOrganization(state, action) {
+      const organizationID = action.payload;
+      const currentFollowedOrganizations = [...state.followedOrganizations];
+      const newFollowedEvents = currentFollowedOrganizations.filter(
+        (organization) => organization !== organizationID[0]
+      );
+
+      state.followedOrganizations = newFollowedEvents;
+    },
+    clearFollowList(state) {
+      state.followedEvents = [];
+      state.followedOrganizations = [];
     },
   },
 });

@@ -63,7 +63,10 @@ const AllEventPage = () => {
     }
   }, [trackScrolling, pagination.end, pagination.page]);
 
-  window.scrollTo(0, 0);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div id="header">
       <NavigationBar />
