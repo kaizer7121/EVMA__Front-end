@@ -1,8 +1,5 @@
-import { useCallback, useState } from "react";
-import { useEffect } from "react/cjs/react.development";
-import {
-  getAllEventByProfileID,
-} from "../../Service/api/eventApi";
+import { useCallback, useState, useEffect } from "react";
+import { getAllEventByProfileID } from "../../Service/api/eventApi";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import CompactedEvent from "../Events/CompactedEvent";
 import styles from "./OrganizationDetail.module.scss";
@@ -111,7 +108,10 @@ const OrganizationDetail = (props) => {
           </h3>
           <p className={`${styles.organizationDetail__description_param}`}></p>
           {description.map((sentence, index) => (
-            <p key={`SENTENCE_${index}`} className={`${styles.organizationDetail__description_param}`}>
+            <p
+              key={`SENTENCE_${index}`}
+              className={`${styles.organizationDetail__description_param}`}
+            >
               {sentence}
             </p>
           ))}

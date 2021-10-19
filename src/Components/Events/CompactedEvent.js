@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
-import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 
 import styles from "./CompactedEvent.module.scss";

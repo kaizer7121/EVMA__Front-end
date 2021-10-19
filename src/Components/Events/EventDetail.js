@@ -2,9 +2,8 @@ import ListPost from "./Posts/ListPost";
 
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { converISOToSimpleDate } from "../../Service/functions";
-import { useEffect } from "react/cjs/react.development";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import { useHistory } from "react-router";
 import ConfirmDelete from "../Popup/ConfirmDelete";

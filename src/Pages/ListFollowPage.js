@@ -1,6 +1,6 @@
 import SideNavigation from "../Components/Navigation/SideNavigation";
 import NavigationBar from "../Components/Navigation/Navigationbar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ListFollow from "../Components/ListFollow/ListFollow";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
@@ -150,7 +150,7 @@ const ListFollowPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
+
   useEffect(() => {
     if (!token || profile.role !== "Attendees") {
       history.replace("/sign-in");

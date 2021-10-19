@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
-import { useEffect } from "react/cjs/react.development";
 import EventDetail from "../Components/Events/EventDetail";
 import NavigationBar from "../Components/Navigation/Navigationbar";
 import SideNavigation from "../Components/Navigation/SideNavigation";

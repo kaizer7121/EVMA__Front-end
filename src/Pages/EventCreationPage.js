@@ -2,7 +2,7 @@ import { useHistory, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import EventCreation from "../Components/Events/EventCreation";
 import NavigationBar from "../Components/Navigation/Navigationbar";
-import { getAllCategoryFromDB, getEventByID } from "../Service/api/eventApi";
+import { getEventByID } from "../Service/api/eventApi";
 import { useSelector } from "react-redux";
 import { getURLImage } from "../Service/firebaseFunctions";
 

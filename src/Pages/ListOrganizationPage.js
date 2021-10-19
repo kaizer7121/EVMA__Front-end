@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 import NavigationBar from "../Components/Navigation/Navigationbar";
 import SideNavigation from "../Components/Navigation/SideNavigation";
 import ListOrganization from "../Components/Organizations/ListOrganization";
