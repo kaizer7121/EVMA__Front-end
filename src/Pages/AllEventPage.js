@@ -10,6 +10,7 @@ const AllEventPage = () => {
     page: 0,
     end: false,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const trackScrolling = useCallback(() => {
     const wrappedElement = document.getElementById("header");
@@ -54,6 +55,7 @@ const AllEventPage = () => {
           }));
         }
         setListEvent((prevValue) => [...prevValue, ...response.content]);
+        setIsLoading(false);
       } catch (err) {
         console.log("Fail when get all event: " + err);
       }
@@ -71,7 +73,7 @@ const AllEventPage = () => {
     <div id="header">
       <NavigationBar />
       <SideNavigation activatedItem={"HOME"} />
-      <ListEvent listEvent={listEvent} />
+      <ListEvent isLoading={isLoading} listEvent={listEvent} />
     </div>
   );
 };

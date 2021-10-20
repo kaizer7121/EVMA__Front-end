@@ -31,6 +31,7 @@ const SignUp = () => {
     fullName: false,
     dateOfBirth: false,
   });
+  const [isWaiting, setIsWaiting] = useState(false);
   const token = useSelector((state) => state.token.token);
   const history = useHistory();
 
@@ -92,7 +93,9 @@ const SignUp = () => {
     event.preventDefault();
     if (checkValidInfo()) {
       try {
+        setIsWaiting(true);
         signUp(registerInfo).then((response) => {
+          setIsWaiting(false);
           if (
             response &&
             response.data &&
@@ -104,10 +107,13 @@ const SignUp = () => {
             }));
           }
           if (!isNaN(response)) {
-            history.push("/sign-in");
+            if (!alert("Sign up successfully!")) {
+              history.push("/sign-in");
+            }
           }
         });
       } catch (error) {
+        setIsWaiting(false);
         console.log(error.response);
       }
     } else {
@@ -234,13 +240,23 @@ const SignUp = () => {
                 </p>
               )}
             </div>
-
-            <button
-              type="submit"
-              className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
-            >
-              Create An Account
-            </button>
+            {!isWaiting && (
+              <button
+                type="submit"
+                className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
+              >
+                Create An Account
+              </button>
+            )}
+            {isWaiting && (
+              <button
+                type="button"
+                className={`${commonStyles.btn} ${commonStyles.btn_wait} ${commonStyles.btn_grey_dark}`}
+              >
+                <div className={commonStyles.loader_icon}></div>
+                Create An Account
+              </button>
+            )}
           </form>
         </div>
       </div>

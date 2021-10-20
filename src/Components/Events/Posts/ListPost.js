@@ -6,7 +6,7 @@ import styles from "./ListPost.module.scss";
 
 import commonStyles from "../../Auth/Auth.module.scss";
 import Post from "./Post";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import {
   createEventPost,
   deleteEventPost,
@@ -25,6 +25,7 @@ const ListPost = (props) => {
   const [initData, setInitData] = useState({ isEmpty: true });
   const [removeImg, setRemoveImg] = useState(false);
 
+  const history = useHistory();
   const urlParam = useParams();
 
   const openPostCreation = () => {
@@ -57,11 +58,15 @@ const ListPost = (props) => {
         actionType === "Create"
           ? await createEventPost(data)
           : await editEventPost(data, initData.postId);
+      const RELOAD_LEFT = localStorage.getItem("RELOAD_LEFT");
+      console.log("RELOAD_LEFT: " + RELOAD_LEFT);
       if (postInfo.image.size && postInfo.image.size > 0) {
-        console.log("Upload");
         const imageAsFile = postInfo.image;
         const fileName = response.imageURL;
         uploadImgToStorage(imageAsFile, fileName);
+        if (RELOAD_LEFT) {
+          localStorage.setItem("RELOAD_LEFT", 2);
+        }
         setTimeout(() => {
           window.location.reload();
         }, 500);
@@ -70,8 +75,14 @@ const ListPost = (props) => {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
           deleteImageFile(fileName);
+          if (RELOAD_LEFT) {
+            localStorage.setItem("RELOAD_LEFT", 2);
+          }
           window.location.reload();
         } else {
+          if (RELOAD_LEFT) {
+            localStorage.setItem("RELOAD_LEFT", 2);
+          }
           window.location.reload();
         }
       }
@@ -97,6 +108,10 @@ const ListPost = (props) => {
       await deleteEventPost(idDeletedPost);
       const fileName = `postImg_${idDeletedPost}`;
       await deleteImageFile(fileName);
+      const RELOAD_LEFT = localStorage.getItem("RELOAD_LEFT");
+      if (RELOAD_LEFT) {
+        localStorage.setItem("RELOAD_LEFT", 2);
+      }
       setTimeout(() => {
         window.location.reload();
         setIsDeletingPost("");

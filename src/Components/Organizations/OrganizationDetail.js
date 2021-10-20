@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import { getAllEventByProfileID } from "../../Service/api/eventApi";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import CompactedEvent from "../Events/CompactedEvent";
+import LoadingComponent from "../Loading/LoadingComponent";
 import styles from "./OrganizationDetail.module.scss";
 
 const OrganizationDetail = (props) => {
@@ -89,44 +90,54 @@ const OrganizationDetail = (props) => {
 
   return (
     <div className={`${styles.organizationDetail}`}>
-      <div className={`${styles.organizationDetail__image}`}>
-        <img
-          src={backgroundURL}
-          alt="cover"
-          className={`${styles.organizationDetail__image_cover}`}
-        />
-        <div className={`${styles.organizationDetail__image_avatar}`}>
-          <img src={avatarURL} alt="avatar" />
-          <h3>{props.information.name}</h3>
-        </div>
-      </div>
-      <hr />
-      <div className={`${styles.organizationDetail__description}`}>
-        <div className={`${styles.organizationDetail__description_part}`}>
-          <h3 className={`${styles.organizationDetail__description_topic}`}>
-            Description:{" "}
-          </h3>
-          <p className={`${styles.organizationDetail__description_param}`}></p>
-          {description.map((sentence, index) => (
-            <p
-              key={`SENTENCE_${index}`}
-              className={`${styles.organizationDetail__description_param}`}
-            >
-              {sentence}
-            </p>
-          ))}
-        </div>
-        <div className={`${styles.organizationDetail__description_part}`}>
-          <h3 className={`${styles.organizationDetail__description_topic}`}>
-            Related events:{" "}
-          </h3>
-          <div className={`${styles.organizationDetail__relatedEvent}`}>
-            {listEvent.map((event) => (
-              <CompactedEvent key={`CPEVENT_${event.id}`} information={event} />
-            ))}
+      {props.isLoading && <LoadingComponent />}
+      {!props.isLoading && (
+        <>
+          <div className={`${styles.organizationDetail__image}`}>
+            <img
+              src={backgroundURL}
+              alt="cover"
+              className={`${styles.organizationDetail__image_cover}`}
+            />
+            <div className={`${styles.organizationDetail__image_avatar}`}>
+              <img src={avatarURL} alt="avatar" />
+              <h3>{props.information.name}</h3>
+            </div>
           </div>
-        </div>
-      </div>
+          <hr />
+          <div className={`${styles.organizationDetail__description}`}>
+            <div className={`${styles.organizationDetail__description_part}`}>
+              <h3 className={`${styles.organizationDetail__description_topic}`}>
+                Description:{" "}
+              </h3>
+              <p
+                className={`${styles.organizationDetail__description_param}`}
+              ></p>
+              {description.map((sentence, index) => (
+                <p
+                  key={`SENTENCE_${index}`}
+                  className={`${styles.organizationDetail__description_param}`}
+                >
+                  {sentence}
+                </p>
+              ))}
+            </div>
+            <div className={`${styles.organizationDetail__description_part}`}>
+              <h3 className={`${styles.organizationDetail__description_topic}`}>
+                Related events:{" "}
+              </h3>
+              <div className={`${styles.organizationDetail__relatedEvent}`}>
+                {listEvent.map((event) => (
+                  <CompactedEvent
+                    key={`CPEVENT_${event.id}`}
+                    information={event}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

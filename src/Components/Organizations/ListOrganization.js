@@ -2,6 +2,7 @@ import Organization from "./Organization";
 
 import styles from "./ListOrganizations.module.scss";
 import { useEffect, useState } from "react";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 const ListOrganization = (props) => {
   const [currentLList, setCurrentList] = useState([...props.listOrganization]);
@@ -42,25 +43,30 @@ const ListOrganization = (props) => {
 
   return (
     <div className={`${styles.listOrganizations}`}>
-      <div className={`${styles.listOrganizations__searchBar}`}>
-        <input
-          type="text"
-          placeholder="Search organization name ..."
-          onChange={changeSearchValue}
-          value={searchValue}
-        />
-        <img
-          src="/images/icon/search-icon.png"
-          alt="search icon"
-          onClick={startSearch}
-        />
-      </div>
-      {currentLList.map((organization, index) => (
-        <Organization
-          key={`ORGANIZATION_${index}`}
-          information={organization}
-        />
-      ))}
+      {props.isLoading && <LoadingComponent />}
+      {!props.isLoading && (
+        <>
+          <div className={`${styles.listOrganizations__searchBar}`}>
+            <input
+              type="text"
+              placeholder="Search organization name ..."
+              onChange={changeSearchValue}
+              value={searchValue}
+            />
+            <img
+              src="/images/icon/search-icon.png"
+              alt="search icon"
+              onClick={startSearch}
+            />
+          </div>
+          {currentLList.map((organization, index) => (
+            <Organization
+              key={`ORGANIZATION_${index}`}
+              information={organization}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

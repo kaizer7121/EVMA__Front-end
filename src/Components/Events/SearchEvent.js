@@ -200,7 +200,7 @@ const SearchEvent = () => {
         </div>
         <div className={`${styles.searchEvent__searchDetail_type}`}>
           <div className={`${styles.searchEvent__searchDetail_type_topic}`}>
-            <h3>Orgnaizers:</h3>
+            <h3>Organizers:</h3>
             <input
               type="text"
               placeholder="Organization name"

@@ -48,14 +48,17 @@ const Organization = (props) => {
     } else {
       try {
         const organizationID = props.information.id;
-        const response = await followOrganization(organizationID);
-        if (response) {
-          dispatch(
-            profileAction.removeFollowedOrganization([`${organizationID}_o`])
-          );
-        }
+        followOrganization(organizationID);
+        dispatch(
+          profileAction.addFollowedOrganizers([`${organizationID}_o`])
+        );
       } catch (error) {
         console.log("Error when follow organization " + error);
+        dispatch(
+          profileAction.removeFollowedOrganization([
+            `${props.information.id}_o`,
+          ])
+        );
       }
     }
   };
@@ -66,14 +69,17 @@ const Organization = (props) => {
     } else {
       try {
         const organizationID = props.information.id;
-        const response = await unfollowOrganization(organizationID);
-        if (response) {
-          dispatch(
-            profileAction.removeFollowedOrganization([`${organizationID}_o`])
-          );
-        }
+        unfollowOrganization(organizationID);
+        dispatch(
+          profileAction.removeFollowedOrganization([`${organizationID}_o`])
+        );
       } catch (error) {
         console.log("Error when follow organization " + error);
+        dispatch(
+          profileAction.addFollowedOrganizers([
+            `${props.information.id}_o`,
+          ])
+        );
       }
     }
   };

@@ -7,6 +7,8 @@ import { getOrganizationDetail } from "../Service/api/organizationApi";
 
 const OrganizationDetailPage = () => {
   const [organizationDetail, setOrganizationDetail] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const urlParam = useParams();
 
   useEffect(() => {
@@ -18,6 +20,7 @@ const OrganizationDetailPage = () => {
     const getDetailInfo = async () => {
       const organizationDetail = await getOrganizationDetail(organizationID);
       setOrganizationDetail(organizationDetail);
+      setIsLoading(false);
     };
     getDetailInfo();
   }, [urlParam.id]);
@@ -25,7 +28,11 @@ const OrganizationDetailPage = () => {
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"NONE"} />
-      <OrganizationDetail id={urlParam.id} information={organizationDetail} />
+      <OrganizationDetail
+        isLoading={isLoading}
+        id={urlParam.id}
+        information={organizationDetail}
+      />
     </>
   );
 };

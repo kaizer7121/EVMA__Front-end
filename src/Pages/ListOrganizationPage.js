@@ -6,6 +6,7 @@ import { getAllOrganization } from "../Service/api/organizationApi";
 
 const ListOrganizationPage = () => {
   const [listOrganization, setListOrganization] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -19,9 +20,9 @@ const ListOrganizationPage = () => {
         };
         const list = await getAllOrganization(params);
         if (list && list.content) {
-          console.log(list.content);
           setListOrganization(list.content);
         }
+        setIsLoading(false);
       };
       getListOrganization();
     } catch (error) {
@@ -32,7 +33,10 @@ const ListOrganizationPage = () => {
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"ORGANIZTAION"} />
-      <ListOrganization listOrganization={listOrganization} />
+      <ListOrganization
+        isLoading={isLoading}
+        listOrganization={listOrganization}
+      />
     </>
   );
 };

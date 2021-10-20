@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import CreationBar from "./CreationBar";
 import InitEvent from "./InitEvent";
-
+import LoadingComponent from "../Loading/LoadingComponent";
 import ConfirmImage from "../Popup/ConfirmImage";
 import { uploadImgToStorage } from "../../Service/firebaseFunctions";
 import { createEvent, editEvent } from "../../Service/api/eventApi";
@@ -273,7 +273,11 @@ const EventCreation = (props) => {
         }
         if (responseData.status !== 400) {
           const message =
-            actionType === "Edit" ? "Edit successfully" : type === "PUBLISH" ? "Create successfully" : "Save to draft successfully" ;
+            actionType === "Edit"
+              ? "Edit successfully"
+              : type === "PUBLISH"
+              ? "Create successfully"
+              : "Save to draft successfully";
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
               console.log(responseData);
@@ -403,32 +407,36 @@ const EventCreation = (props) => {
       }));
     }
   };
-
   return (
-    <div>
-      <CreationBar
-        categoriesInDB={props.categoriesInDB}
-        eventError={eventError}
-        inputValue={inputValue}
-        addEmoji={addEmoji}
-        uploadImage={uploadImage}
-        information={eventInfo}
-        onSubmit={onSubmitEvent}
-        onCancel={onCancel}
-        removeCategory={removeCategory}
-        changeMultiInput={changeMultiInput}
-        changeMultiInputValue={changeMultiInputValue}
-        changeToggleButtonHandler={changeToggleButtonHandler}
-      />
-      <InitEvent information={eventInfo} />
-      {croppingImage && !croppingImage.empty && (
-        <ConfirmImage
-          information={croppingImage}
-          onClose={onCloseCropping}
-          onConfirm={onConfirmCroppedImg}
-        />
+    <>
+      {props.isLoading && <LoadingComponent />}
+      {!props.isLoading && (
+        <div>
+          <CreationBar
+            categoriesInDB={props.categoriesInDB}
+            eventError={eventError}
+            inputValue={inputValue}
+            addEmoji={addEmoji}
+            uploadImage={uploadImage}
+            information={eventInfo}
+            onSubmit={onSubmitEvent}
+            onCancel={onCancel}
+            removeCategory={removeCategory}
+            changeMultiInput={changeMultiInput}
+            changeMultiInputValue={changeMultiInputValue}
+            changeToggleButtonHandler={changeToggleButtonHandler}
+          />
+          <InitEvent information={eventInfo} />
+          {croppingImage && !croppingImage.empty && (
+            <ConfirmImage
+              information={croppingImage}
+              onClose={onCloseCropping}
+              onConfirm={onConfirmCroppedImg}
+            />
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

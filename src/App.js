@@ -21,26 +21,25 @@ import {
   signInWithFullImage,
   updateListCategoryToStore,
 } from "./Service/functions";
-import ConfirmDeletePost from "./Components/Popup/ConfirmDeletePost";
 import SearchEventPage from "./Pages/SearchEventPage";
 import { getAllCategoryFromDB } from "./Service/api/eventApi";
 import OwnEventPage from "./Pages/OwnEventPage";
-import EventFilter from "./Components/Filter/EventFilter";
 import {
   getAllNotiInLast3Days,
   getListFollowFromUser,
   ListenDataChangeFromFollowList,
 } from "./Service/firebaseFunctions";
-import { useState } from "react";
-import { notificationAction } from "./Store/notificationSlice";
-import ListNotification from "./Components/Notification/ListNotification";
 import ListFollowPage from "./Pages/ListFollowPage";
+import LoadingComponent from "./Components/Loading/LoadingComponent";
+import { useState } from "react";
 
 let isGetFollowList = false;
 
 function App() {
   const token = useSelector((state) => state.token.token);
   const listCategory = useSelector((state) => state.categories.listCategory);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
   // Handle firebase auth changed
@@ -61,7 +60,6 @@ function App() {
   // }, []);
   useEffect(() => {
     const userID = localStorage.getItem("USER_ID");
-    console.log("EFFECT");
 
     if (listCategory[0] === "Empty") {
       try {
@@ -73,10 +71,10 @@ function App() {
       }
     }
     if (!token || !userID) {
-      console.log("DELETE ACCOUNT");
       dispatch(profileAction.signOut());
       dispatch(tokenAction.deleteToken());
       dispatch(profileAction.clearFollowList());
+      setIsLoading(false);
     } else {
       getProfilebyID(userID)
         .then((profile) => {
@@ -123,24 +121,27 @@ function App() {
                       followedOrganizers,
                       dispatch
                     );
+                    setIsLoading(false);
                   }
                 }
               );
-            }
+            } 
           } else {
             dispatch(profileAction.signOut());
             dispatch(tokenAction.deleteToken());
             dispatch(profileAction.clearFollowList());
+            setIsLoading(false);
           }
         })
         .catch(() => {
           dispatch(profileAction.signOut());
           dispatch(tokenAction.deleteToken());
           dispatch(profileAction.clearFollowList());
+          setIsLoading(false);
         });
     }
     const left = localStorage.getItem("RELOAD_LEFT");
-    console.log(left);
+
     if (left === "0") {
       dispatch(profileAction.signOut());
       dispatch(tokenAction.deleteToken());
@@ -149,57 +150,65 @@ function App() {
     if (left === "1") {
       localStorage.setItem("RELOAD_LEFT", 0);
     }
+    if (left === "2") {
+      localStorage.setItem("RELOAD_LEFT", 1);
+    }
   }, [token, dispatch, listCategory]);
 
   return (
-    <Switch>
-      <Route path="/sign-in">
-        <SignInPage />
-      </Route>
-      <Route path="/sign-up">
-        <SignUpPage />
-      </Route>
-      <Route path="/forgot-password">
-        <ForgotPassword />
-      </Route>
+    <>
+      {isLoading && <LoadingComponent />}
+      {!isLoading && (
+        <Switch>
+          <Route path="/sign-in">
+            <SignInPage />
+          </Route>
+          <Route path="/sign-up">
+            <SignUpPage />
+          </Route>
+          <Route path="/forgot-password">
+            <ForgotPassword />
+          </Route>
 
-      <Route exact path="/event/:id">
-        <EventDetaiPage />
-      </Route>
-      <Route exact path="/ownEvent/">
-        <OwnEventPage />
-      </Route>
-      <Route exact path="/event">
-        <AllEventPage />
-      </Route>
-      <Route exact path="/organization">
-        <ListOrganizationPage />
-      </Route>
-      <Route exact path="/organization/:id">
-        <OrganizationDetailPage />
-      </Route>
-      <Route path="/create">
-        <EventCreationPage />
-      </Route>
-      <Route path="/edit/:id">
-        <EventCreationPage />
-      </Route>
-      <Route path="/profile">
-        <ProfilePage />
-      </Route>
-      <Route path="/listFollow">
-        <ListFollowPage />
-      </Route>
-      <Route path="/search">
-        <SearchEventPage />
-      </Route>
-      <Route path="/test">
-        <ListNotification />
-      </Route>
-      <Route exact path="*">
-        <Redirect to="/event" />
-      </Route>
-    </Switch>
+          <Route exact path="/event/:id">
+            <EventDetaiPage />
+          </Route>
+          <Route exact path="/ownEvent/">
+            <OwnEventPage />
+          </Route>
+          <Route exact path="/event">
+            <AllEventPage />
+          </Route>
+          <Route exact path="/organization">
+            <ListOrganizationPage />
+          </Route>
+          <Route exact path="/organization/:id">
+            <OrganizationDetailPage />
+          </Route>
+          <Route path="/create">
+            <EventCreationPage />
+          </Route>
+          <Route path="/edit/:id">
+            <EventCreationPage />
+          </Route>
+          <Route path="/profile">
+            <ProfilePage />
+          </Route>
+          <Route path="/listFollow">
+            <ListFollowPage />
+          </Route>
+          <Route path="/search">
+            <SearchEventPage />
+          </Route>
+          <Route path="/test">
+            <LoadingComponent />
+          </Route>
+          <Route exact path="*">
+            <Redirect to="/event" />
+          </Route>
+        </Switch>
+      )}
+    </>
   );
 }
 

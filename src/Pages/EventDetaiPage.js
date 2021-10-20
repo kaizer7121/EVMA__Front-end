@@ -26,6 +26,7 @@ const EventDetaiPage = () => {
     content: "",
   });
   const [listPost, setListPost] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const history = useHistory();
   const urlParam = useParams();
@@ -53,8 +54,13 @@ const EventDetaiPage = () => {
       size: 50,
     };
     const getListPost = async () => {
-      const list = await getEventPost(eventID);
-      setListPost(list.content, params);
+      try {
+        const list = await getEventPost(eventID);
+        setListPost(list.content, params);
+        setIsLoading(false);
+      } catch (err) {
+        console.log("Error when get list post " + err);
+      }
     };
     getListPost();
   }, [urlParam.id, history]);
@@ -63,7 +69,11 @@ const EventDetaiPage = () => {
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"NONE"} />
-      <EventDetail information={eventDetail} listPost={listPost} />
+      <EventDetail
+        isLoading={isLoading}
+        information={eventDetail}
+        listPost={listPost}
+      />
     </>
   );
 };

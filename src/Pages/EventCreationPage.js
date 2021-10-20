@@ -10,10 +10,11 @@ const EventCreationPage = () => {
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
   const listCategory = useSelector((state) => state.categories.listCategory);
-
   const [initialInformation, setInitialInformation] = useState({
     isEmpty: true,
   });
+  const [isLoading, setIsLoading] = useState(true);
+
   const params = useParams();
   const history = useHistory();
 
@@ -79,11 +80,14 @@ const EventCreationPage = () => {
             organization: profile.name,
             otherOrganizations,
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log("FAIL WHEN GET CATEGORIES " + error);
+          console.log("FAIL WHEN GET EEVENT INFO " + error);
         }
       };
       getEventInformation();
+    } else {
+      setIsLoading(false);
     }
   }, [params, profile.name, history, profile.id, token]);
   return (
@@ -91,12 +95,14 @@ const EventCreationPage = () => {
       <NavigationBar />
       {!(params && params.id) && (
         <EventCreation
+          isLoading={isLoading}
           profileName={profile.name}
           categoriesInDB={listCategory}
         />
       )}
       {params && params.id && !initialInformation.isEmpty && (
         <EventCreation
+          isLoading={isLoading}
           profileName={profile.name}
           initialInformation={initialInformation}
           categoriesInDB={listCategory}

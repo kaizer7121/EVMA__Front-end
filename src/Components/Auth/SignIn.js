@@ -22,6 +22,7 @@ const SignIn = () => {
     wrongInfo: false,
   });
   const [rememberUser, setRememberUser] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   // const [isHaveGoogleToken, setIsHaveGoogleToken] = useState(false);
   const token = useSelector((state) => state.token.token);
 
@@ -73,12 +74,10 @@ const SignIn = () => {
 
   const signInHandler = async (event) => {
     event.preventDefault();
-    console.log("CHECK:");
-    console.log(checkValidInfo());
     if (checkValidInfo()) {
       try {
+        setIsWaiting(true);
         const response = await signIn(userInfo);
-        console.log(response);
         if (response.status === "Login success") {
           const { profile, token } = response;
 
@@ -88,10 +87,13 @@ const SignIn = () => {
           if (!rememberUser) {
             localStorage.setItem("RELOAD_LEFT", 1);
           }
+          setIsWaiting(false);
         } else {
+          setIsWaiting(false);
           setErrorInfo((prevValue) => ({ ...prevValue, wrongInfo: true }));
         }
       } catch (error) {
+        setIsWaiting(false);
         console.log("Fail when signup " + error);
       }
     } else {
@@ -157,12 +159,23 @@ const SignIn = () => {
               />
               <label htmlFor="remember">Remember Me</label>
             </div>
-            <button
-              type="submit"
-              className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
-            >
-              Sign In
-            </button>
+            {!isWaiting && (
+              <button
+                type="submit"
+                className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
+              >
+                Sign In
+              </button>
+            )}
+            {isWaiting && (
+              <button
+                type="button"
+                className={`${commonStyles.btn} ${commonStyles.btn_wait} ${commonStyles.btn_grey_dark}`}
+              >
+                <div className={commonStyles.loader_icon}></div>
+                Create An Account
+              </button>
+            )}
           </form>
           <div className={`${commonStyles.separator}`}>OR</div>
           {/* <button
