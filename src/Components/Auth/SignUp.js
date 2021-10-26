@@ -1,23 +1,21 @@
 import { Link, useHistory } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
-import { useEffect, useState } from "react";
-import {
-  calculateAge,
-  validateEmail,
-  validateName,
-} from "../../Service/functions";
+import { useState } from "react";
+import { calculateAge, validateName } from "../../Service/functions";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
-import { signUp } from "../../Service/api/authApi";
-import { useSelector } from "react-redux";
+import { signUp, updateProfile } from "../../Service/api/authApi";
+import { useDispatch, useSelector } from "react-redux";
+import { profileAction } from "../../Store/profileSlice";
 
 const UpdateProfile = () => {
-  const [registerInfo, setRegisterInfo] = useState({
-    fullName: "",
+  const profile = useSelector((state) => state.profile);
+  const [profileInfo, setProfileInfo] = useState({
+    fullName: profile.name ? profile.name : "",
     dateOfBirth: "",
-    role: "",
+    role: "Attendees",
   });
   const [userYearOld, setUserYearOld] = useState("");
   const [errorRegister, setErrorRegister] = useState({
@@ -25,19 +23,14 @@ const UpdateProfile = () => {
     dateOfBirth: false,
   });
   const [isWaiting, setIsWaiting] = useState(false);
-  const token = useSelector((state) => state.token.token);
-  const history = useHistory();
 
-  useEffect(() => {
-    if (token) {
-      history.replace("/home");
-    }
-  }, [token, history]);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const inputHanlder = (event) => {
     const type = event.target.id;
     const value = event.target.value;
-    setRegisterInfo((prevValue) => ({ ...prevValue, [type]: value }));
+    setProfileInfo((prevValue) => ({ ...prevValue, [type]: value }));
   };
   const inputDateHandler = (value) => {
     if (value !== "") {
@@ -47,13 +40,13 @@ const UpdateProfile = () => {
       setUserYearOld("");
     }
 
-    setRegisterInfo((prevValue) => ({ ...prevValue, dateOfBirth: value }));
+    setProfileInfo((prevValue) => ({ ...prevValue, dateOfBirth: value }));
   };
 
   const checkValidInfo = () => {
     let fullName = false;
     let dateOfBirth = false;
-    if (!validateName(registerInfo.fullName)) {
+    if (!validateName(profileInfo.fullName)) {
       fullName = true;
     }
     if (userYearOld < 16) {
@@ -67,35 +60,47 @@ const UpdateProfile = () => {
     return !(fullName || dateOfBirth);
   };
 
-  const signUpHandler = async (event) => {
+  const completeProfileHandler = async (event) => {
     event.preventDefault();
     if (checkValidInfo()) {
+      let fixedDate = new Date(profileInfo.dateOfBirth);
+      fixedDate = new Date(fixedDate.setHours(fixedDate.getHours() + 7));
+
       try {
+        const requestData = {
+          name: profileInfo.fullName,
+          email: profile.email,
+          city: profile.city,
+          jobTitle: profile.jobTitle,
+          address: profile.address,
+          phoneNumber: profile.phoneNumber,
+          summary: profile.summary,
+          dob: fixedDate.toISOString(),
+          role: profileInfo.role,
+        };
+
         setIsWaiting(true);
-        signUp(registerInfo).then((response) => {
-          setIsWaiting(false);
-          if (
-            response &&
-            response.data &&
-            response.data.message === "Data integrity violation"
-          ) {
-            setErrorRegister((prevValue) => ({
-              ...prevValue,
-              isDuplicateEmail: true,
-            }));
-          }
-          if (!isNaN(response)) {
-            if (!alert("Sign up successfully!")) {
-              history.push("/sign-in");
-            }
-          }
-        });
+
+        const response = await updateProfile(requestData, profile.id);
+        if (response.status !== 400 && response.status !== 403) {
+          console.log();
+          console.log("======================");
+          console.log([response.dob, requestData.dob]);
+          alert("PAUSE");
+          dispatch(
+            profileAction.updateProfile({
+              ...response,
+              avatarURL: "/images/default-avatar.png",
+              backgroundURL: "/images/default-cover.jpg",
+            })
+          );
+        }
       } catch (error) {
         setIsWaiting(false);
         console.log(error.response);
       }
     } else {
-      setRegisterInfo((prevValue) => ({
+      setProfileInfo((prevValue) => ({
         ...prevValue,
         password: "",
         confirmPassword: "",
@@ -108,20 +113,28 @@ const UpdateProfile = () => {
       <div className={`${styles.register__box}`}>
         <div className={`${styles.register__poster}`}></div>
         <div className={`${styles.register__content}`}>
+          <button
+            className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.register__signOut}`}
+          >
+            Sign out
+          </button>
           <div className={`${styles.register__content_detail}`}>
             <div>
               <h1>EVMA</h1>
               <p>Please complete informations bellow</p>
             </div>
 
-            <form className={`${commonStyles.form}`} onSubmit={signUpHandler}>
+            <form
+              className={`${commonStyles.form}`}
+              onSubmit={completeProfileHandler}
+            >
               <div className={`${styles.register__form__group}`}>
                 <label htmlFor="full-name">Full Name</label>
                 <input
                   type="text"
                   id="fullName"
                   className={`${commonStyles.form__input}`}
-                  value={registerInfo.fullName}
+                  value={profileInfo.fullName}
                   onChange={inputHanlder}
                 />
                 {errorRegister.fullName && (
@@ -142,7 +155,7 @@ const UpdateProfile = () => {
                       if (date === undefined) date = "";
                       inputDateHandler(date);
                     }}
-                    value={registerInfo.dateOfBirth}
+                    value={profileInfo.dateOfBirth}
                   />
                   <input
                     type="text"
@@ -158,7 +171,7 @@ const UpdateProfile = () => {
                   </p>
                 )}
               </div>
-              <label htmlForfor="cars">Choose a role:</label>
+              <label htmlFor="cars">Choose a role:</label>
               <div className={`${styles.register__form__group}`}>
                 <select
                   id="role"

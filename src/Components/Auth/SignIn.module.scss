@@ -61,7 +61,6 @@
     }
   }
 
-  
   &__content {
     display: table-cell;
     padding: 24px 0 35px;
@@ -81,7 +80,7 @@
           margin-bottom: 0;
           font-size: 60px;
         }
-    
+
         h3 {
           font-size: 30px;
           font-weight: 600;
@@ -92,6 +91,11 @@
       &_button {
         margin-top: 10px;
         margin-bottom: auto;
+
+        img {
+          width: 25px;
+          margin-right: 1.5rem;
+        }
       }
 
       &_text {
@@ -113,7 +117,7 @@
 
     @media only screen and (max-width: 1200px) {
       &_detail {
-        min-height: 50vh;         
+        min-height: 50vh;
       }
     }
 

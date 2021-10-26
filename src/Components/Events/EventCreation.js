@@ -47,6 +47,7 @@ const EventCreation = (props) => {
     title: false,
     start: false,
     end: false,
+    dateCompare: false,
     location: false,
     categories: false,
     summary: false,
@@ -99,6 +100,7 @@ const EventCreation = (props) => {
     let title = false;
     let start = false;
     let end = false;
+    let dateCompare = false;
     let location = false;
     let categories = false;
     let summary = false;
@@ -160,10 +162,36 @@ const EventCreation = (props) => {
       image = true;
     }
 
+    // Process date to check
+    if (!start && !end) {
+      let startDateAndTime = new Date(eventInfo.startDate);
+      const startTimeSplit = eventInfo.startTime.split(":");
+      startDateAndTime.setHours(+startTimeSplit[0] + 7, startTimeSplit[1]);
+      startDateAndTime = startDateAndTime.toISOString();
+
+      let endDateAndTime = null;
+
+      if (
+        !eventError.end &&
+        eventInfo.endDate.toString().length > 0 &&
+        eventInfo.endTime.length > 0
+      ) {
+        endDateAndTime = new Date(eventInfo.endDate);
+        const endTimeSplit = eventInfo.endTime.split(":");
+        endDateAndTime.setHours(+endTimeSplit[0] + 7, endTimeSplit[1]);
+        endDateAndTime = endDateAndTime.toISOString();
+      }
+
+      if (endDateAndTime && endDateAndTime < startDateAndTime) {
+        dateCompare = true;
+      }
+    }
+
     setEventError({
       title,
       start,
       end,
+      dateCompare,
       location,
       categories,
       summary,
@@ -175,6 +203,7 @@ const EventCreation = (props) => {
       title ||
       start ||
       end ||
+      dateCompare ||
       location ||
       categories ||
       summary ||

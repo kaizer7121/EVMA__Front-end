@@ -129,8 +129,6 @@ export const converISOToDate = (isoDate) => {
 };
 
 export const converISOToOnlyDate = (isoDate) => {
-  console.log("ISO:");
-  console.log(isoDate);
   const [date, ] = isoDate.split("T");
   const fullDate = new Date(date);
 

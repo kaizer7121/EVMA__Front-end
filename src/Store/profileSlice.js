@@ -35,8 +35,6 @@ const profileSlice = createSlice({
         dob,
       } = action.payload;
 
-      const roleName = !role ? "Attendees" : role.authority;
-
       state.id = id;
       state.name = name;
       state.email = email;
@@ -47,7 +45,7 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
-      state.role = roleName;
+      state.role = role.authority;
       state.dob = dob;
 
       localStorage.setItem("USER_ID", id);
@@ -87,6 +85,7 @@ const profileSlice = createSlice({
         avatarURL,
         backgroundURL,
         dob,
+        role
       } = action.payload;
 
       state.name = name;
@@ -98,6 +97,7 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
+      state.role = role.authority;
       state.dob = dob;
     },
     addFollowedEvents(state, action) {

@@ -67,10 +67,6 @@ const UserNavigation = () => {
             <span className={`${styles.userNav__user_sign}`}>
               <Link to="/sign-in">Sign in</Link>
             </span>
-            <span className={`${styles.userNav__user_divide}`}>|</span>
-            <span className={`${styles.userNav__user_sign}`}>
-              <Link to="/sign-up">Sign up</Link>
-            </span>
           </div>
         </div>
       )}
@@ -116,12 +112,20 @@ const UserNavigation = () => {
                 onClick={selectOptionHandler}
               >
                 {profile.role === "Event Organizer" && (
-                  <Link
-                    to="/create"
-                    className={`${styles.dropdown__content_createEvent}`}
-                  >
-                    Create an event
-                  </Link>
+                  <>
+                    <Link
+                      to="/create"
+                      className={`${styles.dropdown__content_createEvent}`}
+                    >
+                      Create an event
+                    </Link>
+                    <Link
+                      to={`organization/${profile.id}`}
+                      className={`${styles.dropdown__content_createEvent}`}
+                    >
+                      View your page
+                    </Link>
+                  </>
                 )}
 
                 <Link

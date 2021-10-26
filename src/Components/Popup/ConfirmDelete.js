@@ -42,9 +42,7 @@ const ConfirmDelete = (props) => {
               }}
             />
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam
+              When you cancel the event, all follower wil recieve the message and you can't modify this event anymore
             </p>
           </div>
           <div className={styles.confirmDelete__body_select}>
@@ -58,9 +56,7 @@ const ConfirmDelete = (props) => {
               }}
             />
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam,
+            When you delete the event, all follower wil recieve the message and you can't modify this event anymore
             </p>
           </div>
         </div>

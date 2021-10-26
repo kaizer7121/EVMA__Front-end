@@ -5,7 +5,10 @@ import {
   followOrganization,
   unfollowOrganization,
 } from "../../Service/api/organizationApi";
-import { getURLImage } from "../../Service/firebaseFunctions";
+import {
+  getURLImage,
+  listenNotificationOfDocID,
+} from "../../Service/firebaseFunctions";
 import { profileAction } from "../../Store/profileSlice";
 import styles from "./Organization.module.scss";
 
@@ -48,10 +51,10 @@ const Organization = (props) => {
     } else {
       try {
         const organizationID = props.information.id;
-        followOrganization(organizationID);
-        dispatch(
-          profileAction.addFollowedOrganizers([`${organizationID}_o`])
-        );
+        followOrganization(organizationID).then(() => {
+          listenNotificationOfDocID(`${organizationID}_o`, dispatch);
+        });
+        dispatch(profileAction.addFollowedOrganizers([`${organizationID}_o`]));
       } catch (error) {
         console.log("Error when follow organization " + error);
         dispatch(
@@ -76,9 +79,7 @@ const Organization = (props) => {
       } catch (error) {
         console.log("Error when follow organization " + error);
         dispatch(
-          profileAction.addFollowedOrganizers([
-            `${props.information.id}_o`,
-          ])
+          profileAction.addFollowedOrganizers([`${props.information.id}_o`])
         );
       }
     }

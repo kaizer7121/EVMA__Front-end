@@ -137,7 +137,6 @@ export const ListenDataChangeFromFollowList = async (
     while (followedEvents.length > 0) {
       const chunk = followedEvents.splice(0, step);
       const listenData = async (chunk) => {
-        console.log(chunk);
         db.collection("InstantNotification")
           .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
           .onSnapshot(
@@ -180,7 +179,6 @@ export const ListenDataChangeFromFollowList = async (
   }
 
   if (followedOrganizers.length > 0) {
-    console.log("if");
     while (followedOrganizers.length > 0) {
       console.log("while");
       console.log(followedOrganizers.length);
@@ -228,4 +226,40 @@ export const ListenDataChangeFromFollowList = async (
   } else {
     dispatch(notificationAction.allowToStoreInstantOrganizationNoti());
   }
+};
+
+export const listenNotificationOfDocID = async (docID, dispatch) => {
+  const listenData = async () => {
+    db.collection("InstantNotification")
+      .where(firebase.firestore.FieldPath.documentId(), "==", docID)
+      .onSnapshot(
+        (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              const instantEvent = change.doc.data();
+              dispatch(notificationAction.addInstantEvent(instantEvent));
+              addSingleNotificationWithImg(
+                instantEvent,
+                change.doc.id,
+                dispatch
+              );
+            }
+            if (change.type === "modified") {
+              const instantEvent = change.doc.data();
+              dispatch(notificationAction.addInstantEvent(instantEvent));
+              addSingleNotificationWithImg(
+                instantEvent,
+                change.doc.id,
+                dispatch
+              );
+            }
+          });
+        },
+        (error) => {
+          console.log("Somethings wrong when listening data: " + error);
+        }
+      );
+  };
+
+  await listenData();
 };

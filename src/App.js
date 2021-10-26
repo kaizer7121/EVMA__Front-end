@@ -6,7 +6,7 @@ import "./App.scss";
 
 import { useEffect } from "react";
 import SignInPage from "./Pages/SignInPage";
-import SignUpPage from "./Pages/SignUpPage";
+import UpdateProfilePage from "./Pages/UpdateProfilePage";
 import AllEventPage from "./Pages/AllEventPage";
 import ListOrganizationPage from "./Pages/ListOrganizationPage";
 import OrganizationDetailPage from "./Pages/OrganizationDetailPage";
@@ -16,7 +16,7 @@ import ProfilePage from "./Pages/ProfilePage";
 import { useDispatch, useSelector } from "react-redux";
 import { profileAction } from "./Store/profileSlice";
 import { tokenAction } from "./Store/tokenSlice";
-import { getProfilebyID } from "./Service/api/authApi";
+import { getCurrentProfile } from "./Service/api/authApi";
 import {
   signInWithFullImage,
   updateListCategoryToStore,
@@ -37,8 +37,8 @@ let isGetFollowList = false;
 
 function App() {
   const token = useSelector((state) => state.token.token);
+  const profile = useSelector((state) => state.profile);
   const listCategory = useSelector((state) => state.categories.listCategory);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -59,8 +59,6 @@ function App() {
   //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   // }, []);
   useEffect(() => {
-    const userID = localStorage.getItem("USER_ID");
-
     if (listCategory[0] === "Empty") {
       try {
         getAllCategoryFromDB().then((response) => {
@@ -70,13 +68,13 @@ function App() {
         console.log("FAIL WHEN GET CATEGORIES " + error);
       }
     }
-    if (!token || !userID) {
+    if (!token) {
       dispatch(profileAction.signOut());
       dispatch(tokenAction.deleteToken());
       dispatch(profileAction.clearFollowList());
       setIsLoading(false);
     } else {
-      getProfilebyID(userID)
+      getCurrentProfile()
         .then((profile) => {
           if (profile) {
             signInWithFullImage(profile, dispatch);
@@ -122,10 +120,12 @@ function App() {
                       dispatch
                     );
                     setIsLoading(false);
+                  } else {
+                    setIsLoading(false);
                   }
                 }
               );
-            } 
+            }
           } else {
             dispatch(profileAction.signOut());
             dispatch(tokenAction.deleteToken());
@@ -140,36 +140,42 @@ function App() {
           setIsLoading(false);
         });
     }
-    const left = localStorage.getItem("RELOAD_LEFT");
+    // const left = localStorage.getItem("RELOAD_LEFT");
 
-    if (left === "0") {
-      dispatch(profileAction.signOut());
-      dispatch(tokenAction.deleteToken());
-      localStorage.removeItem("RELOAD_LEFT");
-    }
-    if (left === "1") {
-      localStorage.setItem("RELOAD_LEFT", 0);
-    }
-    if (left === "2") {
-      localStorage.setItem("RELOAD_LEFT", 1);
-    }
+    // if (left === "0") {
+    //   dispatch(profileAction.signOut());
+    //   dispatch(tokenAction.deleteToken());
+    //   localStorage.removeItem("RELOAD_LEFT");
+    // }
+    // if (left === "1") {
+    //   localStorage.setItem("RELOAD_LEFT", 0);
+    // }
+    // if (left === "2") {
+    //   localStorage.setItem("RELOAD_LEFT", 1);
+    // }
   }, [token, dispatch, listCategory]);
 
   return (
     <>
       {isLoading && <LoadingComponent />}
-      {!isLoading && (
+      {profile.role === null && (
+        <Switch>
+          <Route path="/update-profile">
+            <UpdateProfilePage />
+          </Route>
+          <Route exact path="*">
+            <Redirect to="/update-profile" />
+          </Route>
+        </Switch>
+      )}
+      {profile.role !== null && !isLoading && (
         <Switch>
           <Route path="/sign-in">
             <SignInPage />
           </Route>
-          <Route path="/sign-up">
-            <SignUpPage />
-          </Route>
           <Route path="/forgot-password">
             <ForgotPassword />
           </Route>
-
           <Route exact path="/event/:id">
             <EventDetaiPage />
           </Route>

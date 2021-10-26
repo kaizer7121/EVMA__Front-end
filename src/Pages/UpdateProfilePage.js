@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import SignUp from "../Components/Auth/SignUp";
 
-const SignUpPage = () => {
+const UpdateProfilePage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -10,4 +10,4 @@ const SignUpPage = () => {
   return <SignUp />;
 };
 
-export default SignUpPage;
+export default UpdateProfilePage;

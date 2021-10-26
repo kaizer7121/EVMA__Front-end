@@ -13,6 +13,32 @@
   background-position: top;
   position: relative;
 
+  &__signOut {
+    width: 30%;
+    padding: 12px 10px;
+    position: relative;
+    bottom: 10px;
+    right: 40px;
+
+    @media only screen and (max-width: 1800px) {
+      width: 35%;
+      padding: 8px 4px;
+      bottom: 6px;
+      right: 35px;
+    }
+
+    @media only screen and (max-width: 900px) {
+      width: 35%;
+      padding: 8px 2px;
+      bottom: 6px;
+      right: 10px;
+    }
+
+    @media only screen and (max-width: 620px) {
+      width: 40%;
+    }
+  }
+
   &__box {
     position: absolute;
     top: 50%;
@@ -154,7 +180,6 @@
       &__group {
         margin-bottom: 20px;
       }
-
     }
   }
 }

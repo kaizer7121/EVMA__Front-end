@@ -4,7 +4,10 @@ import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { useState, useEffect } from "react";
 import { converISOToSimpleDate } from "../../Service/functions";
-import { getURLImage } from "../../Service/firebaseFunctions";
+import {
+  getURLImage,
+  listenNotificationOfDocID,
+} from "../../Service/firebaseFunctions";
 import { useHistory } from "react-router";
 import ConfirmDelete from "../Popup/ConfirmDelete";
 import {
@@ -114,7 +117,9 @@ const EventDetail = (props) => {
         dispatch(profileAction.addFollowedEvents([`${eventID}_e`]));
       } catch (error) {
         console.log("Error when follow event " + error);
-        dispatch(profileAction.removeFollowedEvent([`${props.information.id}_e`]));
+        dispatch(
+          profileAction.removeFollowedEvent([`${props.information.id}_e`])
+        );
       }
     }
   };
@@ -125,12 +130,15 @@ const EventDetail = (props) => {
     } else {
       try {
         const eventID = props.information.id;
-        unfollowEvent(eventID);
+        unfollowEvent(eventID).then(() => {
+          listenNotificationOfDocID(`${eventID}_e`, dispatch);
+        });
         dispatch(profileAction.removeFollowedEvent([`${eventID}_e`]));
-        console.log("IS RUN");
       } catch (error) {
         console.log("Error when follow event " + error);
-        dispatch(profileAction.addFollowedEvents([`${props.information.id}_e`]));
+        dispatch(
+          profileAction.addFollowedEvents([`${props.information.id}_e`])
+        );
       }
     }
   };

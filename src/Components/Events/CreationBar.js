@@ -12,9 +12,6 @@ import "rc-time-picker/assets/index.css";
 import styles from "./CreationBar.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 
-let startMoment;
-let endMoment;
-
 const CreationBar = (props) => {
   const [isChoosingEmoji, setIsChoosingEmoji] = useState({
     shortDesc: false,
@@ -39,26 +36,26 @@ const CreationBar = (props) => {
     props.information.otherOrganizations.length,
   ]);
 
-  useEffect(() => {
-    startMoment = moment();
-    endMoment = moment();
-    if (props.information.startTime.length > 0) {
-      const timeArr = props.information.startTime.split(":");
-      const currentDate = new Date();
-      currentDate.setHours(timeArr[0], timeArr[1]);
-      startMoment._d = currentDate;
-    } else {
-      startMoment = "";
-    }
-    if (props.information.endTime.length > 0) {
-      const timeArr = props.information.endTime.split(":");
-      const currentDate = new Date();
-      currentDate.setHours(timeArr[0], timeArr[1]);
-      endMoment._d = currentDate;
-    } else {
-      endMoment = "";
-    }
-  }, [props.information.startTime, props.information.endTime]);
+  // useEffect(() => {
+  //   startMoment = moment();
+  //   endMoment = moment();
+  //   if (props.information.startTime.length > 0) {
+  //     const timeArr = props.information.startTime.split(":");
+  //     const currentDate = new Date();
+  //     currentDate.setHours(timeArr[0], timeArr[1]);
+  //     startMoment._d = currentDate;
+  //   } else {
+  //     startMoment = "";
+  //   }
+  //   if (props.information.endTime.length > 0) {
+  //     const timeArr = props.information.endTime.split(":");
+  //     const currentDate = new Date();
+  //     currentDate.setHours(timeArr[0], timeArr[1]);
+  //     endMoment._d = currentDate;
+  //   } else {
+  //     endMoment = "";
+  //   }
+  // }, [props.information.startTime, props.information.endTime]);
 
   const openShortDescEmojiPickerHandler = () => {
     setIsChoosingEmoji((prevValue) => ({
@@ -214,6 +211,13 @@ const CreationBar = (props) => {
           format
         </p>
       )}
+      {props.eventError.dateCompare && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          End date must be after start date
+        </p>
+      )}
       <div className={`${styles.creationBar__toggleButton}`}>
         <span>Online event</span>
         <label className={`${commonStyles.switch}`}>
@@ -232,9 +236,11 @@ const CreationBar = (props) => {
         return (
           <section key={index} className={`${styles.creationBar__multiInput}`}>
             <label
+              key={`LABEL_NAME_${index}`}
               className={`${styles.creationBar__input} ${styles.creationBar__multiInput_short}`}
             >
               <input
+                key={`INPUT_NAME_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
                 placeholder=""
@@ -247,12 +253,19 @@ const CreationBar = (props) => {
                 }}
                 value={props.information.locationName[index]}
               />
-              <span className={`${styles.creationBar__input__label}`}>
+              <span
+                key={`SPAN_NAME_${index}`}
+                className={`${styles.creationBar__input__label}`}
+              >
                 Name
               </span>
             </label>
-            <label className={`${styles.creationBar__input}`}>
+            <label
+              key={`LABEL_DETAIL_${index}`}
+              className={`${styles.creationBar__input}`}
+            >
               <input
+                key={`INPUT_DETAIL_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
                 placeholder=""
@@ -265,7 +278,10 @@ const CreationBar = (props) => {
                 }}
                 value={props.information.locationDetail[index]}
               />
-              <span className={`${styles.creationBar__input__label}`}>
+              <span
+                key={`SPAN_DETAIL_${index}`}
+                className={`${styles.creationBar__input__label}`}
+              >
                 Detail(URL)
               </span>
             </label>
@@ -302,11 +318,16 @@ const CreationBar = (props) => {
       <h3 className={`${styles.creationBar__topic}`}>Hashtag:</h3>
       {props.information.hashtag.map((location, index) => {
         return (
-          <section key={index} className={`${styles.creationBar__multiInput}`}>
+          <section
+            key={`SECTION_HASHTAG_${index}`}
+            className={`${styles.creationBar__multiInput}`}
+          >
             <label
+              key={`LABEL_HASHTAG_${index}`}
               className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
             >
               <input
+                key={`INPUT_HASHTAG_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
                 placeholder=""
@@ -319,7 +340,10 @@ const CreationBar = (props) => {
                 }}
                 value={props.information.hashtag[index]}
               />
-              <span className={`${styles.creationBar__input__label}`}>
+              <span
+                key={`SPAN_HASHTAG_${index}`}
+                className={`${styles.creationBar__input__label}`}
+              >
                 Hashtag name
               </span>
             </label>
@@ -358,16 +382,15 @@ const CreationBar = (props) => {
           Categories:<small>(Click to remove)</small>
         </h3>
         {props.information.categories.map((category, index) => (
-          <>
-            <p
-              className={`${styles.creationBar__category}`}
-              onClick={() => {
-                props.removeCategory(index);
-              }}
-            >
-              {category}
-            </p>
-          </>
+          <p
+            key={`P_CATEGORY_${index}`}
+            className={`${styles.creationBar__category}`}
+            onClick={() => {
+              props.removeCategory(index);
+            }}
+          >
+            {category}
+          </p>
         ))}
         <div className={`${styles.creationBar__categorySelection}`}>
           <select
@@ -409,11 +432,11 @@ const CreationBar = (props) => {
       <h3 className={`${styles.creationBar__topic}`}>Other organizations:</h3>
       {props.information.otherOrganizations.map((location, index) => {
         return (
-          <section key={index} className={`${styles.creationBar__multiInput}`}>
-            <label
+          <section key={`SECTION_ORGANIZATION_${index}`} className={`${styles.creationBar__multiInput}`}>
+            <label key={`LABEL_ORGANIZATION_${index}`}
               className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
             >
-              <input
+              <input key={`INPUT_ORGANIZATION_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
                 placeholder=""
@@ -426,7 +449,7 @@ const CreationBar = (props) => {
                 }}
                 value={props.information.otherOrganizations[index]}
               />
-              <span className={`${styles.creationBar__input__label}`}>
+              <span key={`SPAN_ORGANIZATION_${index}`} className={`${styles.creationBar__input__label}`}>
                 Organiztion name
               </span>
             </label>
