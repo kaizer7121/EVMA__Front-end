@@ -244,6 +244,7 @@ const CreationBar = (props) => {
                 className={`${styles.creationBar__input__field}`}
                 type="text"
                 placeholder=""
+                // maxLength="25"
                 onChange={(event) => {
                   props.changeMultiInputValue(
                     event.target.value,
@@ -327,6 +328,7 @@ const CreationBar = (props) => {
               className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
             >
               <input
+                // maxLength="25"
                 key={`INPUT_HASHTAG_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
@@ -356,6 +358,13 @@ const CreationBar = (props) => {
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
         >
           Additional hastag must not be empty
+        </p>
+      )}
+      {props.eventError.tagLength && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          Each tag not exceed 25 characters
         </p>
       )}
       {numberOfMultiInput.hashtag > 1 && (
@@ -425,20 +434,26 @@ const CreationBar = (props) => {
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
         >
-          Number of category must between (1 - 10)
+          Number of category must not be empty and not exceed 10 categories
         </p>
       )}
 
       <h3 className={`${styles.creationBar__topic}`}>Other organizations:</h3>
       {props.information.otherOrganizations.map((location, index) => {
         return (
-          <section key={`SECTION_ORGANIZATION_${index}`} className={`${styles.creationBar__multiInput}`}>
-            <label key={`LABEL_ORGANIZATION_${index}`}
+          <section
+            key={`SECTION_ORGANIZATION_${index}`}
+            className={`${styles.creationBar__multiInput}`}
+          >
+            <label
+              key={`LABEL_ORGANIZATION_${index}`}
               className={`${styles.creationBar__input} ${styles.creationBar__multiInput_long}`}
             >
-              <input key={`INPUT_ORGANIZATION_${index}`}
+              <input
+                key={`INPUT_ORGANIZATION_${index}`}
                 className={`${styles.creationBar__input__field}`}
                 type="text"
+                // maxLength="50"
                 placeholder=""
                 onChange={(event) => {
                   props.changeMultiInputValue(
@@ -449,13 +464,30 @@ const CreationBar = (props) => {
                 }}
                 value={props.information.otherOrganizations[index]}
               />
-              <span key={`SPAN_ORGANIZATION_${index}`} className={`${styles.creationBar__input__label}`}>
-                Organiztion name
+              <span
+                key={`SPAN_ORGANIZATION_${index}`}
+                className={`${styles.creationBar__input__label}`}
+              >
+                Organiztion name (optional)
               </span>
             </label>
           </section>
         );
       })}
+      {props.eventError.otherOrganizations && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          Additional other organization must not be empty
+        </p>
+      )}
+      {props.eventError.otherOrganizationsLength && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          Each organization name not exceed 50 characters
+        </p>
+      )}
       {numberOfMultiInput.otherOrganizations > 1 && (
         <p
           className={`${styles.creationBar__multiInput_remove}`}
@@ -511,7 +543,7 @@ const CreationBar = (props) => {
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative}`}
         >
-          Summary must not empty and not exceed 250 characters
+          Summary must not empty and not exceed 255 characters
         </p>
       )}
       <section className={`${styles.creationBar__description}`}>
@@ -575,7 +607,7 @@ const CreationBar = (props) => {
       </section>
       {props.eventError.image && (
         <p className={`${styles.creationBar__error}`}>
-          This event don't have cover image
+          This event doesn't have cover image
         </p>
       )}
       <section className={`${styles.creationBar__buttons}`}>

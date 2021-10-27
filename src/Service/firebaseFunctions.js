@@ -142,16 +142,7 @@ export const ListenDataChangeFromFollowList = async (
           .onSnapshot(
             (snapshot) => {
               snapshot.docChanges().forEach((change) => {
-                if (change.type === "added") {
-                  const instantEvent = change.doc.data();
-                  dispatch(notificationAction.addInstantEvent(instantEvent));
-                  addSingleNotificationWithImg(
-                    instantEvent,
-                    change.doc.id,
-                    dispatch
-                  );
-                }
-                if (change.type === "modified") {
+                if (change.type === "added" || change.type === "modified") {
                   const instantEvent = change.doc.data();
                   dispatch(notificationAction.addInstantEvent(instantEvent));
                   addSingleNotificationWithImg(
@@ -194,17 +185,14 @@ export const ListenDataChangeFromFollowList = async (
                   notificationAction.preventToStoreInstantOrganizationNoti()
                 );
               }
-              if (change.type === "added") {
-                console.log("added org");
+              if (change.type === "added" || change.type === "modified") {
                 const instantEvent = change.doc.data();
                 dispatch(notificationAction.addInstantEvent(instantEvent));
-                dispatch(notificationAction.addNewNotification(instantEvent));
-              }
-              if (change.type === "modified") {
-                console.log("modified org");
-                const instantEvent = change.doc.data();
-                dispatch(notificationAction.addInstantEvent(instantEvent));
-                dispatch(notificationAction.addNewNotification(instantEvent));
+                addSingleNotificationWithImg(
+                  instantEvent,
+                  change.doc.id,
+                  dispatch
+                );
               }
               if (followedOrganizers.length === 0) {
                 dispatch(
@@ -229,37 +217,33 @@ export const ListenDataChangeFromFollowList = async (
 };
 
 export const listenNotificationOfDocID = async (docID, dispatch) => {
-  const listenData = async () => {
-    db.collection("InstantNotification")
-      .where(firebase.firestore.FieldPath.documentId(), "==", docID)
-      .onSnapshot(
-        (snapshot) => {
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              const instantEvent = change.doc.data();
-              dispatch(notificationAction.addInstantEvent(instantEvent));
-              addSingleNotificationWithImg(
-                instantEvent,
-                change.doc.id,
-                dispatch
-              );
-            }
-            if (change.type === "modified") {
-              const instantEvent = change.doc.data();
-              dispatch(notificationAction.addInstantEvent(instantEvent));
-              addSingleNotificationWithImg(
-                instantEvent,
-                change.doc.id,
-                dispatch
-              );
-            }
-          });
-        },
-        (error) => {
-          console.log("Somethings wrong when listening data: " + error);
-        }
-      );
-  };
+  console.log("Listen");
+  db.collection("InstantNotification")
+    .where(firebase.firestore.FieldPath.documentId(), "==", docID)
+    .onSnapshot(
+      (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            const instantEvent = change.doc.data();
+            dispatch(notificationAction.addInstantEvent(instantEvent));
+            addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
+          }
+          if (change.type === "modified") {
+            const instantEvent = change.doc.data();
+            dispatch(notificationAction.addInstantEvent(instantEvent));
+            addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
+          }
+        });
+      },
+      (error) => {
+        console.log("Somethings wrong when listening data: " + error);
+      }
+    );
+};
 
-  await listenData();
+export const detachListenNotificationOfDocID = async (docID) => {
+  console.log("Unsub");
+  db.collection("InstantNotification")
+    .where(firebase.firestore.FieldPath.documentId(), "==", docID)
+    .onSnapshot();
 };

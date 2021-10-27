@@ -203,14 +203,20 @@ const Profile = () => {
             imageAsFile.avatar.size &&
             imageAsFile.avatar.size > 0
           ) {
-            await uploadImgToStorage(imageAsFile.avatar, avatarName);
+            await uploadImgToStorage(
+              imageAsFile.avatar,
+              `userAvatar_${repsonse.id}`
+            );
           }
           if (
             imageAsFile.cover &&
             imageAsFile.cover.size &&
             imageAsFile.cover.size > 0
           ) {
-            await uploadImgToStorage(imageAsFile.cover, backgroundName);
+            await uploadImgToStorage(
+              imageAsFile.cover,
+              `background_${repsonse.id}`
+            );
           }
           const profileData = {
             ...repsonse,
@@ -293,8 +299,6 @@ const Profile = () => {
           )}
 
           <div className={`${styles.profile__topic}`}>
-            <h2>Contact information</h2>
-
             <h3>Name</h3>
             <input
               type="text"

@@ -5,6 +5,7 @@ import commonStyles from "../Auth/Auth.module.scss";
 import { useState, useEffect } from "react";
 import { converISOToSimpleDate } from "../../Service/functions";
 import {
+  detachListenNotificationOfDocID,
   getURLImage,
   listenNotificationOfDocID,
 } from "../../Service/firebaseFunctions";
@@ -113,10 +114,13 @@ const EventDetail = (props) => {
     } else {
       try {
         const eventID = props.information.id;
-        followEvent(eventID);
+        followEvent(eventID).then(() => {
+          listenNotificationOfDocID(`${eventID}_e`, dispatch);
+        });
         dispatch(profileAction.addFollowedEvents([`${eventID}_e`]));
       } catch (error) {
         console.log("Error when follow event " + error);
+
         dispatch(
           profileAction.removeFollowedEvent([`${props.information.id}_e`])
         );
@@ -131,7 +135,7 @@ const EventDetail = (props) => {
       try {
         const eventID = props.information.id;
         unfollowEvent(eventID).then(() => {
-          listenNotificationOfDocID(`${eventID}_e`, dispatch);
+          detachListenNotificationOfDocID(`${eventID}_e`);
         });
         dispatch(profileAction.removeFollowedEvent([`${eventID}_e`]));
       } catch (error) {

@@ -129,7 +129,7 @@ export const converISOToDate = (isoDate) => {
 };
 
 export const converISOToOnlyDate = (isoDate) => {
-  const [date, ] = isoDate.split("T");
+  const [date] = isoDate.split("T");
   const fullDate = new Date(date);
 
   return fullDate;
@@ -138,7 +138,7 @@ export const converISOToOnlyDate = (isoDate) => {
 export const converISOToOnlyTime = (isoDate) => {
   const [, isoTime] = isoDate.split("T");
   const fullTime = isoTime.split("Z");
-  const [hour, minute, ] = fullTime[0].split(":");
+  const [hour, minute] = fullTime[0].split(":");
   const returnTime = `${hour}:${minute}`;
   return returnTime;
 };
@@ -257,11 +257,12 @@ export const addSingleNotificationWithImg = async (
     const listDate = Object.getOwnPropertyNames(notification);
     Object.values(notification).forEach(async (key, index) => {
       const id = docID.split("_")[0];
+      const type = docID.split("_")[1];
       notification = {
         notificationID: id,
         date: listDate[index],
         message: key,
-        type: id === "o" ? "Organization" : "Event",
+        type: type === "o" ? "Organization" : "Event",
       };
     });
     if (notification.type === "Organization") {
@@ -287,5 +288,3 @@ export const addSingleNotificationWithImg = async (
     }
   }
 };
-
-

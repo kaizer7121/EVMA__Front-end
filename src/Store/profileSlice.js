@@ -45,7 +45,7 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
-      state.role = role.authority;
+      state.role = role && role.authority ? role.authority : null;
       state.dob = dob;
 
       localStorage.setItem("USER_ID", id);
@@ -85,7 +85,7 @@ const profileSlice = createSlice({
         avatarURL,
         backgroundURL,
         dob,
-        role
+        role,
       } = action.payload;
 
       state.name = name;

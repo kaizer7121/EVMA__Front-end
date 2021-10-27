@@ -173,15 +173,13 @@
   button {
     font-weight: 550;
     font-size: 16px;
-    padding: 0.8rem 3.2rem;
+    padding: 0.4rem 3rem;
     box-sizing: content-box;
     margin: 0 auto;
     display: flex;
     align-items: center;
     transition: all 0.1s;
-    color: $color-primary;
     background-color: $color-white;
-    border: 0.5px solid $color-primary;
     cursor: pointer;
 
     &:hover {

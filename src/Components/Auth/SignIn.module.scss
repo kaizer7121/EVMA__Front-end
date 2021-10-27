@@ -109,6 +109,20 @@
         }
       }
     }
+
+    &_unable {
+      padding: 0 20px;
+      margin-top: -20px;
+      p {
+        color: $color-danger;
+        font-weight: 500;
+      }
+
+      button {
+        width: 50%;
+        text-transform: uppercase;
+      }
+    }
     @media only screen and (max-width: 1450px) {
       &_detail {
         min-height: 55vh;

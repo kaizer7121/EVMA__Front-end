@@ -11,11 +11,16 @@ export const getOrganizationDetail = (organizationID) => {
 };
 
 export const followOrganization = (organizationID) => {
-  const url = `http://localhost:8080/support/api/followOrganizer?organizerId=${organizationID}`;
+  const url = `/api/followOrganizer?organizerId=${organizationID}`;
   return axiosClient.get(url);
 };
 
 export const unfollowOrganization = (organizationID) => {
-  const url = `http://localhost:8080/support/api/unfollowOrganizer?organizerId=${organizationID}`;
+  const url = `/api/unfollowOrganizer?organizerId=${organizationID}`;
+  return axiosClient.get(url);
+};
+
+export const getListFollowedOrganization = () => {
+  const url = "api/getFollowOrganizers?size=100";
   return axiosClient.get(url);
 };

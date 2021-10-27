@@ -6,11 +6,7 @@ import firebase, { uiConfig } from "../../Firebase";
 import "firebaseui/dist/firebaseui.css";
 import { useEffect, useState } from "react";
 import { signInWithFullImage, validateEmail } from "../../Service/functions";
-import {
-  exchangeFirebaseToken,
-  getGoogleLoginLink,
-  signIn,
-} from "../../Service/api/authApi";
+import { exchangeFirebaseToken } from "../../Service/api/authApi";
 import { useDispatch } from "react-redux";
 import { tokenAction } from "../../Store/tokenSlice";
 import { useSelector } from "react-redux";
@@ -18,6 +14,7 @@ import { profileAction } from "../../Store/profileSlice";
 
 const SignIn = () => {
   const [isWaiting, setIsWaiting] = useState(false);
+  const [isAccountUnable, setIsAccountUnable] = useState(false);
 
   const token = useSelector((state) => state.token.token);
   const dispatch = useDispatch();
@@ -51,6 +48,8 @@ const SignIn = () => {
             localStorage.setItem("TOKEN", response.token);
             dispatch(profileAction.signInToEvma(response.profile));
             dispatch(tokenAction.addToken(response.token));
+          } else if (response.status === "Unable") {
+            setIsAccountUnable(true);
           }
         }
       });
@@ -72,6 +71,10 @@ const SignIn = () => {
   //   }
   // };
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   return (
     <div className={`${styles.login}`}>
       <div className={`${styles.login__box}`}>
@@ -83,12 +86,25 @@ const SignIn = () => {
               <h3>Welcome back to EVMA</h3>
             </div>
 
-            {isWaiting && (
+            {isAccountUnable && (
+              <div className={styles.login__content_unable}>
+                <p>
+                  Your account is now unable, you have to wait to be activated
+                </p>
+                <button
+                  className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
+                  onClick={reloadPage}
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+            {!isAccountUnable && isWaiting && (
               <div
                 className={`${commonStyles.loader_icon_big} ${styles.login__content_detail_button}`}
               ></div>
             )}
-            {!isWaiting && (
+            {!isAccountUnable && !isWaiting && (
               <div
                 className={`${commonStyles.googleBtn} ${styles.login__content_detail_button}`}
               >

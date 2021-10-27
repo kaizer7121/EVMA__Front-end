@@ -6,6 +6,7 @@ import {
   unfollowOrganization,
 } from "../../Service/api/organizationApi";
 import {
+  detachListenNotificationOfDocID,
   getURLImage,
   listenNotificationOfDocID,
 } from "../../Service/firebaseFunctions";
@@ -57,6 +58,7 @@ const Organization = (props) => {
         dispatch(profileAction.addFollowedOrganizers([`${organizationID}_o`]));
       } catch (error) {
         console.log("Error when follow organization " + error);
+
         dispatch(
           profileAction.removeFollowedOrganization([
             `${props.information.id}_o`,
@@ -72,7 +74,9 @@ const Organization = (props) => {
     } else {
       try {
         const organizationID = props.information.id;
-        unfollowOrganization(organizationID);
+        unfollowOrganization(organizationID).then(() => {
+          detachListenNotificationOfDocID(`${organizationID}_o`);
+        });
         dispatch(
           profileAction.removeFollowedOrganization([`${organizationID}_o`])
         );

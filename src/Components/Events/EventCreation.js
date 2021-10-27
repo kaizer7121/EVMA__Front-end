@@ -54,6 +54,9 @@ const EventCreation = (props) => {
     content: false,
     image: false,
     hashtag: false,
+    tagLength: false,
+    otherOrganizations: false,
+    otherOrganizationsLength: false,
   });
 
   const history = useHistory();
@@ -107,6 +110,9 @@ const EventCreation = (props) => {
     let content = false;
     let image = false;
     let hashtag = false;
+    let tagLength = false;
+    let otherOrganizations = false;
+    let otherOrganizationsLength = false;
 
     if (
       eventInfo.title === undefined ||
@@ -136,6 +142,7 @@ const EventCreation = (props) => {
     });
     eventInfo.hashtag.forEach((tag, index) => {
       if (index > 0 && tag.length === 0) hashtag = true;
+      if (tag.length > 25) tagLength = true;
     });
     if (
       eventInfo.categories === undefined ||
@@ -161,6 +168,10 @@ const EventCreation = (props) => {
     if (eventInfo.image === undefined || eventInfo.image.length === 0) {
       image = true;
     }
+    eventInfo.otherOrganizations.forEach((organization, index) => {
+      if (index > 0 && organization.length === 0) otherOrganizations = true;
+      if (organization.length > 50) otherOrganizationsLength = true;
+    });
 
     // Process date to check
     if (!start && !end) {
@@ -198,6 +209,9 @@ const EventCreation = (props) => {
       content,
       image,
       hashtag,
+      tagLength,
+      otherOrganizations,
+      otherOrganizationsLength,
     });
     return !(
       title ||
@@ -209,7 +223,10 @@ const EventCreation = (props) => {
       summary ||
       content ||
       image ||
-      hashtag
+      hashtag ||
+      tagLength ||
+      otherOrganizations ||
+      otherOrganizationsLength
     );
   };
 

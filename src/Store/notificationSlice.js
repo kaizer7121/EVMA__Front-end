@@ -11,6 +11,17 @@ const notificationSlice = createSlice({
   reducers: {
     addNotiInLast3Days(state, action) {
       const notifications = action.payload;
+      
+      notifications.sort((firstNoti, secondNoti) => {
+        const firstDate = new Date(firstNoti.date);
+        const secondDate = new Date(secondNoti.date);
+
+        return firstDate.getTime() < secondDate.getTime()
+          ? 1
+          : firstDate.getTime() > secondDate.getTime()
+          ? -1
+          : 0;
+      });
 
       state.notifications = [...notifications];
     },
@@ -21,7 +32,7 @@ const notificationSlice = createSlice({
         state.isAllowToStoreInstantOrganizationNoti
       ) {
         const notification = action.payload;
-        state.notifications = [...state.notifications, notification];
+        state.notifications = [notification, ...state.notifications];
       }
     },
 
