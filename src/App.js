@@ -42,22 +42,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
-  // Handle firebase auth changed
-  // useEffect(() => {
-  //   const unregisterAuthObserver = firebase
-  //     .auth()
-  //     .onAuthStateChanged(async (user) => {
-  //       // setIsSignedIn(!!user);
-  //       if (!user) {
-  //         return console.log("Log out");
-  //       }
-  //       // console.log(user.displayName);
-  //       // console.log("======================");
-  //       // const token = await user.getIdToken();
-  //       // console.log(token);
-  //     });
-  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  // }, []);
+
   useEffect(() => {
     if (listCategory[0] === "Empty") {
       try {
@@ -140,19 +125,6 @@ function App() {
           setIsLoading(false);
         });
     }
-    // const left = localStorage.getItem("RELOAD_LEFT");
-
-    // if (left === "0") {
-    //   dispatch(profileAction.signOut());
-    //   dispatch(tokenAction.deleteToken());
-    //   localStorage.removeItem("RELOAD_LEFT");
-    // }
-    // if (left === "1") {
-    //   localStorage.setItem("RELOAD_LEFT", 0);
-    // }
-    // if (left === "2") {
-    //   localStorage.setItem("RELOAD_LEFT", 1);
-    // }
   }, [token, dispatch, listCategory]);
 
   return (

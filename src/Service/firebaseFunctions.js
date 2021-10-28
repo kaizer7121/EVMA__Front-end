@@ -217,21 +217,17 @@ export const ListenDataChangeFromFollowList = async (
 };
 
 export const listenNotificationOfDocID = async (docID, dispatch) => {
-  console.log("Listen");
   db.collection("InstantNotification")
     .where(firebase.firestore.FieldPath.documentId(), "==", docID)
     .onSnapshot(
       (snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "added") {
+        snapshot.docChanges().forEach(async (change) => {
+          if (change.type === "added" || change.type === "modified") {
             const instantEvent = change.doc.data();
             dispatch(notificationAction.addInstantEvent(instantEvent));
-            addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
-          }
-          if (change.type === "modified") {
-            const instantEvent = change.doc.data();
-            dispatch(notificationAction.addInstantEvent(instantEvent));
-            addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
+            await addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
+            dispatch(notificationAction.allowToStoreInstantOrganizationNoti());
+            dispatch(notificationAction.allowToStoreInstantEventNoti());
           }
         });
       },
@@ -242,7 +238,6 @@ export const listenNotificationOfDocID = async (docID, dispatch) => {
 };
 
 export const detachListenNotificationOfDocID = async (docID) => {
-  console.log("Unsub");
   db.collection("InstantNotification")
     .where(firebase.firestore.FieldPath.documentId(), "==", docID)
     .onSnapshot();

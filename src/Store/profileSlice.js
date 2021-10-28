@@ -47,8 +47,6 @@ const profileSlice = createSlice({
       state.backgroundURL = backgroundURL;
       state.role = role && role.authority ? role.authority : null;
       state.dob = dob;
-
-      localStorage.setItem("USER_ID", id);
     },
     signOut(state) {
       state.id = "";
@@ -63,9 +61,6 @@ const profileSlice = createSlice({
       state.backgroundURL = "";
       state.role = "";
       state.dob = "";
-
-      console.log("DELETE ID");
-      localStorage.removeItem("USER_ID");
     },
 
     uploadImages(state, action) {

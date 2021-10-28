@@ -83,10 +83,6 @@ const UpdateProfile = () => {
 
         const response = await updateProfile(requestData, profile.id);
         if (response.status !== 400 && response.status !== 403) {
-          console.log();
-          console.log("======================");
-          console.log([response.dob, requestData.dob]);
-          alert("PAUSE");
           dispatch(
             profileAction.updateProfile({
               ...response,
@@ -96,7 +92,6 @@ const UpdateProfile = () => {
           );
         }
       } catch (error) {
-        setIsWaiting(false);
         console.log(error.response);
       }
     } else {
@@ -116,12 +111,12 @@ const UpdateProfile = () => {
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.register__signOut}`}
           >
-            Sign out
+            Retry
           </button>
           <div className={`${styles.register__content_detail}`}>
             <div>
               <h1>EVMA</h1>
-              <p>Please complete informations bellow</p>
+              <p>Please complete information bellow</p>
             </div>
 
             <form
@@ -178,7 +173,7 @@ const UpdateProfile = () => {
                   className={`${commonStyles.form__input} ${commonStyles.form__input_large}`}
                   onClick={inputHanlder}
                 >
-                  <option value="Attendees">Attendees</option>
+                  <option value="Attendees">Attendee</option>
                   <option value="Event Organizer">Event Organizer</option>
                 </select>
               </div>

@@ -128,7 +128,7 @@ const Profile = () => {
       dob = true;
     }
     if (
-      accountInformation.dob.length > 0 &&
+      accountInformation.phoneNumber.length > 0 &&
       !validatePhone(accountInformation.phoneNumber)
     ) {
       phoneNumber = true;
@@ -142,8 +142,8 @@ const Profile = () => {
     }
     if (
       accountInformation.address &&
-      accountInformation.address.length >= 50 &&
-      validateName(accountInformation.address)
+      (accountInformation.address.length >= 50 ||
+        validateName(accountInformation.address))
     ) {
       address = true;
     }
@@ -178,7 +178,7 @@ const Profile = () => {
             : null,
         address:
           accountInformation.address && accountInformation.address.length > 0
-            ? accountInformation.address.replace(", ", ",")
+            ? accountInformation.address.replaceAll(", ", ",")
             : null,
         phoneNumber:
           accountInformation.phoneNumber &&
@@ -193,9 +193,8 @@ const Profile = () => {
         role: accountInformation.role,
       };
       try {
+        console.log(accountInformation.address.length);
         const repsonse = await updateProfile(data, profile.id);
-        const avatarName = repsonse.avatarURL;
-        const backgroundName = repsonse.backgroundURL;
 
         if (repsonse.status !== 400 && repsonse.status !== 403) {
           if (
@@ -227,11 +226,12 @@ const Profile = () => {
               ? accountInformation.backgroundURL
               : "/images/default-cover.jpg",
           };
+          console.log(profileData);
+
           await updateProfileWithFullImage(profileData, dispatch);
           setIsUpdatedProfile(true);
         } else {
           alert("Some thing wrong with server when update profile");
-          // setIsUpdatedProfile(true);
         }
       } catch (error) {
         console.log("Error when update profile " + error);
@@ -315,7 +315,7 @@ const Profile = () => {
 
             <div className={`${styles.profile__topic_row}`}>
               <div className={`${styles.profile__topic_col}`}>
-                <h3>Birth of date</h3>
+                <h3>{userRole === "Event Organizer" ? "Founding date" : "Birth of date"}</h3>
                 <label className={`${styles.profile__topic_datePicker}`}>
                   <DayPickerInput
                     format={"DD/MM/yyyy"}

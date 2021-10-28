@@ -67,7 +67,8 @@ export const validatePassword = (password) => {
 };
 
 export const validatePhone = (phoneNumber) => {
-  const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+  const regexString = "[\\d]{10,11}$";
+  const regex = new RegExp(regexString);
   return regex.test(phoneNumber);
 };
 
@@ -190,20 +191,6 @@ export const signInWithFullImage = async (profile, dispatch) => {
 };
 
 export const updateProfileWithFullImage = async (profile, dispatch) => {
-  // const { id } = profile;
-  // const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
-  // const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
-
-  // const fullData = {
-  //   ...profile,
-  //   avatarURL: avatarURLFirebase
-  //     ? avatarURLFirebase
-  //     : "/images/default-avatar.png",
-  //   backgroundURL: backgroundURLFirebase
-  //     ? backgroundURLFirebase
-  //     : "/images/default-cover.jpg",
-  // };
-
   dispatch(profileAction.updateProfile(profile));
 };
 
@@ -287,4 +274,18 @@ export const addSingleNotificationWithImg = async (
       dispatch(notificationAction.addNewNotification(notificationWithImg));
     }
   }
+};
+
+export const clearUnfollowNotification = (
+  oldNotifications,
+  type,
+  id,
+  dispatch
+) => {
+  const modifiedNotifications = oldNotifications.filter(
+    (notification) =>
+      notification.type !== type ||
+      (notification.type === type && notification.notificationID === id)
+  );
+  dispatch(notificationAction.modifyListNotification(modifiedNotifications));
 };

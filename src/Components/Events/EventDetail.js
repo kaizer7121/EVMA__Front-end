@@ -3,7 +3,10 @@ import ListPost from "./Posts/ListPost";
 import styles from "./EventDetail.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
 import { useState, useEffect } from "react";
-import { converISOToSimpleDate } from "../../Service/functions";
+import {
+  clearUnfollowNotification,
+  converISOToSimpleDate,
+} from "../../Service/functions";
 import {
   detachListenNotificationOfDocID,
   getURLImage,
@@ -19,10 +22,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { profileAction } from "../../Store/profileSlice";
 import LoadingComponent from "../Loading/LoadingComponent";
+import { notificationAction } from "../../Store/notificationSlice";
 
 let locations = { offline: [], online: [] };
 
 const EventDetail = (props) => {
+  const listNotification = useSelector(
+    (state) => state.notifications.notifications
+  );
   const profile = useSelector((state) => state.profile);
   const { followedEvents } = profile;
   const token = useSelector((state) => state.token.token);
@@ -36,6 +43,7 @@ const EventDetail = (props) => {
     : null;
   const [choosingDelete, setChoosingDelete] = useState(false);
   const [isFollow, setIsFollow] = useState(false);
+  const [isShared, setIsShared] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -100,10 +108,7 @@ const EventDetail = (props) => {
     const id = type === "Cancel" ? 3 : 4;
     const eventID = props.information.id;
     changeEventStatus(eventID, id);
-    const RELOAD_LEFT = localStorage.getItem("RELOAD_LEFT");
-    if (RELOAD_LEFT) {
-      localStorage.setItem("RELOAD_LEFT", 2);
-    }
+
     window.location.reload();
     setChoosingDelete(false);
   };
@@ -115,6 +120,7 @@ const EventDetail = (props) => {
       try {
         const eventID = props.information.id;
         followEvent(eventID).then(() => {
+          dispatch(notificationAction.preventToStoreInstantEventNoti());
           listenNotificationOfDocID(`${eventID}_e`, dispatch);
         });
         dispatch(profileAction.addFollowedEvents([`${eventID}_e`]));
@@ -138,6 +144,7 @@ const EventDetail = (props) => {
           detachListenNotificationOfDocID(`${eventID}_e`);
         });
         dispatch(profileAction.removeFollowedEvent([`${eventID}_e`]));
+        clearUnfollowNotification(listNotification, "Event", eventID, dispatch);
       } catch (error) {
         console.log("Error when follow event " + error);
         dispatch(
@@ -145,6 +152,20 @@ const EventDetail = (props) => {
         );
       }
     }
+  };
+
+  const onShareUrl = () => {
+    const el = document.createElement("input");
+    el.value = window.location.href;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    setIsShared(true);
+  };
+
+  const reloadPost = () => {
+    props.reloadPost();
   };
 
   const mainContent = (
@@ -306,6 +327,7 @@ const EventDetail = (props) => {
                 props.information.status.name === "Draft") && (
                 <div className={`${styles.detail__buttons}`}>
                   {!isOwnEvent &&
+                    profile.role === "Attendees" &&
                     (isFollow ? (
                       <button
                         className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
@@ -339,11 +361,23 @@ const EventDetail = (props) => {
                   )}
 
                   {props.information.status.name !== "Draft" && (
-                    <button
-                      className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
-                    >
-                      SHARE
-                    </button>
+                    <>
+                      {!isShared && (
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+                          onClick={onShareUrl}
+                        >
+                          SHARE
+                        </button>
+                      )}
+                      {isShared && (
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_disable} ${commonStyles.btn_grey_dark} ${styles.btn_small}`}
+                        >
+                          Copied
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -378,6 +412,7 @@ const EventDetail = (props) => {
               eventStatus={props.information.status.name}
               isOwnEvent={isOwnEvent}
               information={props.listPost}
+              reloadPost={reloadPost}
             />
           )}
           {choosingDelete && (

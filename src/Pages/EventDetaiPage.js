@@ -26,6 +26,7 @@ const EventDetaiPage = () => {
     content: "",
   });
   const [listPost, setListPost] = useState([]);
+  const [isReloadPost, setIsReloadPost] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const history = useHistory();
@@ -41,29 +42,36 @@ const EventDetaiPage = () => {
     // Get event information
     const getDetailInfo = async () => {
       const eventDetail = await getEventByID(eventID);
-      console.log(eventDetail);
       if (!eventDetail || !eventDetail.id) {
         history.push("/event");
       }
       setEventDetail(eventDetail);
     };
     getDetailInfo();
+  }, [urlParam.id, history]);
+
+  useEffect(() => {
+    const eventID = urlParam.id;
 
     // Get list post
-    const params = {
-      size: 50,
-    };
-    const getListPost = async () => {
-      try {
-        const list = await getEventPost(eventID);
-        setListPost(list.content, params);
-        setIsLoading(false);
-      } catch (err) {
-        console.log("Error when get list post " + err);
-      }
-    };
-    getListPost();
-  }, [urlParam.id, history]);
+    if (isReloadPost) {
+      const getListPost = async () => {
+        try {
+          const list = await getEventPost(eventID);
+          setListPost(list.content);
+          setIsLoading(false);
+        } catch (err) {
+          console.log("Error when get list post " + err);
+        }
+      };
+      getListPost();
+      setIsReloadPost(false);
+    }
+  }, [urlParam.id, isReloadPost]);
+
+  const reloadPost = () => {
+    setIsReloadPost(true);
+  };
 
   return (
     <>
@@ -73,6 +81,7 @@ const EventDetaiPage = () => {
         isLoading={isLoading}
         information={eventDetail}
         listPost={listPost}
+        reloadPost={reloadPost}
       />
     </>
   );

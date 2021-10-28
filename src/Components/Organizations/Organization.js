@@ -10,10 +10,15 @@ import {
   getURLImage,
   listenNotificationOfDocID,
 } from "../../Service/firebaseFunctions";
+import { clearUnfollowNotification } from "../../Service/functions";
+import { notificationAction } from "../../Store/notificationSlice";
 import { profileAction } from "../../Store/profileSlice";
 import styles from "./Organization.module.scss";
 
 const Organization = (props) => {
+  const listNotification = useSelector(
+    (state) => state.notifications.notifications
+  );
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
   const { followedOrganizations } = profile;
@@ -53,6 +58,7 @@ const Organization = (props) => {
       try {
         const organizationID = props.information.id;
         followOrganization(organizationID).then(() => {
+          dispatch(notificationAction.preventToStoreInstantOrganizationNoti());
           listenNotificationOfDocID(`${organizationID}_o`, dispatch);
         });
         dispatch(profileAction.addFollowedOrganizers([`${organizationID}_o`]));
@@ -79,6 +85,12 @@ const Organization = (props) => {
         });
         dispatch(
           profileAction.removeFollowedOrganization([`${organizationID}_o`])
+        );
+        clearUnfollowNotification(
+          listNotification,
+          "Organization",
+          organizationID,
+          dispatch
         );
       } catch (error) {
         console.log("Error when follow organization " + error);

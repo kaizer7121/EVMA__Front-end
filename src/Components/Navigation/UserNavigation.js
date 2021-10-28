@@ -49,7 +49,7 @@ const UserNavigation = () => {
   const onSignOut = () => {
     dispatch(tokenAction.deleteToken());
     dispatch(profileAction.signOut());
-    history.push("/sign-in");
+    history.push("/home");
   };
 
   const OpenNotificationHandler = () => {

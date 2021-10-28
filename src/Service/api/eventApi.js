@@ -21,9 +21,9 @@ export const getEventByID = (eventID) => {
   return axiosClient.get(url);
 };
 
-export const getEventPost = (eventID, params) => {
-  const url = `/api/posts/${eventID}`;
-  return axiosClient.get(url, { params });
+export const getEventPost = (eventID) => {
+  const url = `/api/posts/${eventID}?size=100`;
+  return axiosClient.get(url);
 };
 
 export const createEventPost = (data) => {
