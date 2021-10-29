@@ -44,7 +44,6 @@ const Post = (props) => {
   return (
     <div className={`${styles.post}`}>
       <header className={`${styles.post__header}`}>
-        {/* <span>{convertDate(props.information.date)}</span> */}
         <span>{date}</span>
         {props.isOwnEvent && props.eventStatus === "Published" && (
           <>

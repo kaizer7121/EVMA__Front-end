@@ -1,0 +1,80 @@
+@import "../SASS_Abstract/variable";
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 1px 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+  &__image {
+    img {
+      width: 60px;
+      border-radius: 2px;
+    }
+
+    &_avatar {
+      img {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &__detail {
+    h3 {
+      font-size: 20px;
+      font-weight: 500;
+      margin: 5px auto 0;
+    }
+
+    p {
+      text-align: left;
+      margin-top: 0;
+      font-size: 14px;
+    }
+  }
+
+  &:hover {
+    background-color: $color-grey-light-3;
+  }
+
+  &:active {
+    filter: brightness(0.95);
+  }
+
+  @media only screen and (max-width: $bp-medium) {
+    &__image {
+      img {
+        width: 55px;
+      }
+    }
+
+    &__detail {
+      h3 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+  @media only screen and (max-width: $bp-smaller) {
+    &__image {
+      img {
+        width: 50px;
+      }
+    }
+
+    &__detail {
+      h3 {
+        font-size: 16px;
+      }
+
+      p {
+        font-size: 10px;
+      }
+    }
+  }
+}

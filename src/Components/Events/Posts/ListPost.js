@@ -58,19 +58,29 @@ const ListPost = (props) => {
           ? await createEventPost(data)
           : await editEventPost(data, initData.postId);
       if (postInfo.image.size && postInfo.image.size > 0) {
-        console.log("Upload");
         const imageAsFile = postInfo.image;
         const fileName = response.imageURL;
         await uploadImgToStorage(imageAsFile, fileName);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        closePostCreation();
+        if (actionType === "Edit") {
+          props.clearAndReloadPost();
+        } else {
+          props.reloadPost();
+        }
       } else {
         if (removeImg) {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
           await deleteImageFile(fileName);
-          window.location.reload();
+          closePostCreation();
+          if (actionType === "Edit") {
+            props.clearAndReloadPost();
+          } else {
+            props.reloadPost();
+          }
+        } else {
+          closePostCreation();
+          props.reloadPost();
         }
       }
     } catch (error) {
@@ -95,11 +105,8 @@ const ListPost = (props) => {
       await deleteEventPost(idDeletedPost);
       const fileName = `postImg_${idDeletedPost}`;
       await deleteImageFile(fileName);
-      setTimeout(() => {
-        window.location.reload();
-        setIsDeletingPost("");
-        setIsDeletingPost(false);
-      }, 50);
+      setIsDeletingPost(false);
+      props.reloadPost();
     } catch (error) {
       alert("Some thing wrong when delete post!");
     }

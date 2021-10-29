@@ -2,21 +2,25 @@ import { useHistory, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import EventCreation from "../Components/Events/EventCreation";
 import NavigationBar from "../Components/Navigation/Navigationbar";
-import { getAllCategoryFromDB, getEventByID } from "../Service/api/eventApi";
+import { getEventByID } from "../Service/api/eventApi";
 import { useSelector } from "react-redux";
 import { getURLImage } from "../Service/firebaseFunctions";
 
 const EventCreationPage = () => {
-  window.scrollTo(0, 0);
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
   const listCategory = useSelector((state) => state.categories.listCategory);
-  
   const [initialInformation, setInitialInformation] = useState({
     isEmpty: true,
   });
+  const [isLoading, setIsLoading] = useState(true);
+
   const params = useParams();
   const history = useHistory();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (!token || profile.role !== "Event Organizer") {
@@ -76,11 +80,14 @@ const EventCreationPage = () => {
             organization: profile.name,
             otherOrganizations,
           });
+          setIsLoading(false);
         } catch (error) {
-          console.log("FAIL WHEN GET CATEGORIES " + error);
+          console.log("FAIL WHEN GET EEVENT INFO " + error);
         }
       };
       getEventInformation();
+    } else {
+      setIsLoading(false);
     }
   }, [params, profile.name, history, profile.id, token]);
   return (
@@ -88,12 +95,14 @@ const EventCreationPage = () => {
       <NavigationBar />
       {!(params && params.id) && (
         <EventCreation
+          isLoading={isLoading}
           profileName={profile.name}
           categoriesInDB={listCategory}
         />
       )}
       {params && params.id && !initialInformation.isEmpty && (
         <EventCreation
+          isLoading={isLoading}
           profileName={profile.name}
           initialInformation={initialInformation}
           categoriesInDB={listCategory}

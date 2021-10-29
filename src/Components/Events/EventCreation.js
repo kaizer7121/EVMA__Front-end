@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import CreationBar from "./CreationBar";
 import InitEvent from "./InitEvent";
-
+import LoadingComponent from "../Loading/LoadingComponent";
 import ConfirmImage from "../Popup/ConfirmImage";
 import { uploadImgToStorage } from "../../Service/firebaseFunctions";
 import { createEvent, editEvent } from "../../Service/api/eventApi";
@@ -47,12 +47,16 @@ const EventCreation = (props) => {
     title: false,
     start: false,
     end: false,
+    dateCompare: false,
     location: false,
     categories: false,
     summary: false,
     content: false,
     image: false,
     hashtag: false,
+    tagLength: false,
+    otherOrganizations: false,
+    otherOrganizationsLength: false,
   });
 
   const history = useHistory();
@@ -99,12 +103,16 @@ const EventCreation = (props) => {
     let title = false;
     let start = false;
     let end = false;
+    let dateCompare = false;
     let location = false;
     let categories = false;
     let summary = false;
     let content = false;
     let image = false;
     let hashtag = false;
+    let tagLength = false;
+    let otherOrganizations = false;
+    let otherOrganizationsLength = false;
 
     if (
       eventInfo.title === undefined ||
@@ -134,6 +142,7 @@ const EventCreation = (props) => {
     });
     eventInfo.hashtag.forEach((tag, index) => {
       if (index > 0 && tag.length === 0) hashtag = true;
+      if (tag.length > 25) tagLength = true;
     });
     if (
       eventInfo.categories === undefined ||
@@ -159,28 +168,65 @@ const EventCreation = (props) => {
     if (eventInfo.image === undefined || eventInfo.image.length === 0) {
       image = true;
     }
+    eventInfo.otherOrganizations.forEach((organization, index) => {
+      if (index > 0 && organization.length === 0) otherOrganizations = true;
+      if (organization.length > 50) otherOrganizationsLength = true;
+    });
+
+    // Process date to check
+    if (!start && !end) {
+      let startDateAndTime = new Date(eventInfo.startDate);
+      const startTimeSplit = eventInfo.startTime.split(":");
+      startDateAndTime.setHours(+startTimeSplit[0] + 7, startTimeSplit[1]);
+      startDateAndTime = startDateAndTime.toISOString();
+
+      let endDateAndTime = null;
+
+      if (
+        !eventError.end &&
+        eventInfo.endDate.toString().length > 0 &&
+        eventInfo.endTime.length > 0
+      ) {
+        endDateAndTime = new Date(eventInfo.endDate);
+        const endTimeSplit = eventInfo.endTime.split(":");
+        endDateAndTime.setHours(+endTimeSplit[0] + 7, endTimeSplit[1]);
+        endDateAndTime = endDateAndTime.toISOString();
+      }
+
+      if (endDateAndTime && endDateAndTime < startDateAndTime) {
+        dateCompare = true;
+      }
+    }
 
     setEventError({
       title,
       start,
       end,
+      dateCompare,
       location,
       categories,
       summary,
       content,
       image,
       hashtag,
+      tagLength,
+      otherOrganizations,
+      otherOrganizationsLength,
     });
     return !(
       title ||
       start ||
       end ||
+      dateCompare ||
       location ||
       categories ||
       summary ||
       content ||
       image ||
-      hashtag
+      hashtag ||
+      tagLength ||
+      otherOrganizations ||
+      otherOrganizationsLength
     );
   };
 
@@ -273,7 +319,11 @@ const EventCreation = (props) => {
         }
         if (responseData.status !== 400) {
           const message =
-            actionType === "Edit" ? "Edit successfully" : type === "PUBLISH" ? "Create successfully" : "Save to draft successfully" ;
+            actionType === "Edit"
+              ? "Edit successfully"
+              : type === "PUBLISH"
+              ? "Create successfully"
+              : "Save to draft successfully";
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
               console.log(responseData);
@@ -403,32 +453,36 @@ const EventCreation = (props) => {
       }));
     }
   };
-
   return (
-    <div>
-      <CreationBar
-        categoriesInDB={props.categoriesInDB}
-        eventError={eventError}
-        inputValue={inputValue}
-        addEmoji={addEmoji}
-        uploadImage={uploadImage}
-        information={eventInfo}
-        onSubmit={onSubmitEvent}
-        onCancel={onCancel}
-        removeCategory={removeCategory}
-        changeMultiInput={changeMultiInput}
-        changeMultiInputValue={changeMultiInputValue}
-        changeToggleButtonHandler={changeToggleButtonHandler}
-      />
-      <InitEvent information={eventInfo} />
-      {croppingImage && !croppingImage.empty && (
-        <ConfirmImage
-          information={croppingImage}
-          onClose={onCloseCropping}
-          onConfirm={onConfirmCroppedImg}
-        />
+    <>
+      {props.isLoading && <LoadingComponent />}
+      {!props.isLoading && (
+        <div>
+          <CreationBar
+            categoriesInDB={props.categoriesInDB}
+            eventError={eventError}
+            inputValue={inputValue}
+            addEmoji={addEmoji}
+            uploadImage={uploadImage}
+            information={eventInfo}
+            onSubmit={onSubmitEvent}
+            onCancel={onCancel}
+            removeCategory={removeCategory}
+            changeMultiInput={changeMultiInput}
+            changeMultiInputValue={changeMultiInputValue}
+            changeToggleButtonHandler={changeToggleButtonHandler}
+          />
+          <InitEvent information={eventInfo} />
+          {croppingImage && !croppingImage.empty && (
+            <ConfirmImage
+              information={croppingImage}
+              onClose={onCloseCropping}
+              onConfirm={onConfirmCroppedImg}
+            />
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
-import { useEffect } from "react/cjs/react.development";
 import EventDetail from "../Components/Events/EventDetail";
 import NavigationBar from "../Components/Navigation/Navigationbar";
 import SideNavigation from "../Components/Navigation/SideNavigation";
 import { getEventByID, getEventPost } from "../Service/api/eventApi";
 
 const EventDetaiPage = () => {
-  window.scrollTo(0, 0);
   const [eventDetail, setEventDetail] = useState({
     id: "",
     title: "",
@@ -28,9 +26,15 @@ const EventDetaiPage = () => {
     content: "",
   });
   const [listPost, setListPost] = useState([]);
+  const [isReloadPost, setIsReloadPost] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const history = useHistory();
   const urlParam = useParams();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const eventID = urlParam.id;
@@ -38,30 +42,53 @@ const EventDetaiPage = () => {
     // Get event information
     const getDetailInfo = async () => {
       const eventDetail = await getEventByID(eventID);
-      console.log(eventDetail);
       if (!eventDetail || !eventDetail.id) {
         history.push("/event");
       }
       setEventDetail(eventDetail);
     };
     getDetailInfo();
+  }, [urlParam.id, history]);
+
+  useEffect(() => {
+    const eventID = urlParam.id;
 
     // Get list post
-    const params = {
-      size: 50,
-    };
-    const getListPost = async () => {
-      const list = await getEventPost(eventID);
-      setListPost(list.content, params);
-    };
-    getListPost();
-  }, [urlParam.id, history]);
+    if (isReloadPost) {
+      const getListPost = async () => {
+        try {
+          const list = await getEventPost(eventID);
+          setListPost(list.content);
+          setIsLoading(false);
+        } catch (err) {
+          console.log("Error when get list post " + err);
+        }
+      };
+      getListPost();
+      setIsReloadPost(false);
+    }
+  }, [urlParam.id, isReloadPost]);
+
+  const reloadPost = () => {
+    setIsReloadPost(true);
+  };
+
+  const clearAndReloadPost = () => {  
+    setListPost([]);
+    setIsReloadPost(true);
+  };
 
   return (
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"NONE"} />
-      <EventDetail information={eventDetail} listPost={listPost} />
+      <EventDetail
+        isLoading={isLoading}
+        information={eventDetail}
+        listPost={listPost}
+        reloadPost={reloadPost}
+        clearAndReloadPost={clearAndReloadPost}
+      />
     </>
   );
 };

@@ -13,14 +13,41 @@
   background-position: top;
   position: relative;
 
+  &__signOut {
+    width: 30%;
+    padding: 12px 10px;
+    position: relative;
+    bottom: 10px;
+    right: 40px;
+
+    @media only screen and (max-width: 1800px) {
+      width: 35%;
+      padding: 8px 4px;
+      bottom: 6px;
+      right: 35px;
+    }
+
+    @media only screen and (max-width: 900px) {
+      width: 35%;
+      padding: 8px 2px;
+      bottom: 6px;
+      right: 10px;
+    }
+
+    @media only screen and (max-width: 620px) {
+      width: 40%;
+    }
+  }
+
   &__box {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 52%;
+    width: 48%;
     box-shadow: 1.6px 15px 30px rgba($color-black, 0.2);
     display: table;
+    min-height: 66vh;
 
     @media only screen and (max-width: 1800px) {
       width: 60%;
@@ -34,8 +61,8 @@
       width: 80%;
     }
 
-    @media only screen and (max-width: 920px) {
-      width: 95%;
+    @media only screen and (max-width: 900px) {
+      width: 100%;
     }
 
     @media only screen and (max-width: 660px) {
@@ -43,7 +70,7 @@
     }
 
     @media only screen and (max-width: 450px) {
-      width: 85%;
+      width: 100%;
     }
   }
 
@@ -65,6 +92,13 @@
     padding: 22px 72px 30px;
     background: rgba($color-white, 0.9);
 
+    &_detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      min-height: 60vh;
+    }
+
     h1 {
       text-transform: uppercase;
       color: $color-primary;
@@ -76,35 +110,19 @@
     p {
       font-weight: 500;
       margin-bottom: -10px;
-
-      a {
-        color: $color-primary;
-      }
+      font-size: 18px;
     }
 
     @media only screen and (max-width: 1450px) {
       padding: 18px 55px 27px;
-
-      h1 {
-        font-size: 35px;
-      }
     }
 
     @media only screen and (max-width: 1200px) {
       padding: 18px 48px 27px;
-
-      h1 {
-        font-size: 32px;
-      }
     }
 
     @media only screen and (max-width: 920px) {
-      background: rgba($color-white, 0.7);
       padding: 16px 24px 25px;
-
-      p {
-        margin-bottom: -8px;
-      }
     }
 
     @media only screen and (max-width: 660px) {
@@ -140,11 +158,9 @@
             border: 1px solid $color-grey-dark-2;
             @media only screen and (max-width: 660px) {
               width: 100%;
-              background-color: rgba($color-white, 0.5);
             }
             @media only screen and (max-width: 540px) {
               width: 90%;
-              background-color: rgba($color-white, 0.5);
             }
           }
 
@@ -163,11 +179,6 @@
     @media only screen and (max-width: 920px) {
       &__group {
         margin-bottom: 20px;
-      }
-
-      &__checkbox {
-        margin-top: -5.5px;
-        margin-bottom: 8px;
       }
     }
   }

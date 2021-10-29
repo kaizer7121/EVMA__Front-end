@@ -33,6 +33,7 @@ const Profile = () => {
     city: profile.city ? profile.city : "",
     jobTitle: profile.jobTitle ? profile.jobTitle : "",
     summary: profile.summary ? profile.summary : "",
+    role: profile.role ? profile.role : "",
   });
   const [errorInformation, setErrorInformation] = useState({
     name: false,
@@ -47,11 +48,6 @@ const Profile = () => {
     avatar: "",
     cover: "",
   });
-  const [accountSecurity, setAccountSecurity] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
   const [isUpdatedProfile, setIsUpdatedProfile] = useState(false);
 
   const dispatch = useDispatch();
@@ -64,14 +60,14 @@ const Profile = () => {
       name: profile.name,
       dob: converISOToOnlyDate(profile.dob),
       phoneNumber: profile.phoneNumber,
-      address: profile.address.replace(",", ", "),
+      address: profile.address && profile.address.replace(",", ", "),
       city: profile.city,
       jobTitle: profile.jobTitle,
       summary: profile.summary,
+      role: profile.role,
     });
   }, [profile]);
 
-  console.log(accountInformation);
   const inputValueAccountInformation = (value, type) => {
     setAccountInformation((prevValue) => ({
       ...prevValue,
@@ -109,13 +105,6 @@ const Profile = () => {
     setCroppingImage({ empty: true });
   };
 
-  const inputValueAccountSecurity = (value, type) => {
-    setAccountSecurity((prevValue) => ({
-      ...prevValue,
-      [type]: value,
-    }));
-  };
-
   const checkValidInfo = () => {
     let name = false;
     let dob = false;
@@ -139,7 +128,7 @@ const Profile = () => {
       dob = true;
     }
     if (
-      accountInformation.dob.length > 0 &&
+      accountInformation.phoneNumber.length > 0 &&
       !validatePhone(accountInformation.phoneNumber)
     ) {
       phoneNumber = true;
@@ -153,8 +142,8 @@ const Profile = () => {
     }
     if (
       accountInformation.address &&
-      accountInformation.address.length >= 50 &&
-      validateName(accountInformation.address)
+      (accountInformation.address.length >= 50 ||
+        validateName(accountInformation.address))
     ) {
       address = true;
     }
@@ -173,20 +162,39 @@ const Profile = () => {
 
   const onUpdateProfile = async () => {
     if (checkValidInfo()) {
+      let fixedDate = new Date(accountInformation.dob);
+      fixedDate = new Date(fixedDate.setHours(fixedDate.getHours() + 7));
+
       const data = {
         name: accountInformation.name,
         email: accountInformation.email,
-        city: accountInformation.city,
-        jobTitle: accountInformation.jobTitle,
-        address: accountInformation.address.replace(", ", ","),
-        phoneNumber: accountInformation.phoneNumber,
-        summary: accountInformation.summary,
-        dob: accountInformation.dob.toISOString(),
+        city:
+          accountInformation.city && accountInformation.city.length > 0
+            ? accountInformation.city
+            : null,
+        jobTitle:
+          accountInformation.jobTitle && accountInformation.jobTitle.length > 0
+            ? accountInformation.jobTitle
+            : null,
+        address:
+          accountInformation.address && accountInformation.address.length > 0
+            ? accountInformation.address.replaceAll(", ", ",")
+            : null,
+        phoneNumber:
+          accountInformation.phoneNumber &&
+          accountInformation.phoneNumber.length > 0
+            ? accountInformation.phoneNumber
+            : null,
+        summary:
+          accountInformation.summary && accountInformation.summary.length > 0
+            ? accountInformation.summary
+            : null,
+        dob: fixedDate.toISOString(),
+        role: accountInformation.role,
       };
       try {
+        console.log(accountInformation.address.length);
         const repsonse = await updateProfile(data, profile.id);
-        const avatarName = repsonse.avatarURL;
-        const backgroundName = repsonse.backgroundURL;
 
         if (repsonse.status !== 400 && repsonse.status !== 403) {
           if (
@@ -194,15 +202,20 @@ const Profile = () => {
             imageAsFile.avatar.size &&
             imageAsFile.avatar.size > 0
           ) {
-            await uploadImgToStorage(imageAsFile.avatar, avatarName);
-            console.log("UPLOAD AVATAR");
+            await uploadImgToStorage(
+              imageAsFile.avatar,
+              `userAvatar_${repsonse.id}`
+            );
           }
           if (
             imageAsFile.cover &&
             imageAsFile.cover.size &&
             imageAsFile.cover.size > 0
           ) {
-            await uploadImgToStorage(imageAsFile.cover, backgroundName);
+            await uploadImgToStorage(
+              imageAsFile.cover,
+              `background_${repsonse.id}`
+            );
           }
           const profileData = {
             ...repsonse,
@@ -213,12 +226,12 @@ const Profile = () => {
               ? accountInformation.backgroundURL
               : "/images/default-cover.jpg",
           };
+          console.log(profileData);
+
           await updateProfileWithFullImage(profileData, dispatch);
           setIsUpdatedProfile(true);
         } else {
           alert("Some thing wrong with server when update profile");
-          console.log(repsonse);
-          // setIsUpdatedProfile(true);
         }
       } catch (error) {
         console.log("Error when update profile " + error);
@@ -286,8 +299,6 @@ const Profile = () => {
           )}
 
           <div className={`${styles.profile__topic}`}>
-            <h2>Contact information</h2>
-
             <h3>Name</h3>
             <input
               type="text"
@@ -304,9 +315,10 @@ const Profile = () => {
 
             <div className={`${styles.profile__topic_row}`}>
               <div className={`${styles.profile__topic_col}`}>
-                <h3>Birth of date</h3>
+                <h3>{userRole === "Event Organizer" ? "Founding date" : "Birth of date"}</h3>
                 <label className={`${styles.profile__topic_datePicker}`}>
                   <DayPickerInput
+                    format={"DD/MM/yyyy"}
                     formatDate={formatDate}
                     parseDate={parseDate}
                     placeholder={`${formatDate(new Date())}`}
@@ -371,15 +383,18 @@ const Profile = () => {
               </div>
             </div>
 
-            <h3>Job title</h3>
-            <input
-              type="text"
-              value={accountInformation.jobTitle}
-              onChange={(event) =>
-                inputValueAccountInformation(event.target.value, "jobTitle")
-              }
-            />
-
+            {userRole === "Attendees" && (
+              <>
+                <h3>Job title</h3>
+                <input
+                  type="text"
+                  value={accountInformation.jobTitle}
+                  onChange={(event) =>
+                    inputValueAccountInformation(event.target.value, "jobTitle")
+                  }
+                />
+              </>
+            )}
             {userRole === "Event Organizer" && (
               <>
                 <h3>Summary</h3>
@@ -406,44 +421,6 @@ const Profile = () => {
             onClick={onUpdateProfile}
           >
             Save profile
-          </button>
-          <hr />
-        </section>
-        <section className={`${styles.profile__section}`}>
-          <h1>Account Security</h1>
-          <div className={`${styles.profile__topic}`}>
-            <h3>Old password:</h3>
-            <input
-              type="password"
-              value={accountSecurity.oldPassword}
-              onChange={(event) => {
-                inputValueAccountSecurity(event.target.value, "oldPassword");
-              }}
-            />
-
-            <h3>New password:</h3>
-            <input
-              type="password"
-              value={accountSecurity.newPassword}
-              onChange={(event) => {
-                inputValueAccountSecurity(event.target.value, "newPassword");
-              }}
-            />
-
-            <h3>Confirm password:</h3>
-            <input
-              type="password"
-              value={accountSecurity.confirmNewPassword}
-              onChange={(event) => {
-                inputValueAccountSecurity(
-                  event.target.value,
-                  "confirmNewPassword"
-                );
-              }}
-            />
-          </div>
-          <button className={`${styles.profile__section_button}`}>
-            Confirm
           </button>
         </section>
       </section>

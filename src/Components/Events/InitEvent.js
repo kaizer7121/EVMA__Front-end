@@ -75,27 +75,27 @@ const InitEvent = (props) => {
             const isLast = index + 1 === locations.online.length;
             return isLast ? (
               <a
-                key={`online_${index}`}
+                key={`online_link_${index}`}
                 href={location.locationDetail}
                 className={`${styles.detail__registerText} `}
               >
                 <span
-                  key={`online_${index}`}
+                  key={`online_text_${index}`}
                 >{`${location.locationName}`}</span>
               </a>
             ) : (
-              <>
+              <span key={`online_location_${index}`}>
                 <a
-                  key={`online_${index}`}
+                  key={`online_link_${index}`}
                   href={props.information.locationDetail}
                   className={`${styles.detail__registerText}`}
                 >
                   <span
-                    key={`online_${index}`}
+                    key={`online_text_${index}`}
                   >{`${location.locationName},`}</span>
                 </a>
-                <span key={`online_${index}`}> </span>
-              </>
+                <span key={`online_text_${index}`}> </span>
+              </span>
             );
           })}
           <p></p>

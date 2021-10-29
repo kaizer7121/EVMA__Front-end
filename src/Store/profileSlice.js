@@ -15,6 +15,8 @@ const profileSlice = createSlice({
     backgroundURL: "/images/default-cover.jpg",
     role: "",
     dob: "",
+    followedEvents: [],
+    followedOrganizations: [],
   },
   reducers: {
     signInToEvma(state, action) {
@@ -33,8 +35,6 @@ const profileSlice = createSlice({
         dob,
       } = action.payload;
 
-      const roleName = !role ? "Attendees" : role.authority;
-
       state.id = id;
       state.name = name;
       state.email = email;
@@ -45,10 +45,8 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
-      state.role = roleName;
+      state.role = role && role.authority ? role.authority : null;
       state.dob = dob;
-
-      localStorage.setItem("USER_ID", id);
     },
     signOut(state) {
       state.id = "";
@@ -63,9 +61,6 @@ const profileSlice = createSlice({
       state.backgroundURL = "";
       state.role = "";
       state.dob = "";
-
-      console.log("DELETE ID");
-      localStorage.removeItem("USER_ID");
     },
 
     uploadImages(state, action) {
@@ -85,6 +80,7 @@ const profileSlice = createSlice({
         avatarURL,
         backgroundURL,
         dob,
+        role,
       } = action.payload;
 
       state.name = name;
@@ -96,7 +92,42 @@ const profileSlice = createSlice({
       state.summary = summary;
       state.avatarURL = avatarURL;
       state.backgroundURL = backgroundURL;
+      state.role = role.authority;
       state.dob = dob;
+    },
+    addFollowedEvents(state, action) {
+      const followedEvents = action.payload;
+      state.followedEvents = [...state.followedEvents, ...followedEvents];
+    },
+    addFollowedOrganizers(state, action) {
+      const followedOrganizers = action.payload;
+
+      state.followedOrganizations = [
+        ...state.followedOrganizations,
+        ...followedOrganizers,
+      ];
+    },
+    removeFollowedEvent(state, action) {
+      const eventID = action.payload;
+      console.log("REMOVE");
+      const currentFollowedEvents = [...state.followedEvents];
+      const newFollowedEvents = currentFollowedEvents.filter((event) => {
+        return event !== eventID[0];
+      });
+      state.followedEvents = newFollowedEvents;
+    },
+    removeFollowedOrganization(state, action) {
+      const organizationID = action.payload;
+      const currentFollowedOrganizations = [...state.followedOrganizations];
+      const newFollowedEvents = currentFollowedOrganizations.filter(
+        (organization) => organization !== organizationID[0]
+      );
+
+      state.followedOrganizations = newFollowedEvents;
+    },
+    clearFollowList(state) {
+      state.followedEvents = [];
+      state.followedOrganizations = [];
     },
   },
 });

@@ -8,8 +8,6 @@ import SideNavigation from "../Components/Navigation/SideNavigation";
 import { getEventByStatus } from "../Service/api/eventApi";
 
 const OwnEventPage = () => {
-  window.scrollTo(0, 0);
-
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
 
@@ -22,9 +20,14 @@ const OwnEventPage = () => {
     deleted: [],
   });
   const [viewType, setViewType] = useState("All");
+  const [isLoading, setIsLoading] = useState(false);
 
   const history = useHistory();
-  console.log("test");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     if (!token || profile.role !== "Event Organizer") {
       history.replace("/event");
@@ -34,7 +37,6 @@ const OwnEventPage = () => {
   useEffect(() => {
     const getEvent = async () => {
       const response = await getEventByStatus(profile.id, type);
-      console.log("DATA");
       setListEventView((prevValue) => [...prevValue, ...response.content]);
       if (type === "Published") {
         setType("Draft");
@@ -62,6 +64,7 @@ const OwnEventPage = () => {
           ...prevValue,
           deleted: [...response.content],
         }));
+        setIsLoading(false);
       }
     };
     getEvent();
@@ -101,7 +104,7 @@ const OwnEventPage = () => {
       <NavigationBar />
       <SideNavigation activatedItem="TYPE_3" />
       <EventFilter onChangeViewType={onChangeViewType} />
-      <ListEvent listEvent={listEventView} />
+      <ListEvent isLoading={isLoading} listEvent={listEventView} />
     </div>
   );
 };

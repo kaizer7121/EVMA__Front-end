@@ -11,6 +11,16 @@ export const signIn = (data) => {
   });
 };
 
+export const getGoogleLoginLink = () => {
+  const url = "/api/loginWithGG";
+  return axiosClient.get(url);
+};
+
+export const exchangeFirebaseToken = (params) => {
+  const url = "/api/firebaseToken";
+  return axiosClient.get(url, { params });
+};
+
 export const signUp = (data) => {
   const url = "/api/signup";
   const params = {
@@ -23,6 +33,11 @@ export const signUp = (data) => {
   };
 
   return axiosClient.post(url, params);
+};
+
+export const getCurrentProfile = () => {
+  const url = "/api/profiles/currentUser";
+  return axiosClient.get(url);
 };
 
 export const changePassword = (data) => {

@@ -76,6 +76,7 @@
     font-weight: 500;
     margin-top: 0.6rem;
     margin-bottom: 1.2rem;
+    word-wrap: break-word;
   }
 
   &__category {
@@ -87,6 +88,7 @@
     background-color: $color-tertiary-light;
     border-radius: 5px;
     display: inline-block;
+    word-wrap: break-word;
 
     &:not(:last-child) {
       margin-right: 1.5rem;
@@ -170,11 +172,13 @@
     font-size: 2.5rem;
     color: $color-primary;
     margin-bottom: 2.5rem;
+    word-wrap: break-word;
   }
 
   &__description {
     font-size: 1.2rem;
     font-weight: 500;
+    word-wrap: break-word;
   }
 
   @media only screen and (max-width: $bp-extraLarge) {

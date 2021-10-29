@@ -1,5 +1,7 @@
 import { categoriesAction } from "../Store/categoriesStore";
+import { notificationAction } from "../Store/notificationSlice";
 import { profileAction } from "../Store/profileSlice";
+import { tokenAction } from "../Store/tokenSlice";
 import { getURLImage } from "./firebaseFunctions";
 
 export const getDate = (fullDate) => {
@@ -65,7 +67,8 @@ export const validatePassword = (password) => {
 };
 
 export const validatePhone = (phoneNumber) => {
-  const regex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+  const regexString = "[\\d]{10,11}$";
+  const regex = new RegExp(regexString);
   return regex.test(phoneNumber);
 };
 
@@ -103,6 +106,19 @@ export const convertDate = (date) => {
   )} at ${date.toLocaleTimeString("en-US")}`;
 };
 
+export const convertDate2 = (date) => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return `${date.toLocaleDateString(
+    undefined,
+    options
+  )} at ${date.toLocaleTimeString("en-US")}`;
+};
+
 export const converISOToDate = (isoDate) => {
   const [date, isoTime] = isoDate.split("T");
   const fullTime = isoTime.split("Z");
@@ -114,18 +130,16 @@ export const converISOToDate = (isoDate) => {
 };
 
 export const converISOToOnlyDate = (isoDate) => {
-  console.log("ISO:");
-  console.log(isoDate);
-  const [date, isoTime] = isoDate.split("T");
+  const [date] = isoDate.split("T");
   const fullDate = new Date(date);
 
   return fullDate;
 };
 
 export const converISOToOnlyTime = (isoDate) => {
-  const [date, isoTime] = isoDate.split("T");
+  const [, isoTime] = isoDate.split("T");
   const fullTime = isoTime.split("Z");
-  const [hour, minute, second] = fullTime[0].split(":");
+  const [hour, minute] = fullTime[0].split(":");
   const returnTime = `${hour}:${minute}`;
   return returnTime;
 };
@@ -143,44 +157,135 @@ export const converISOToSimpleDate = (isoDate) => {
   }
 };
 
+export const convertDateToCollectionName = (date) => {
+  const currentDate = new Date(date);
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
+  return `${currentDay}.${currentMonth}`;
+};
+
 // ================= REDUX FUNCTION =================
 
 export const signInWithFullImage = async (profile, dispatch) => {
-  const { id } = profile;
-  const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
-  const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
+  try {
+    const { id } = profile;
+    const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
+    const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
 
-  const fullData = {
-    ...profile,
-    avatarURL: avatarURLFirebase
-      ? avatarURLFirebase
-      : "/images/default-avatar.png",
-    backgroundURL: backgroundURLFirebase
-      ? backgroundURLFirebase
-      : "/images/default-cover.jpg",
-  };
+    const fullData = {
+      ...profile,
+      avatarURL: avatarURLFirebase
+        ? avatarURLFirebase
+        : "/images/default-avatar.png",
+      backgroundURL: backgroundURLFirebase
+        ? backgroundURLFirebase
+        : "/images/default-cover.jpg",
+    };
 
-  dispatch(profileAction.signInToEvma(fullData));
+    dispatch(profileAction.signInToEvma(fullData));
+  } catch (error) {
+    dispatch(profileAction.signOut());
+    dispatch(tokenAction.deleteToken());
+    alert("Some thing wrong with network");
+  }
 };
 
 export const updateProfileWithFullImage = async (profile, dispatch) => {
-  // const { id } = profile;
-  // const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
-  // const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
-
-  // const fullData = {
-  //   ...profile,
-  //   avatarURL: avatarURLFirebase
-  //     ? avatarURLFirebase
-  //     : "/images/default-avatar.png",
-  //   backgroundURL: backgroundURLFirebase
-  //     ? backgroundURLFirebase
-  //     : "/images/default-cover.jpg",
-  // };
-
   dispatch(profileAction.updateProfile(profile));
 };
 
 export const updateListCategoryToStore = async (listCategory, dispatch) => {
-  dispatch(categoriesAction.updateListCategories(listCategory));
+  try {
+    if (listCategory && listCategory.length > 0) {
+      dispatch(categoriesAction.updateListCategories(listCategory));
+    }
+  } catch (error) {
+    alert("Some thing wrong with network");
+  }
+};
+
+export const addNotificationsWithImg = async (listNoti, dispatch) => {
+  if (listNoti && listNoti.length > 0) {
+    const listNotiWithImg = [];
+    Promise.all(
+      listNoti.map(async (noti) => {
+        if (noti.type === "Organization") {
+          const organizationImgURL = await getURLImage(
+            `userAvatar_${noti.notificationID}`
+          );
+          listNotiWithImg.push({
+            ...noti,
+            imgURL: organizationImgURL
+              ? organizationImgURL
+              : "/images/default-avatar.png",
+          });
+        } else if (noti.type === "Event") {
+          const eventImgURL = await getURLImage(
+            `EventCover_${noti.notificationID}`
+          );
+          listNotiWithImg.push({
+            ...noti,
+            imgURL: eventImgURL ? eventImgURL : "/images/default-avatar.png",
+          });
+        }
+      })
+    ).then(() => {
+      dispatch(notificationAction.addNotiInLast3Days(listNotiWithImg));
+    });
+  }
+};
+
+export const addSingleNotificationWithImg = async (
+  notification,
+  docID,
+  dispatch
+) => {
+  if (notification) {
+    const listDate = Object.getOwnPropertyNames(notification);
+    Object.values(notification).forEach(async (key, index) => {
+      const id = docID.split("_")[0];
+      const type = docID.split("_")[1];
+      notification = {
+        notificationID: id,
+        date: listDate[index],
+        message: key,
+        type: type === "o" ? "Organization" : "Event",
+      };
+    });
+    if (notification.type === "Organization") {
+      const organizationImgURL = await getURLImage(
+        `userAvatar_${notification.notificationID}`
+      );
+      const notificationWithImg = {
+        ...notification,
+        imgURL: organizationImgURL
+          ? organizationImgURL
+          : "/images/default-avatar.png",
+      };
+      dispatch(notificationAction.addNewNotification(notificationWithImg));
+    } else if (notification.type === "Event") {
+      const eventImgURL = await getURLImage(
+        `EventCover_${notification.notificationID}`
+      );
+      const notificationWithImg = {
+        ...notification,
+        imgURL: eventImgURL ? eventImgURL : "/images/default-avatar.png",
+      };
+      dispatch(notificationAction.addNewNotification(notificationWithImg));
+    }
+  }
+};
+
+export const clearUnfollowNotification = (
+  oldNotifications,
+  type,
+  id,
+  dispatch
+) => {
+  const modifiedNotifications = oldNotifications.filter(
+    (notification) =>
+      notification.type !== type ||
+      (notification.type === type && notification.notificationID === id)
+  );
+  dispatch(notificationAction.modifyListNotification(modifiedNotifications));
 };

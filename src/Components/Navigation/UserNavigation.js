@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { notificationAction } from "../../Store/notificationSlice";
 import { profileAction } from "../../Store/profileSlice";
 import { tokenAction } from "../../Store/tokenSlice";
+import ListNotification from "../Notification/ListNotification";
 import styles from "./UserNavigation.module.scss";
 
 const UserNavigation = () => {
   const profile = useSelector((state) => state.profile);
   const token = useSelector((state) => state.token.token);
+  const instantNotification = useSelector(
+    (state) => state.notifications.instantNotifications
+  );
 
   const [isShowOption, setIsShowOption] = useState();
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -43,7 +49,14 @@ const UserNavigation = () => {
   const onSignOut = () => {
     dispatch(tokenAction.deleteToken());
     dispatch(profileAction.signOut());
-    history.push("/sign-in");
+    history.push("/home");
+  };
+
+  const OpenNotificationHandler = () => {
+    setIsOpenNotification(!isOpenNotification);
+    if (!isOpenNotification) {
+      dispatch(notificationAction.clearInstantEvent());
+    }
   };
 
   return (
@@ -54,24 +67,30 @@ const UserNavigation = () => {
             <span className={`${styles.userNav__user_sign}`}>
               <Link to="/sign-in">Sign in</Link>
             </span>
-            <span className={`${styles.userNav__user_divide}`}>|</span>
-            <span className={`${styles.userNav__user_sign}`}>
-              <Link to="/sign-up">Sign up</Link>
-            </span>
           </div>
         </div>
       )}
       {token && (
         <div className={`${styles.userNav}`}>
           <div className={`${styles.userNav__user}`}>
-            <div className={`${styles.userNav__iconBox}`}>
-              <img
-                className={`${styles.userNav__icon}`}
-                src="/images/icon/notification.png"
-                alt="Noti"
-              />
-              <span className={`${styles.userNav__notification}`}>13</span>
-            </div>
+            {profile.role === "Attendees" && (
+              <div
+                className={`${styles.userNav__iconBox}`}
+                onClick={OpenNotificationHandler}
+              >
+                <img
+                  className={`${styles.userNav__icon}`}
+                  src="/images/icon/notification.png"
+                  alt="Noti"
+                />
+                {instantNotification.length > 0 && (
+                  <span className={`${styles.userNav__notification}`}>
+                    {instantNotification.length}
+                  </span>
+                )}
+              </div>
+            )}
+
             <img
               src={profile.avatarURL}
               alt="User avatar"
@@ -93,12 +112,20 @@ const UserNavigation = () => {
                 onClick={selectOptionHandler}
               >
                 {profile.role === "Event Organizer" && (
-                  <Link
-                    to="/create"
-                    className={`${styles.dropdown__content_createEvent}`}
-                  >
-                    Create an event
-                  </Link>
+                  <>
+                    <Link
+                      to="/create"
+                      className={`${styles.dropdown__content_createEvent}`}
+                    >
+                      Create an event
+                    </Link>
+                    <Link
+                      to={`organization/${profile.id}`}
+                      className={`${styles.dropdown__content_createEvent}`}
+                    >
+                      View your page
+                    </Link>
+                  </>
                 )}
 
                 <Link
@@ -115,6 +142,7 @@ const UserNavigation = () => {
                 </p>
               </div>
             </div>
+            {isOpenNotification && <ListNotification />}
           </div>
         </div>
       )}

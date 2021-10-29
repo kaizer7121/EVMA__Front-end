@@ -1,13 +1,17 @@
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 import NavigationBar from "../Components/Navigation/Navigationbar";
 import SideNavigation from "../Components/Navigation/SideNavigation";
 import ListOrganization from "../Components/Organizations/ListOrganization";
 import { getAllOrganization } from "../Service/api/organizationApi";
 
 const ListOrganizationPage = () => {
-  window.scrollTo(0, 0);
   const [listOrganization, setListOrganization] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     try {
       const getListOrganization = async () => {
@@ -16,9 +20,9 @@ const ListOrganizationPage = () => {
         };
         const list = await getAllOrganization(params);
         if (list && list.content) {
-          console.log(list.content)
           setListOrganization(list.content);
         }
+        setIsLoading(false);
       };
       getListOrganization();
     } catch (error) {
@@ -29,7 +33,10 @@ const ListOrganizationPage = () => {
     <>
       <NavigationBar />
       <SideNavigation activatedItem={"ORGANIZTAION"} />
-      <ListOrganization listOrganization={listOrganization} />
+      <ListOrganization
+        isLoading={isLoading}
+        listOrganization={listOrganization}
+      />
     </>
   );
 };

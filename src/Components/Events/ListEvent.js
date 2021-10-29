@@ -1,4 +1,5 @@
 import Event from "./Event";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 import { useEffect, useState } from "react";
 
@@ -13,7 +14,9 @@ const ListEvent = (props) => {
 
   return (
     <div className={`${styles.listEvent}`} id="header">
-      {listEvent.length > 0 &&
+      {props.isLoading && <LoadingComponent />}
+      {!props.isLoading &&
+        listEvent.length > 0 &&
         listEvent.map((event) => {
           return <Event key={`EVENT_${event.id}`} information={event} />;
         })}

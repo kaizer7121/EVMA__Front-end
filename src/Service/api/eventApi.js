@@ -1,7 +1,8 @@
 import axiosClient from "./axiosClient";
 
-export const getAllEvent = (params) => {
+export const getAllEvent = (param) => {
   const url = "/api/events";
+  const params = { ...param, sort: "startDate,desc" };
   return axiosClient.get(url, { params });
 };
 
@@ -20,9 +21,9 @@ export const getEventByID = (eventID) => {
   return axiosClient.get(url);
 };
 
-export const getEventPost = (eventID, params) => {
-  const url = `/api/posts/${eventID}`;
-  return axiosClient.get(url, { params });
+export const getEventPost = (eventID) => {
+  const url = `/api/posts/${eventID}?size=100`;
+  return axiosClient.get(url);
 };
 
 export const createEventPost = (data) => {
@@ -56,11 +57,26 @@ export const changeEventStatus = (eventID, statusID) => {
 };
 
 export const searchEvent = (data) => {
-  const url = "/api/events/search?size=100";
+  const url = "/api/events/search?size=100&sort=startDate,desc";
   return axiosClient.post(url, data);
 };
 
 export const getEventByStatus = (organizationID, statusID) => {
   const url = `api/events/byOrganizer/${organizationID}/${statusID}`;
+  return axiosClient.get(url);
+};
+
+export const followEvent = (eventID) => {
+  const url = `/api/followEvent?eventId=${eventID}`;
+  return axiosClient.get(url);
+};
+
+export const unfollowEvent = (eventID) => {
+  const url = `/api/unfollowEvent?eventId=${eventID}`;
+  return axiosClient.get(url);
+};
+
+export const getListFollowedEvent = () => {
+  const url = "api/getFollowEvents?size=100";
   return axiosClient.get(url);
 };

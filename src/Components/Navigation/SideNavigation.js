@@ -39,8 +39,8 @@ const SideNavigation = (props) => {
               <span>Own event</span>
             </Link>
           ) : (
-            <Link to="/event" className={`${styles.sideNav__link}`}>
-              <span>Followed event</span>
+            <Link to="/listFollow" className={`${styles.sideNav__link}`}>
+              <span>List follow</span>
             </Link>
           )}
         </li>
