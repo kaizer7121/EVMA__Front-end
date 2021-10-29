@@ -17,6 +17,7 @@ const CreatePost = (props) => {
     content: false,
   });
   const [isChoosingEmoji, setIsChoosingEmoji] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
 
   const onChangeContent = (event) => {
     setPostInfo((prevValue) => ({ ...prevValue, content: event.target.value }));
@@ -59,10 +60,10 @@ const CreatePost = (props) => {
 
   const onSubmit = () => {
     if (checkValidData()) {
+      setIsWaiting(true);
       props.onConfirm(postInfo);
     }
   };
-
   return (
     <Backdrop>
       <section className={`${styles.createPost}`}>
@@ -140,12 +141,22 @@ const CreatePost = (props) => {
             )}
           </section>
           <div className={`${styles.createPost__button}`}>
-            <button
-              className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
-              onClick={onSubmit}
-            >
-              Submit
-            </button>
+            {!isWaiting && (
+              <button
+                className={`${commonStyles.btn} ${commonStyles.btn_primary}`}
+                onClick={onSubmit}
+              >
+                Submit
+              </button>
+            )}
+            {isWaiting && (
+              <button
+                className={`${commonStyles.btn} ${commonStyles.btn_wait} ${commonStyles.btn_grey_dark}`}
+                onClick={onSubmit}
+              >
+                Submit
+              </button>
+            )}
           </div>
         </div>
       </section>

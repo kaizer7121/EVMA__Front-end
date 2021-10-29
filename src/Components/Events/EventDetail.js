@@ -168,6 +168,10 @@ const EventDetail = (props) => {
     props.reloadPost();
   };
 
+  const clearAndReloadPost = () => {
+    props.clearAndReloadPost();
+  };
+
   const mainContent = (
     <div className={`${styles.detail__body}`}>
       <h1 className={`${styles.detail__title}`}>{props.information.title}</h1>
@@ -414,6 +418,7 @@ const EventDetail = (props) => {
               information={props.listPost}
               reloadPost={reloadPost}
               changeDisplayType={changeDisplayType}
+              clearAndReloadPost={clearAndReloadPost}
             />
           )}
           {choosingDelete && (

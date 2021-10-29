@@ -62,15 +62,22 @@ const ListPost = (props) => {
         const fileName = response.imageURL;
         await uploadImgToStorage(imageAsFile, fileName);
         closePostCreation();
-        props.reloadPost();
+        if (actionType === "Edit") {
+          props.clearAndReloadPost();
+        } else {
+          props.reloadPost();
+        }
       } else {
         if (removeImg) {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
           await deleteImageFile(fileName);
           closePostCreation();
-          props.reloadPost();
-
+          if (actionType === "Edit") {
+            props.clearAndReloadPost();
+          } else {
+            props.reloadPost();
+          }
         } else {
           closePostCreation();
           props.reloadPost();

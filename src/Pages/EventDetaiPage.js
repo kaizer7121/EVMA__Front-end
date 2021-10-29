@@ -70,6 +70,10 @@ const EventDetaiPage = () => {
   }, [urlParam.id, isReloadPost]);
 
   const reloadPost = () => {
+    setIsReloadPost(true);
+  };
+
+  const clearAndReloadPost = () => {  
     setListPost([]);
     setIsReloadPost(true);
   };
@@ -83,6 +87,7 @@ const EventDetaiPage = () => {
         information={eventDetail}
         listPost={listPost}
         reloadPost={reloadPost}
+        clearAndReloadPost={clearAndReloadPost}
       />
     </>
   );
