@@ -413,6 +413,7 @@ const EventDetail = (props) => {
               isOwnEvent={isOwnEvent}
               information={props.listPost}
               reloadPost={reloadPost}
+              changeDisplayType={changeDisplayType}
             />
           )}
           {choosingDelete && (

@@ -61,17 +61,18 @@ const ListPost = (props) => {
         const imageAsFile = postInfo.image;
         const fileName = response.imageURL;
         await uploadImgToStorage(imageAsFile, fileName);
-        setIsCreatingPost(false);
+        closePostCreation();
         props.reloadPost();
       } else {
         if (removeImg) {
           setRemoveImg(false);
           const fileName = `postImg_${initData.postId}`;
           await deleteImageFile(fileName);
-          setIsCreatingPost(false);
+          closePostCreation();
           props.reloadPost();
+
         } else {
-          setIsCreatingPost(false);
+          closePostCreation();
           props.reloadPost();
         }
       }

@@ -70,6 +70,7 @@ const EventDetaiPage = () => {
   }, [urlParam.id, isReloadPost]);
 
   const reloadPost = () => {
+    setListPost([]);
     setIsReloadPost(true);
   };
 
