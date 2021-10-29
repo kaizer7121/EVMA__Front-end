@@ -1,6 +1,6 @@
 import styles from "./SearchEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
@@ -29,6 +29,17 @@ const SearchEvent = () => {
     invalidData: false,
     emptyList: false,
   });
+  const [listAvailableCategory, setListAvailableCategory] =
+    useState(listCategory);
+
+  useEffect(() => {
+    console.log(searchInfo.categories);
+    const availableCategories = listCategory.filter(
+      (category) => !searchInfo.categories.includes(category.name)
+    );
+    setListAvailableCategory([...availableCategories]);
+  }, [listCategory, searchInfo.categories]);
+
   const inputSearchValue = (event) => {
     const value = event.target.value;
     setSearchInfo((prevValue) => ({
@@ -139,7 +150,7 @@ const SearchEvent = () => {
       }));
     }
   };
-  console.log(searchedEvent);
+
   return (
     <div className={`${styles.searchEvent}`}>
       <div className={`${styles.searchEvent__searchName}`}>
@@ -170,7 +181,7 @@ const SearchEvent = () => {
               <option value="default" disabled hidden>
                 Choose category
               </option>
-              {listCategory.map((category, index) => (
+              {listAvailableCategory.map((category, index) => (
                 <option key={`CATEGORY_${index}`} value={category.name}>
                   {category.name}
                 </option>

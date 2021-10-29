@@ -23,6 +23,9 @@ const CreationBar = (props) => {
     otherOrganizations: 1,
   });
   const [selectedCategory, setSelectedCategory] = useState("default");
+  const [listAvailableCategory, setListAvailableCategory] = useState(
+    props.categoriesInDB
+  );
   useEffect(() => {
     setNumberOfMultiInput((prevValue) => ({
       ...prevValue,
@@ -35,6 +38,13 @@ const CreationBar = (props) => {
     props.information.hashtag.length,
     props.information.otherOrganizations.length,
   ]);
+
+  useEffect(() => {
+    const availableCategories = props.categoriesInDB.filter(
+      (category) => !props.information.categories.includes(category.name)
+    );
+    setListAvailableCategory([...availableCategories]);
+  }, [props.categoriesInDB, props.information.categories]);
 
   // useEffect(() => {
   //   startMoment = moment();
@@ -410,8 +420,8 @@ const CreationBar = (props) => {
             <option value="default" disabled hidden>
               Choose category
             </option>
-            {props.categoriesInDB &&
-              props.categoriesInDB.map((category) => (
+            {listAvailableCategory &&
+              listAvailableCategory.map((category) => (
                 <option id={category.id} key={category.id}>
                   {category.name}
                 </option>
