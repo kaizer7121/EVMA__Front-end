@@ -370,7 +370,7 @@ const EventCreation = (props) => {
       }
       case "HASHTAG": {
         const newHashTag = [...eventInfo.hashtag];
-        if (operations === "ADD") {
+        if (operations === "ADD" && newHashTag.length < 10) {
           newHashTag.push("");
         } else if (operations === "REMOVE") {
           newHashTag.splice(-1);

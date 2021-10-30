@@ -22,7 +22,7 @@ const ConfirmDelete = (props) => {
     <Backdrop>
       <div className={styles.confirmDelete}>
         <div className={styles.confirmDelete__header}>
-          <h1>Delete or cancel event</h1>
+          <h1>Delete or cancel the event</h1>
           <img
             src="/images/icon/cancel-icon.png"
             alt="cancel"
@@ -42,7 +42,8 @@ const ConfirmDelete = (props) => {
               }}
             />
             <p>
-              When you cancel the event, all follower wil recieve the message and you can't modify this event anymore
+              When you cancel the event, all followers will recieve the
+              notification and you cannot modify or delete this event anymore.
             </p>
           </div>
           <div className={styles.confirmDelete__body_select}>
@@ -56,7 +57,8 @@ const ConfirmDelete = (props) => {
               }}
             />
             <p>
-            When you delete the event, all follower wil recieve the message and you can't modify this event anymore
+              When you delete the event, all followers will receive the
+              notification, you cannot modify this event anymore.
             </p>
           </div>
         </div>

@@ -183,6 +183,7 @@
       padding: 0.2rem 0.5rem;
       font-weight: 600;
       font-size: 1.2rem;
+      word-wrap: break-word;
 
       border-radius: 7px;
       display: inline-block;
@@ -396,12 +397,17 @@
     }
   }
 
-  &__reuslt {
+  &__result {
     display: flex;
     flex-wrap: wrap;
     gap: 5%;
     justify-content: space-between;
     border-radius: 10px;
+
+    &_empty {
+      color: $color-danger;
+      margin: 0 auto;
+    }
 
     // @media only screen and (max-width: $bp-smaller) {
     //   flex-direction: column;
