@@ -1,6 +1,6 @@
 import styles from "./SearchEvent.module.scss";
 import commonStyles from "../Auth/Auth.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
@@ -11,7 +11,7 @@ import CompactedEvent from "./CompactedEvent";
 const SearchEvent = () => {
   const listCategory = useSelector((state) => state.categories.listCategory);
 
-  const [searchedEvent, setSearchedEvent] = useState([]);
+  const [searchedEvent, setSearchedEvent] = useState(["empty"]);
   const [searchInfo, setSearchInfo] = useState({
     eventName: "",
     categories: [],
@@ -26,9 +26,24 @@ const SearchEvent = () => {
     hashtags: "",
   });
   const [notification, setNotification] = useState({
-    invalidData: false,
     emptyList: false,
+    invalidData: {
+      title: false,
+      organizers: false,
+      hashtags: false,
+      date: false,
+    },
   });
+  const [listAvailableCategory, setListAvailableCategory] =
+    useState(listCategory);
+
+  useEffect(() => {
+    const availableCategories = listCategory.filter(
+      (category) => !searchInfo.categories.includes(category.name)
+    );
+    setListAvailableCategory([...availableCategories]);
+  }, [listCategory, searchInfo.categories]);
+
   const inputSearchValue = (event) => {
     const value = event.target.value;
     setSearchInfo((prevValue) => ({
@@ -55,11 +70,13 @@ const SearchEvent = () => {
   const addItemToList = (value, type) => {
     if (value.length > 0 && value !== "default") {
       const newList = [...searchInfo[type]];
-      newList.push(value);
-      setSearchInfo((prevValue) => ({
-        ...prevValue,
-        [type]: [...newList],
-      }));
+      if (newList.length < 10) {
+        newList.push(value);
+        setSearchInfo((prevValue) => ({
+          ...prevValue,
+          [type]: [...newList],
+        }));
+      }
       if (type === "categories") {
         setInputField((prevValue) => ({
           ...prevValue,
@@ -82,7 +99,7 @@ const SearchEvent = () => {
     }));
   };
 
-  const checkValidData = () => {
+  const checkEmptyData = () => {
     return !(
       searchInfo.eventName.length === 0 &&
       searchInfo.categories.length === 0 &&
@@ -93,59 +110,117 @@ const SearchEvent = () => {
     );
   };
 
-  const searchEventHandler = async () => {
-    if (checkValidData()) {
-      const categoryIds = [];
-      searchInfo.categories.forEach((categoryName) => {
-        listCategory.forEach((categoryInfo) => {
-          if (categoryName === categoryInfo.name) {
-            categoryIds.push(categoryInfo.id);
-          }
-        });
-      });
+  const checkValidData = () => {
+    let title = false;
+    let organizers = false;
+    let hashtags = false;
+    let date = false;
 
-      const requestData = {
-        title: searchInfo.eventName,
-        tags: searchInfo.hashtags,
-        organizers: searchInfo.organizations,
-        startDate:
-          searchInfo.startDate.toString().length > 0
-            ? searchInfo.startDate.toISOString()
-            : "",
-        endDate:
-          searchInfo.endDate.toString().length > 0
-            ? searchInfo.endDate.toISOString()
-            : "",
-        categories: [...categoryIds],
-      };
-      try {
-        const response = await searchEvent(requestData);
-        setSearchedEvent([...response.content]);
-        console.log("RESPONSE");
-        console.log(response);
-      } catch (error) {
-        alert("Error when send request to server");
-        console.log("ERROR when search event " + error);
+    if (searchInfo.eventName.length > 50) {
+      title = true;
+    }
+    searchInfo.organizations.forEach((organization) => {
+      if (organization.length > 50) {
+        organizers = true;
       }
+    });
+    searchInfo.hashtags.forEach((hashtag) => {
+      if (hashtag.length > 25) {
+        hashtags = true;
+      }
+    });
 
-      setNotification((prevValue) => ({
-        ...prevValue,
-        invalidData: false,
-      }));
-    } else {
-      setNotification((prevValue) => ({
-        ...prevValue,
-        invalidData: true,
-      }));
+    if (
+      searchInfo.startDate &&
+      searchInfo.startDate.toString().length > 0 &&
+      searchInfo.endDate &&
+      searchInfo.endDate.toString().length > 0
+    ) {
+      let startDateAndTime = new Date(searchInfo.startDate);
+      startDateAndTime = startDateAndTime.toISOString();
+
+      let endDateAndTime = new Date(searchInfo.endDate);
+      endDateAndTime = endDateAndTime.toISOString();
+
+      if (endDateAndTime && endDateAndTime < startDateAndTime) {
+        date = true;
+      }
+    }
+    setNotification((prevValue) => ({
+      ...prevValue,
+      invalidData: {
+        title,
+        organizers,
+        hashtags,
+        date,
+      },
+    }));
+
+    return !(title || organizers || date || hashtags);
+  };
+
+  const searchEventHandler = async () => {
+    setNotification({
+      emptyList: false,
+      invalidData: {
+        title: false,
+        organizers: false,
+        hashtags: false,
+        date: false,
+      },
+    });
+    if (checkValidData()) {
+      if (checkEmptyData()) {
+        const categoryIds = [];
+        searchInfo.categories.forEach((categoryName) => {
+          listCategory.forEach((categoryInfo) => {
+            if (categoryName === categoryInfo.name) {
+              categoryIds.push(categoryInfo.id);
+            }
+          });
+        });
+
+        const requestData = {
+          title: searchInfo.eventName,
+          tags: searchInfo.hashtags,
+          organizers: searchInfo.organizations,
+          startDate:
+            searchInfo.startDate.toString().length > 0
+              ? searchInfo.startDate.toISOString()
+              : "",
+          endDate:
+            searchInfo.endDate.toString().length > 0
+              ? searchInfo.endDate.toISOString()
+              : "",
+          categories: [...categoryIds],
+        };
+        try {
+          const response = await searchEvent(requestData);
+          setSearchedEvent([...response.content]);
+        } catch (error) {
+          alert("Error when send request to server");
+          console.log("ERROR when search event " + error);
+        }
+
+        setNotification((prevValue) => ({
+          ...prevValue,
+          emptyList: false,
+        }));
+      } else {
+        setNotification((prevValue) => ({
+          ...prevValue,
+          emptyList: true,
+        }));
+      }
     }
   };
-  console.log(searchedEvent);
+
   return (
     <div className={`${styles.searchEvent}`}>
       <div className={`${styles.searchEvent__searchName}`}>
         <input
           type="text"
-          placeholder="Search event name..."
+          placeholder="Search an event's title..."
           value={searchInfo.eventName}
           onChange={inputSearchValue}
         />
@@ -168,9 +243,9 @@ const SearchEvent = () => {
               }}
             >
               <option value="default" disabled hidden>
-                Choose category
+                Choose categories
               </option>
-              {listCategory.map((category, index) => (
+              {listAvailableCategory.map((category, index) => (
                 <option key={`CATEGORY_${index}`} value={category.name}>
                   {category.name}
                 </option>
@@ -238,7 +313,7 @@ const SearchEvent = () => {
             <h3>Hashtags:</h3>
             <input
               type="text"
-              placeholder="Hashtag name"
+              placeholder="Hashtag's name"
               className={`${styles.searchEvent__searchDetail_type_input}`}
               onChange={(event) => {
                 inputFieldHandler(event, "hashtags");
@@ -301,9 +376,29 @@ const SearchEvent = () => {
           </div>
         </div>
       </div>
-      {notification.invalidData && (
+      {notification.emptyList && (
         <p className={`${styles.searchEvent__error}`}>
           Can't search with empty information !
+        </p>
+      )}
+      {notification.invalidData.title && (
+        <p className={`${styles.searchEvent__error}`}>
+          Title not exceed 50 characters
+        </p>
+      )}
+      {notification.invalidData.organizers && (
+        <p className={`${styles.searchEvent__error}`}>
+          Each organizer not exceed 50 characters
+        </p>
+      )}
+      {notification.invalidData.hashtags && (
+        <p className={`${styles.searchEvent__error}`}>
+          Each hashtag not exceed 25 characters
+        </p>
+      )}
+      {notification.invalidData.date && (
+        <p className={`${styles.searchEvent__error}`}>
+          End date must be after start date
         </p>
       )}
 
@@ -311,10 +406,14 @@ const SearchEvent = () => {
         <span>Result</span>
         <hr />
       </div>
-      <div className={`${styles.searchEvent__reuslt}`}>
-        {searchedEvent.map((event) => (
-          <CompactedEvent key={`CPEVENT_${event.id}`} information={event} />
-        ))}
+      <div className={`${styles.searchEvent__result}`}>
+        {searchedEvent[0] !== "empty" && searchedEvent.length === 0 && (
+          <h3 className={`${styles.searchEvent__result_empty}`}>Don't have any event suitable</h3>
+        )}
+        {searchedEvent[0] !== "empty" &&
+          searchedEvent.map((event) => (
+            <CompactedEvent key={`CPEVENT_${event.id}`} information={event} />
+          ))}
       </div>
     </div>
   );

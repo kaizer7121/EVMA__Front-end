@@ -23,6 +23,9 @@ const CreationBar = (props) => {
     otherOrganizations: 1,
   });
   const [selectedCategory, setSelectedCategory] = useState("default");
+  const [listAvailableCategory, setListAvailableCategory] = useState(
+    props.categoriesInDB
+  );
   useEffect(() => {
     setNumberOfMultiInput((prevValue) => ({
       ...prevValue,
@@ -35,6 +38,13 @@ const CreationBar = (props) => {
     props.information.hashtag.length,
     props.information.otherOrganizations.length,
   ]);
+
+  useEffect(() => {
+    const availableCategories = props.categoriesInDB.filter(
+      (category) => !props.information.categories.includes(category.name)
+    );
+    setListAvailableCategory([...availableCategories]);
+  }, [props.categoriesInDB, props.information.categories]);
 
   // useEffect(() => {
   //   startMoment = moment();
@@ -374,7 +384,7 @@ const CreationBar = (props) => {
             props.changeMultiInput("HASHTAG", "REMOVE");
           }}
         >
-          Remove last hashtag (-)
+          Remove the last hashtag (-)
         </p>
       )}
 
@@ -384,7 +394,7 @@ const CreationBar = (props) => {
           props.changeMultiInput("HASHTAG", "ADD");
         }}
       >
-        Add more hashtag (+)
+        Add more hashtags (+)
       </p>
       <section className={`${styles.creationBar__categories}`}>
         <h3 className={`${styles.creationBar__topic}`}>
@@ -410,8 +420,8 @@ const CreationBar = (props) => {
             <option value="default" disabled hidden>
               Choose category
             </option>
-            {props.categoriesInDB &&
-              props.categoriesInDB.map((category) => (
+            {listAvailableCategory &&
+              listAvailableCategory.map((category) => (
                 <option id={category.id} key={category.id}>
                   {category.name}
                 </option>
@@ -468,7 +478,7 @@ const CreationBar = (props) => {
                 key={`SPAN_ORGANIZATION_${index}`}
                 className={`${styles.creationBar__input__label}`}
               >
-                Organiztion name (optional)
+                Organiztion's name (optional)
               </span>
             </label>
           </section>
@@ -485,7 +495,7 @@ const CreationBar = (props) => {
         <p
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallNegative} ${styles.creationBar__error_mb_smaller}`}
         >
-          Each organization name not exceed 50 characters
+          Each organization's name not exceed 50 characters
         </p>
       )}
       {numberOfMultiInput.otherOrganizations > 1 && (
@@ -505,7 +515,7 @@ const CreationBar = (props) => {
           props.changeMultiInput("OTHER_ORGANIZATIONS", "ADD");
         }}
       >
-        Add more organization (+)
+        Add more organizations (+)
       </p>
 
       <section className={`${styles.creationBar__description}`}>
