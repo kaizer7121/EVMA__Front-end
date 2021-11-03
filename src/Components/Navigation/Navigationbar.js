@@ -10,7 +10,7 @@ const Navbar = () => {
         <Link to="/home">EVMA</Link>
       </div>
       <ul className={`${styles.navBar__items}`}>
-        <li className={`${styles.navBar__item}`}>
+        {/* <li className={`${styles.navBar__item}`}>
           <a href="#" className={`${styles.navBar__link}`}>
             Option 1
           </a>
@@ -24,7 +24,7 @@ const Navbar = () => {
           <a href="#" className={`${styles.navBar__link}`}>
             Option 3
           </a>
-        </li>
+        </li> */}
       </ul>
 
       <UserNavigation />

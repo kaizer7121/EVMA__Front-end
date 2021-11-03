@@ -49,6 +49,7 @@ const Profile = () => {
     cover: "",
   });
   const [isUpdatedProfile, setIsUpdatedProfile] = useState(false);
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -130,7 +131,8 @@ const Profile = () => {
     if (
       accountInformation.phoneNumber &&
       accountInformation.phoneNumber.length > 0 &&
-      !validatePhone(accountInformation.phoneNumber)
+      (!validatePhone(accountInformation.phoneNumber) ||
+        accountInformation.phoneNumber.length > 10)
     ) {
       phoneNumber = true;
     }
@@ -144,8 +146,9 @@ const Profile = () => {
     if (
       accountInformation.address &&
       (accountInformation.address.length >= 50 ||
-        validateName(accountInformation.address))
+        !validateName(accountInformation.address))
     ) {
+      console.log(accountInformation.address);
       address = true;
     }
     setErrorInformation({
@@ -194,9 +197,8 @@ const Profile = () => {
         role: accountInformation.role,
       };
       try {
-        console.log(accountInformation.address.length);
+        setIsSendingRequest(true);
         const repsonse = await updateProfile(data, profile.id);
-        console.log(repsonse);
         if (repsonse.status !== 400 && repsonse.status !== 403) {
           if (
             imageAsFile.avatar &&
@@ -419,13 +421,22 @@ const Profile = () => {
               </>
             )}
           </div>
-
-          <button
-            className={`${styles.profile__section_button}`}
-            onClick={onUpdateProfile}
-          >
-            Save profile
-          </button>
+          {!isSendingRequest ? (
+            <button
+              className={`${styles.profile__section_button} ${styles.profile__section_button_submit}`}
+              onClick={onUpdateProfile}
+            >
+              Save profile
+            </button>
+          ) : (
+            <button
+              className={`${styles.profile__section_button} ${styles.profile__section_button_waiting}`}
+              onClick={onUpdateProfile}
+              disabled={true}
+            >
+              ... Waiting
+            </button>
+          )}
         </section>
       </section>
       {croppingImage && !croppingImage.empty && (

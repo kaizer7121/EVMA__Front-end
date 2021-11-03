@@ -59,7 +59,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    min-width: 100%;
 
     &_sign {
       font-size: 1.2rem;

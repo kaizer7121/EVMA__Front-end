@@ -77,7 +77,7 @@ const OrganizationDetail = (props) => {
       }
     };
     const getURLBackGround = async () => {
-      const fileName = `userBackground_${props.information.id}`;
+      const fileName = `background_${props.information.id}`;
       const url = await getURLImage(fileName);
       if (url) {
         setBackgroundURL(url);

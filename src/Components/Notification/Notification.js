@@ -1,9 +1,28 @@
+import { useHistory } from "react-router";
 import { converISOToSimpleDate } from "../../Service/functions";
 import styles from "./Notification.module.scss";
 
 const Notification = (props) => {
+  const history = useHistory();
+
+  const onClickNotification = (type, id) => {
+    if (type === "Organization") {
+      history.push(`/organization/${id}`);
+    } else if (type === "Event") {
+      history.push(`/event/${id}`);
+    }
+  };
+
   return (
-    <div className={styles.notification}>
+    <div
+      className={styles.notification}
+      onClick={() => {
+        onClickNotification(
+          props.information.type,
+          props.information.notificationID
+        );
+      }}
+    >
       <div
         className={`${styles.notification__image} ${
           props.information.type === "Organization"

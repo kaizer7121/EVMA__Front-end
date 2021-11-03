@@ -59,9 +59,9 @@ const ListOrganization = (props) => {
               onClick={startSearch}
             />
           </div>
-          {currentLList.map((organization, index) => (
+          {currentLList.map((organization) => (
             <Organization
-              key={`ORGANIZATION_${index}`}
+              key={`ORGANIZATION_${organization.id}`}
               information={organization}
             />
           ))}
