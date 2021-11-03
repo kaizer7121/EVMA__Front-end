@@ -1,4 +1,3 @@
-import { Link, useHistory } from "react-router-dom";
 import styles from "./SignUp.module.scss";
 import commonStyles from "./Auth.module.scss";
 import { useState } from "react";
@@ -6,9 +5,11 @@ import { calculateAge, validateName } from "../../Service/functions";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { formatDate, parseDate } from "react-day-picker/moment";
-import { signUp, updateProfile } from "../../Service/api/authApi";
+import { updateProfile } from "../../Service/api/authApi";
 import { useDispatch, useSelector } from "react-redux";
 import { profileAction } from "../../Store/profileSlice";
+import { tokenAction } from "../../Store/tokenSlice";
+import { useHistory } from "react-router";
 
 const UpdateProfile = () => {
   const profile = useSelector((state) => state.profile);
@@ -103,6 +104,13 @@ const UpdateProfile = () => {
     }
   };
 
+  const retryHanlder = () => {
+    dispatch(tokenAction.deleteToken());
+    dispatch(profileAction.signOut());
+
+    history.replace("/sign-in");
+  }
+
   return (
     <div className={`${styles.register}`}>
       <div className={`${styles.register__box}`}>
@@ -110,6 +118,7 @@ const UpdateProfile = () => {
         <div className={`${styles.register__content}`}>
           <button
             className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.register__signOut}`}
+            onClick={retryHanlder}
           >
             Retry
           </button>

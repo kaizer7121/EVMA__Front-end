@@ -4,7 +4,6 @@ import { formatDate, parseDate } from "react-day-picker/moment";
 import Picker from "emoji-picker-react";
 import TextareaAutosize from "react-textarea-autosize";
 import TimePicker from "rc-time-picker";
-import moment from "moment";
 
 import { useState, useEffect } from "react";
 
