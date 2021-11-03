@@ -400,7 +400,7 @@
   &__result {
     display: flex;
     flex-wrap: wrap;
-    gap: 5%;
+    gap: 1%;
     justify-content: space-between;
     border-radius: 10px;
 
@@ -409,8 +409,19 @@
       margin: 0 auto;
     }
 
-    // @media only screen and (max-width: $bp-smaller) {
-    //   flex-direction: column;
-    // }
+    @media only screen and (max-width: $bp-larger) {
+      gap: 3%;
+    }
+
+    @media only screen and (max-width: $bp-medium) {
+      gap: 1%;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }

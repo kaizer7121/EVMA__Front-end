@@ -70,7 +70,7 @@
   }
 
   @media only screen and (max-width: $bp-larger) {
-    width: 48.5%;
+    width: 47.5%;
 
     &__status {
       font-size: 1.3rem;
@@ -93,8 +93,12 @@
     }
   }
 
+  @media only screen and (max-width: $bp-large) {
+    width: 45.5%;
+  }
+
   @media only screen and (max-width: $bp-small) {
-    width: 55%;
+    width: 90%;
 
     &__status {
       font-size: 1.5rem;
@@ -115,9 +119,5 @@
     p {
       font-size: 1.4rem;
     }
-  }
-
-  @media only screen and (max-width: $bp-small) {
-    width: 90%;
   }
 }
