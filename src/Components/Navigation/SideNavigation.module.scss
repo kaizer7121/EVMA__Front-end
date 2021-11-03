@@ -40,6 +40,10 @@
     margin-top: 6.3rem
   }
 
+  @media only screen and (max-width: $bp-extraSmall) {
+    margin-top: 7.2rem
+  }
+
   &__item {
     position: relative;
 

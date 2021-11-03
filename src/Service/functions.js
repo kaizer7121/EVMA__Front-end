@@ -170,7 +170,7 @@ export const signInWithFullImage = async (profile, dispatch) => {
   try {
     const { id } = profile;
     const avatarURLFirebase = await getURLImage(`userAvatar_${id}`);
-    const backgroundURLFirebase = await getURLImage(`userBackground_${id}`);
+    const backgroundURLFirebase = await getURLImage(`background_${id}`);
 
     const fullData = {
       ...profile,

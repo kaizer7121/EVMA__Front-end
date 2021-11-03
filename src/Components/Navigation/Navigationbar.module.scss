@@ -11,6 +11,7 @@
   top: 0;
   left: 0;
   width: 100vw;
+  max-height: 10vh;
   box-sizing: border-box;
   z-index: 20;
 
@@ -72,6 +73,10 @@
     }
   }
 
+  @media only screen and (max-width: $bp-larger) {
+    max-height: 9vh;
+  }
+
   @media only screen and (max-width: $bp-medium) {
     box-shadow: none;
     border-bottom: 0.7px solid rgba($color-grey-dark, 0.5);
@@ -84,7 +89,7 @@
   }
 
   @media only screen and (max-width: $bp-small) {
-    padding: 1rem 2rem 1rem 1rem;
+    max-height: 7.5vh;
 
     &__title {
       margin-right: 0.5rem;
@@ -103,8 +108,12 @@
     }
   }
 
+  @media only screen and (max-width: $bp-small) {
+    max-height: 7.5vh;
+  }
+
   @media only screen and (max-width: $bp-smaller) {
-    padding: 1rem;
+    max-height: 6.5vh;
 
     &__title {
       margin-right: 0;
@@ -126,6 +135,9 @@
   }
 
   @media only screen and (max-width: $bp-extraSmall) {
+    height: 5vh;
+    overflow: hidden;
+
     &__title {
       margin-left: 0.2rem;
       font-size: 3rem;
