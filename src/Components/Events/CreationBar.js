@@ -46,27 +46,6 @@ const CreationBar = (props) => {
     setListAvailableCategory([...availableCategories]);
   }, [props.categoriesInDB, props.information.categories]);
 
-  // useEffect(() => {
-  //   startMoment = moment();
-  //   endMoment = moment();
-  //   if (props.information.startTime.length > 0) {
-  //     const timeArr = props.information.startTime.split(":");
-  //     const currentDate = new Date();
-  //     currentDate.setHours(timeArr[0], timeArr[1]);
-  //     startMoment._d = currentDate;
-  //   } else {
-  //     startMoment = "";
-  //   }
-  //   if (props.information.endTime.length > 0) {
-  //     const timeArr = props.information.endTime.split(":");
-  //     const currentDate = new Date();
-  //     currentDate.setHours(timeArr[0], timeArr[1]);
-  //     endMoment._d = currentDate;
-  //   } else {
-  //     endMoment = "";
-  //   }
-  // }, [props.information.startTime, props.information.endTime]);
-
   const openShortDescEmojiPickerHandler = () => {
     setIsChoosingEmoji((prevValue) => ({
       ...prevValue,
@@ -174,6 +153,7 @@ const CreationBar = (props) => {
           Date and time must not be empty and correct date format
         </p>
       )}
+      
       <h3 className={`${styles.creationBar__picker__title}`}>End (Opional)</h3>
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
@@ -226,6 +206,13 @@ const CreationBar = (props) => {
           className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
         >
           End date must be after start date
+        </p>
+      )}
+      {props.eventError.checkPastTime && (
+        <p
+          className={`${styles.creationBar__error} ${styles.creationBar__error_mt_smallerNegative} ${styles.creationBar__error_mb_smaller}`}
+        >
+          You can't select the day in the past
         </p>
       )}
       <div className={`${styles.creationBar__toggleButton}`}>
