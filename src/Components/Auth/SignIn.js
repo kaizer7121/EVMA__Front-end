@@ -1,11 +1,10 @@
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styles from "./SignIn.module.scss";
 import commonStyles from "./Auth.module.scss";
 import { StyledFirebaseAuth } from "react-firebaseui";
 import firebase, { uiConfig } from "../../Firebase";
 import "firebaseui/dist/firebaseui.css";
 import { useEffect, useState } from "react";
-import { signInWithFullImage, validateEmail } from "../../Service/functions";
 import { exchangeFirebaseToken } from "../../Service/api/authApi";
 import { useDispatch } from "react-redux";
 import { tokenAction } from "../../Store/tokenSlice";

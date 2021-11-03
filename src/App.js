@@ -178,9 +178,9 @@ function App() {
           <Route path="/search">
             <SearchEventPage />
           </Route>
-          <Route path="/test">
+          {/* <Route path="/test">
             <LoadingComponent />
-          </Route>
+          </Route> */}
           <Route exact path="*">
             <Redirect to="/event" />
           </Route>

@@ -48,6 +48,7 @@ const EventCreation = (props) => {
     start: false,
     end: false,
     dateCompare: false,
+    checkPastTime: false,
     location: false,
     categories: false,
     summary: false,
@@ -104,6 +105,7 @@ const EventCreation = (props) => {
     let start = false;
     let end = false;
     let dateCompare = false;
+    let checkPastTime = false;
     let location = false;
     let categories = false;
     let summary = false;
@@ -198,11 +200,44 @@ const EventCreation = (props) => {
       }
     }
 
+    if (!start) {
+      let startDateAndTime = new Date(eventInfo.startDate);
+      const startTimeSplit = eventInfo.startTime.split(":");
+      startDateAndTime.setHours(+startTimeSplit[0], startTimeSplit[1]);
+      startDateAndTime = startDateAndTime.toISOString();
+
+      let currentDate = new Date();
+      currentDate = currentDate.toISOString();
+      if (startDateAndTime < currentDate) {
+        checkPastTime = true;
+      }
+    }
+
+    if (!end) {
+      if (
+        !eventError.end &&
+        eventInfo.endDate.toString().length > 0 &&
+        eventInfo.endTime.length > 0
+      ) {
+        let endDateAndTime = new Date(eventInfo.endDate);
+        const endTimeSplit = eventInfo.endTime.split(":");
+        endDateAndTime.setHours(+endTimeSplit[0], endTimeSplit[1]);
+        endDateAndTime = endDateAndTime.toISOString();
+        
+        let currentDate = new Date();
+        currentDate = currentDate.toISOString();
+        if (endDateAndTime < currentDate) {
+          checkPastTime = true;
+        }
+      }
+    }
+
     setEventError({
       title,
       start,
       end,
       dateCompare,
+      checkPastTime,
       location,
       categories,
       summary,
@@ -218,6 +253,7 @@ const EventCreation = (props) => {
       start ||
       end ||
       dateCompare ||
+      checkPastTime ||
       location ||
       categories ||
       summary ||
