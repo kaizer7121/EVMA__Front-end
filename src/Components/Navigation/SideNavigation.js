@@ -15,7 +15,7 @@ const SideNavigation = (props) => {
           }`}
         >
           <Link to="/event" className={`${styles.sideNav__link}`}>
-            <span>All Event</span>
+            <span>All Events</span>
           </Link>
         </li>
 
@@ -25,7 +25,7 @@ const SideNavigation = (props) => {
           }`}
         >
           <Link to="/organization" className={`${styles.sideNav__link}`}>
-            <span>All Organization</span>
+            <span>All Organizations</span>
           </Link>
         </li>
 
@@ -36,11 +36,11 @@ const SideNavigation = (props) => {
         >
           {profile.role === "Event Organizer" ? (
             <Link to="/ownEvent" className={`${styles.sideNav__link}`}>
-              <span>Own event</span>
+              <span>Own events</span>
             </Link>
           ) : (
             <Link to="/listFollow" className={`${styles.sideNav__link}`}>
-              <span>List follow</span>
+              <span>List follows</span>
             </Link>
           )}
         </li>

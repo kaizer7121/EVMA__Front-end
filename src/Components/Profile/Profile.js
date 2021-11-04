@@ -124,7 +124,8 @@ const Profile = () => {
     if (
       !accountInformation.dob ||
       accountInformation.dob.length === 0 ||
-      calculateAge(accountInformation.dob) < 16
+      calculateAge(accountInformation.dob) < 16 ||
+      calculateAge(accountInformation.dob) > 100
     ) {
       dob = true;
     }
@@ -336,7 +337,7 @@ const Profile = () => {
                 </label>
                 {errorInformation.dob && (
                   <p className={`${styles.profile__error}`}>
-                    Your age must be 16 or order
+                    Your age must be 16 or order and younger than 100
                   </p>
                 )}
               </div>

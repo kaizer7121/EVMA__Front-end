@@ -49,7 +49,7 @@ const ListOrganization = (props) => {
           <div className={`${styles.listOrganizations__searchBar}`}>
             <input
               type="text"
-              placeholder="Search organization name ..."
+              placeholder="Search organization's name ..."
               onChange={changeSearchValue}
               value={searchValue}
             />

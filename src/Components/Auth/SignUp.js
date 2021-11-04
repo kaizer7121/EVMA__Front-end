@@ -50,7 +50,7 @@ const UpdateProfile = () => {
     if (!validateName(profileInfo.fullName)) {
       fullName = true;
     }
-    if (userYearOld < 16) {
+    if (userYearOld < 16 || userYearOld > 100) {
       dateOfBirth = true;
     }
     setErrorRegister({
@@ -109,7 +109,7 @@ const UpdateProfile = () => {
     dispatch(profileAction.signOut());
 
     history.replace("/sign-in");
-  }
+  };
 
   return (
     <div className={`${styles.register}`}>
@@ -148,7 +148,7 @@ const UpdateProfile = () => {
                 )}
               </div>
               <div className={`${styles.register__form__group} `}>
-                <label htmlFor="full-name">Date of birth (older than 16)</label>
+                <label htmlFor="full-name">Date of birth (older than 16 and younger than 100)</label>
                 <div className={`${styles.register__form__group__date_input}`}>
                   <DayPickerInput
                     format={"DD/MM/yyyy"}

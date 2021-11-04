@@ -282,7 +282,7 @@ const SearchEvent = () => {
             <h3>Organizers:</h3>
             <input
               type="text"
-              placeholder="Organization name"
+              placeholder="Organization's name"
               className={`${styles.searchEvent__searchDetail_type_input}`}
               onChange={(event) => {
                 inputFieldHandler(event, "organizations");
