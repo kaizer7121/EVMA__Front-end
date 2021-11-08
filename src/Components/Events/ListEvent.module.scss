@@ -7,6 +7,22 @@
   position: relative;
   display: inline-block;
   border-radius: 1%;
+  text-align: center;
+
+  &__loading {
+
+    img {
+      width: 30px;
+    }
+  }
+
+  &__notification {
+
+    p {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+  }
 
   @media only screen and (max-width: $bp-larger) {
     width: 72%;

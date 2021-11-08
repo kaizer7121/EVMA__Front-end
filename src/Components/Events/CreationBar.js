@@ -464,7 +464,7 @@ const CreationBar = (props) => {
                 key={`SPAN_ORGANIZATION_${index}`}
                 className={`${styles.creationBar__input__label}`}
               >
-                Organiztion's name (optional)
+                Organization's name (optional)
               </span>
             </label>
           </section>

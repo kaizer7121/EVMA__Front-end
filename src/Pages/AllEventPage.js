@@ -60,6 +60,7 @@ const AllEventPage = () => {
             ...prevValue,
             end: true,
           }));
+          setIsGettingNewEvent(false);
         }
         setListEvent((prevValue) => [...prevValue, ...response.content]);
         setIsGettingNewEvent(false);
@@ -81,7 +82,12 @@ const AllEventPage = () => {
     <div id="header">
       <NavigationBar />
       <SideNavigation activatedItem={"HOME"} />
-      <ListEvent isLoading={isLoading} listEvent={listEvent} />
+      <ListEvent
+        isLoading={isLoading}
+        isGettingNewEvent={isGettingNewEvent}
+        isEndOfEvent={pagination.end}
+        listEvent={listEvent}
+      />
     </div>
   );
 };

@@ -36,6 +36,7 @@ const SearchEvent = () => {
   });
   const [listAvailableCategory, setListAvailableCategory] =
     useState(listCategory);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     const availableCategories = listCategory.filter(
@@ -195,10 +196,13 @@ const SearchEvent = () => {
           categories: [...categoryIds],
         };
         try {
+          setIsSearching(true);
           const response = await searchEvent(requestData);
           setSearchedEvent([...response.content]);
+          setIsSearching(false);
         } catch (error) {
           alert("Error when send request to server");
+          setIsSearching(false);
           console.log("ERROR when search event " + error);
         }
 
@@ -278,7 +282,7 @@ const SearchEvent = () => {
             <h3>Organizers:</h3>
             <input
               type="text"
-              placeholder="Organization name"
+              placeholder="Organization's name"
               className={`${styles.searchEvent__searchDetail_type_input}`}
               onChange={(event) => {
                 inputFieldHandler(event, "organizations");
@@ -407,10 +411,18 @@ const SearchEvent = () => {
         <hr />
       </div>
       <div className={`${styles.searchEvent__result}`}>
-        {searchedEvent[0] !== "empty" && searchedEvent.length === 0 && (
-          <h3 className={`${styles.searchEvent__result_empty}`}>Don't have any event suitable</h3>
+        {isSearching && (
+          <div className={`${commonStyles.loader_icon_big}`}></div>
         )}
-        {searchedEvent[0] !== "empty" &&
+        {!isSearching &&
+          searchedEvent[0] !== "empty" &&
+          searchedEvent.length === 0 && (
+            <h3 className={`${styles.searchEvent__result_empty}`}>
+              Don't have any event suitable
+            </h3>
+          )}
+        {!isSearching &&
+          searchedEvent[0] !== "empty" &&
           searchedEvent.map((event) => (
             <CompactedEvent key={`CPEVENT_${event.id}`} information={event} />
           ))}
