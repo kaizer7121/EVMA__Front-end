@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { getURLImage } from "../../Service/firebaseFunctions";
+import { isPastedEvent } from "../../Service/functions";
 
 import styles from "./CompactedEvent.module.scss";
 
@@ -31,9 +32,20 @@ const CompactedEvent = (props) => {
     : [];
   return (
     <div className={`${styles.cpEvent}`}>
-      <div className={`${styles.cpEvent__status}`}>
-        {props.information.status.name}
-      </div>
+      {isPastedEvent(props.information) ? (
+        <div
+          className={`${styles.cpEvent__status}  ${styles.cpEvent__status_past}`}
+        >
+          Past
+        </div>
+      ) : (
+        <div
+          className={`${styles.cpEvent__status} ${styles.cpEvent__status_published}`}
+        >
+          {props.information.status.name}
+        </div>
+      )}
+
       <img src={backgroundURL} alt="Cover" onClick={goToDetailEvent} />
       <div className={styles.cpEvent__detail}>
         <h1 onClick={goToDetailEvent}>{props.information.title}</h1>

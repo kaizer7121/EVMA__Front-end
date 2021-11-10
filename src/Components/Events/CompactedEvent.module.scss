@@ -1,7 +1,6 @@
 @import "../SASS_Abstract/variable";
 
 .cpEvent {
-  // border: 1px solid $color-grey-light-2;
   box-shadow: 0px 0px 20px rgba($color-black, 0.1);
   border: 1px solid rgba($color-black, 0.1);
   border-radius: 5px;
@@ -14,13 +13,20 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    background-color: $color-primary;
     padding: 0.6rem;
     border-radius: 5px;
 
     color: $color-white;
     font-size: 1.1rem;
     font-weight: 600;
+
+    &_published {
+      background-color: $color-primary;
+    }
+
+    &_past {
+      background-color: $color-tertiary-light;
+    }
   }
 
   &__detail {

@@ -5,6 +5,7 @@ import NavigationBar from "../Components/Navigation/Navigationbar";
 import { getEventByID } from "../Service/api/eventApi";
 import { useSelector } from "react-redux";
 import { getURLImage } from "../Service/firebaseFunctions";
+import { isPastedEvent } from "../Service/functions";
 
 const EventCreationPage = () => {
   const profile = useSelector((state) => state.profile);
@@ -34,7 +35,11 @@ const EventCreationPage = () => {
         try {
           const eventID = params.id;
           const response = await getEventByID(eventID);
-          if (!token || response.userProfileId !== profile.id) {
+          if (
+            !token ||
+            response.userProfileId !== profile.id ||
+            isPastedEvent(response)
+          ) {
             history.replace("/event");
           }
 

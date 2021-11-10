@@ -25,6 +25,10 @@
       background-color: $color-primary;
     }
 
+    &_past {
+      background-color: $color-tertiary-light;
+    }
+
     &_cancel {
       background-color: $color-danger;
     }

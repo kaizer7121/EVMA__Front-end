@@ -164,6 +164,18 @@ export const convertDateToCollectionName = (date) => {
   return `${currentDay}.${currentMonth}`;
 };
 
+export const isPastedEvent = (event) => {
+  const currentDate = new Date();
+  const startDate = new Date(event.startDate);
+  const endDate = event.endDate ? new Date(event.endDate) : undefined;
+
+  if (endDate) {
+    return endDate.getTime() < currentDate.getTime();
+  } else {
+    return startDate.getTime() < currentDate.getTime();
+  }
+};
+
 // ================= REDUX FUNCTION =================
 
 export const signInWithFullImage = async (profile, dispatch) => {
