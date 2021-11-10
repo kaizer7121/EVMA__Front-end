@@ -4,6 +4,7 @@ import styles from "./Event.module.scss";
 
 import { useEffect, useState } from "react";
 import { getURLImage } from "../../Service/firebaseFunctions";
+import { isPastedEvent } from "../../Service/functions";
 
 const Event = (props) => {
   const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
@@ -22,13 +23,20 @@ const Event = (props) => {
 
   return (
     <section className={`${styles.event}`}>
-      {props.information.status.name === "Published" && (
-        <div
-          className={`${styles.event__status} ${styles.event__status_published}`}
-        >
-          {props.information.status.name}
-        </div>
-      )}
+      {props.information.status.name === "Published" &&
+        (isPastedEvent(props.information) ? (
+          <div
+            className={`${styles.event__status} ${styles.event__status_past}`}
+          >
+            Past
+          </div>
+        ) : (
+          <div
+            className={`${styles.event__status} ${styles.event__status_published}`}
+          >
+            Published
+          </div>
+        ))}
       {props.information.status.name === "Cancelled" && (
         <div
           className={`${styles.event__status} ${styles.event__status_cancel}`}

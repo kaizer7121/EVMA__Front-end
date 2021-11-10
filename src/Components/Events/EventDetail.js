@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import {
   clearUnfollowNotification,
   converISOToSimpleDate,
+  isPastedEvent,
 } from "../../Service/functions";
 import {
   detachListenNotificationOfDocID,
@@ -193,13 +194,20 @@ const EventDetail = (props) => {
         <section className={`${styles.detail}`}>
           <header className={`${styles.detail__header}`}>
             <div className={`${styles.detail__poster}`}>
-              {props.information.status.name === "Published" && (
-                <div
-                  className={`${styles.detail__status} ${styles.detail__status_published}`}
-                >
-                  {props.information.status.name}
-                </div>
-              )}
+              {props.information.status.name === "Published" &&
+                (isPastedEvent(props.information) ? (
+                  <div
+                    className={`${styles.detail__status} ${styles.detail__status_past}`}
+                  >
+                    Past
+                  </div>
+                ) : (
+                  <div
+                    className={`${styles.detail__status} ${styles.detail__status_published}`}
+                  >
+                    Published
+                  </div>
+                ))}
               {props.information.status.name === "Cancelled" && (
                 <div
                   className={`${styles.detail__status} ${styles.detail__status_cancel}`}
@@ -327,64 +335,65 @@ const EventDetail = (props) => {
                   );
                 })}
               <p></p>
-              {(props.information.status.name === "Published" ||
-                props.information.status.name === "Draft") && (
-                <div className={`${styles.detail__buttons}`}>
-                  {!isOwnEvent &&
-                    profile.role === "Attendees" &&
-                    (isFollow ? (
-                      <button
-                        className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
-                        onClick={unfollowEventHandler}
-                      >
-                        Unfollow
-                      </button>
-                    ) : (
-                      <button
-                        className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
-                        onClick={followEventHandler}
-                      >
-                        Follow
-                      </button>
-                    ))}
-                  {isOwnEvent && (
-                    <>
-                      <button
-                        className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
-                        onClick={onDeleteEvent}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark} ${styles.btn_small}`}
-                        onClick={onEditEvent}
-                      >
-                        Edit
-                      </button>
-                    </>
-                  )}
+              {!isPastedEvent(props.information) &&
+                (props.information.status.name === "Published" ||
+                  props.information.status.name === "Draft") && (
+                  <div className={`${styles.detail__buttons}`}>
+                    {!isOwnEvent &&
+                      profile.role === "Attendees" &&
+                      (isFollow ? (
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
+                          onClick={unfollowEventHandler}
+                        >
+                          Unfollow
+                        </button>
+                      ) : (
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_primary_light} ${styles.btn_small}`}
+                          onClick={followEventHandler}
+                        >
+                          Follow
+                        </button>
+                      ))}
+                    {isOwnEvent && (
+                      <>
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_danger} ${styles.btn_small}`}
+                          onClick={onDeleteEvent}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className={`${commonStyles.btn} ${commonStyles.btn_secondary_dark} ${styles.btn_small}`}
+                          onClick={onEditEvent}
+                        >
+                          Edit
+                        </button>
+                      </>
+                    )}
 
-                  {props.information.status.name !== "Draft" && (
-                    <>
-                      {!isShared && (
-                        <button
-                          className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
-                          onClick={onShareUrl}
-                        >
-                          SHARE
-                        </button>
-                      )}
-                      {isShared && (
-                        <button
-                          className={`${commonStyles.btn} ${commonStyles.btn_disable} ${commonStyles.btn_grey_dark} ${styles.btn_small}`}
-                        >
-                          Copied
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              )}
+                    {props.information.status.name !== "Draft" && (
+                      <>
+                        {!isShared && (
+                          <button
+                            className={`${commonStyles.btn} ${commonStyles.btn_tertiary_dark} ${styles.btn_small}`}
+                            onClick={onShareUrl}
+                          >
+                            SHARE
+                          </button>
+                        )}
+                        {isShared && (
+                          <button
+                            className={`${commonStyles.btn} ${commonStyles.btn_disable} ${commonStyles.btn_grey_dark} ${styles.btn_small}`}
+                          >
+                            Copied
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
             </div>
           </header>
           <hr />
