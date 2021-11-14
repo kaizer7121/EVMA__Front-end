@@ -13,9 +13,7 @@ import { useSelector } from "react-redux";
 const EventCreation = (props) => {
   const profileName = useSelector((state) => state.profile.name);
   const type = props.initialInformation ? "Edit" : "Create";
-  // const allInputs = { imgUrl: "" };
   const [imageAsFile, setImageAsFile] = useState("");
-  // const [imageAsUrl, setImageAsUrl] = useState(allInputs);
   const [eventInfo, setEventInfo] = useState({
     title: type === "Edit" ? props.initialInformation.title : "",
     startDate:
@@ -59,6 +57,7 @@ const EventCreation = (props) => {
     otherOrganizations: false,
     otherOrganizationsLength: false,
   });
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
 
   const history = useHistory();
   useEffect(() => {
@@ -223,7 +222,7 @@ const EventCreation = (props) => {
         const endTimeSplit = eventInfo.endTime.split(":");
         endDateAndTime.setHours(+endTimeSplit[0], endTimeSplit[1]);
         endDateAndTime = endDateAndTime.toISOString();
-        
+
         let currentDate = new Date();
         currentDate = currentDate.toISOString();
         if (endDateAndTime < currentDate) {
@@ -279,6 +278,7 @@ const EventCreation = (props) => {
   const onSubmitEvent = async (type) => {
     const isValid = checkValidEventHandler();
     if (isValid) {
+      setIsSendingRequest(true);
       // Process category
       const categoryIds = [];
       eventInfo.categories.forEach((categoryName) => {
@@ -291,7 +291,7 @@ const EventCreation = (props) => {
 
       // Process hashtag
       const tags =
-        eventInfo.hashtag[0] !== ""
+        eventInfo.hashtag.length === 1 && eventInfo.hashtag[0] !== ""
           ? eventInfo.hashtag.map((tag) => `#${tag}`)
           : [];
 
@@ -324,14 +324,18 @@ const EventCreation = (props) => {
         });
       });
 
+      // Process other orginaztions
+      const otherOrganizations =
+        eventInfo.otherOrganizations.length === 1 &&
+        eventInfo.otherOrganizations[0] === ""
+          ? []
+          : eventInfo.otherOrganizations;
+
       const requestData = {
         title: eventInfo.title,
         categoryIds,
         tags,
-        organizerNames: [
-          eventInfo.organization,
-          ...eventInfo.otherOrganizations,
-        ],
+        organizerNames: [eventInfo.organization, ...otherOrganizations],
         online: eventInfo.isOnlineEvent,
         startDate: startDateAndTime,
         endDate: endDateAndTime,
@@ -362,13 +366,13 @@ const EventCreation = (props) => {
               : "Save to draft successfully";
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
-              console.log(responseData);
+              setIsSendingRequest(false);
               if (!alert(message)) {
                 history.push("/event");
               }
             });
           } else {
-            console.log(responseData);
+            setIsSendingRequest(false);
             if (!alert(message)) {
               history.push("/event");
             }
@@ -507,6 +511,7 @@ const EventCreation = (props) => {
             changeMultiInput={changeMultiInput}
             changeMultiInputValue={changeMultiInputValue}
             changeToggleButtonHandler={changeToggleButtonHandler}
+            isSendingRequest={isSendingRequest}
           />
           <InitEvent information={eventInfo} />
           {croppingImage && !croppingImage.empty && (

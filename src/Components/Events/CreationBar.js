@@ -25,6 +25,7 @@ const CreationBar = (props) => {
   const [listAvailableCategory, setListAvailableCategory] = useState(
     props.categoriesInDB
   );
+
   useEffect(() => {
     setNumberOfMultiInput((prevValue) => ({
       ...prevValue,
@@ -152,7 +153,7 @@ const CreationBar = (props) => {
           Date and time must not be empty and correct date format
         </p>
       )}
-      
+
       <h3 className={`${styles.creationBar__picker__title}`}>End (Opional)</h3>
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
@@ -342,7 +343,7 @@ const CreationBar = (props) => {
                 key={`SPAN_HASHTAG_${index}`}
                 className={`${styles.creationBar__input__label}`}
               >
-                Hashtag name
+                Hashtag name (optional)
               </span>
             </label>
           </section>
@@ -418,6 +419,7 @@ const CreationBar = (props) => {
             onClick={() => {
               if (selectedCategory !== "default") {
                 inputValue(selectedCategory, "categories");
+                setSelectedCategory("default");
               }
             }}
           >
@@ -607,28 +609,34 @@ const CreationBar = (props) => {
         </p>
       )}
       <section className={`${styles.creationBar__buttons}`}>
-        <button
-          className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__cancel}`}
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-        <button
-          className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__saveDraft}`}
-          onClick={() => {
-            onSubmit("DRAFT");
-          }}
-        >
-          Save to draft
-        </button>
-        <button
-          className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__submit}`}
-          onClick={() => {
-            onSubmit("PUBLISH");
-          }}
-        >
-          Publish
-        </button>
+        {props.isSendingRequest ? (
+          <div className={`${commonStyles.loader_icon_big}`}></div>
+        ) : (
+          <>
+            <button
+              className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__cancel}`}
+              onClick={onCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__saveDraft}`}
+              onClick={() => {
+                onSubmit("DRAFT");
+              }}
+            >
+              Save to draft
+            </button>
+            <button
+              className={`${styles.creationBar__buttons__btn} ${styles.creationBar__buttons__submit}`}
+              onClick={() => {
+                onSubmit("PUBLISH");
+              }}
+            >
+              Publish
+            </button>
+          </>
+        )}
       </section>
     </div>
   );

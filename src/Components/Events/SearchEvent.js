@@ -81,6 +81,7 @@ const SearchEvent = () => {
       if (type === "categories") {
         setInputField((prevValue) => ({
           ...prevValue,
+          categories: "default",
         }));
       } else {
         setInputField((prevValue) => ({
