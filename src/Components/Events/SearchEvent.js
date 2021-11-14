@@ -7,6 +7,7 @@ import { formatDate, parseDate } from "react-day-picker/moment";
 import { useSelector } from "react-redux";
 import { searchEvent } from "../../Service/api/eventApi";
 import CompactedEvent from "./CompactedEvent";
+import Swal from "sweetalert2";
 
 const SearchEvent = () => {
   const listCategory = useSelector((state) => state.categories.listCategory);
@@ -202,7 +203,9 @@ const SearchEvent = () => {
           setSearchedEvent([...response.content]);
           setIsSearching(false);
         } catch (error) {
-          alert("Error when send request to server");
+          Swal.fire("Error when send request to server", "", "error").then(() => {
+            window.location.reload();
+          });
           setIsSearching(false);
           console.log("ERROR when search event " + error);
         }

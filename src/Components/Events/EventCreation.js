@@ -9,6 +9,7 @@ import { createEvent, editEvent } from "../../Service/api/eventApi";
 import { useHistory } from "react-router";
 import { converISOToOnlyDate, validURL } from "../../Service/functions";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const EventCreation = (props) => {
   const profileName = useSelector((state) => state.profile.name);
@@ -367,18 +368,21 @@ const EventCreation = (props) => {
           if (imageAsFile && imageAsFile.size > 0) {
             uploadImgToStorage(imageAsFile, fileName).then(() => {
               setIsSendingRequest(false);
-              if (!alert(message)) {
+              Swal.fire(message, "", "success").then(() => {
                 history.push("/event");
-              }
+              });
             });
           } else {
             setIsSendingRequest(false);
-            if (!alert(message)) {
+            Swal.fire(message, "", "success").then(() => {
               history.push("/event");
-            }
+            });
           }
         } else {
-          alert("Something wrong went send request to server");
+          Swal.fire("Something wrong went send request to server", "", "error").then(() => {
+            window.location.reload();
+          });
+          
         }
       } catch (error) {
         console.log("Error when create event " + error);

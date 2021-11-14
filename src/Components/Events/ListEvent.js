@@ -21,7 +21,7 @@ const ListEvent = (props) => {
         listEvent.map((event) => {
           return <Event key={`EVENT_${event.id}`} information={event} />;
         })}
-      {props.isGettingNewEvent && !props.isEndOfEvent && (
+      {props.isGettingNewEvent && !props.isEndOfEvent && !props.isLoading && (
         <div
           className={`${commonStyles.loader_icon_big} ${styles.listEvent__loading}`}
         ></div>

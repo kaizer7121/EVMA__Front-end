@@ -17,6 +17,7 @@ import {
   uploadImgToStorage,
 } from "../../../Service/firebaseFunctions";
 import ConfirmDeletePost from "../../Popup/ConfirmDeletePost";
+import Swal from "sweetalert2";
 
 const ListPost = (props) => {
   const [isCreatingPost, setIsCreatingPost] = useState(false);
@@ -108,7 +109,9 @@ const ListPost = (props) => {
       setIsDeletingPost(false);
       props.reloadPost();
     } catch (error) {
-      alert("Some thing wrong when delete post!");
+      Swal.fire("Some thing wrong when delete post!", "", "error").then(() => {
+        window.location.reload();
+      });
     }
   };
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import { isPastedEvent } from "../../Service/functions";
 
@@ -23,10 +24,6 @@ const CompactedEvent = (props) => {
     getURLImg();
   }, [props.information.id]);
 
-  const goToDetailEvent = () => {
-    history.push(`/event/${props.information.id}`);
-  };
-
   const description = props.information.summary
     ? props.information.summary.split("\n")
     : [];
@@ -46,9 +43,13 @@ const CompactedEvent = (props) => {
         </div>
       )}
 
-      <img src={backgroundURL} alt="Cover" onClick={goToDetailEvent} />
+      <Link to={`/event/${props.information.id}`}>
+        <img src={backgroundURL} alt="Cover" />
+      </Link>
       <div className={styles.cpEvent__detail}>
-        <h1 onClick={goToDetailEvent}>{props.information.title}</h1>
+        <Link to={`/event/${props.information.id}`}>
+          <h1>{props.information.title}</h1>
+        </Link>
         <h3>Summary</h3>
         {description.map((sentence, index) => (
           <p key={`SENTENCE_${index}`}>{sentence}</p>
