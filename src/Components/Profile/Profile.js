@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { formatDate, parseDate } from "react-day-picker/moment";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import TextareaAutosize from "react-textarea-autosize";
+import Swal from "sweetalert2";
 import { updateProfile } from "../../Service/api/authApi";
 import { uploadImgToStorage } from "../../Service/firebaseFunctions";
 import {
@@ -48,10 +49,10 @@ const Profile = () => {
     avatar: "",
     cover: "",
   });
-  const [isUpdatedProfile, setIsUpdatedProfile] = useState(false);
   const [isSendingRequest, setIsSendingRequest] = useState(false);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     setAccountInformation({
@@ -232,9 +233,21 @@ const Profile = () => {
           };
 
           await updateProfileWithFullImage(profileData, dispatch);
-          setIsUpdatedProfile(true);
+          Swal.fire(
+            "Update successfully",
+            "Click OK to go to home page",
+            "success"
+          ).then(() => {
+            history.push("/event");
+          });
         } else {
-          alert("Some thing wrong with server when update profile");
+          Swal.fire(
+            "Some thing wrong with server when update profile",
+            "",
+            "error"
+          ).then(() => {
+            window.location.reload();
+          });
         }
       } catch (error) {
         console.log("Error when update profile " + error);
@@ -244,7 +257,6 @@ const Profile = () => {
 
   return (
     <>
-      {isUpdatedProfile && <Redirect to="/event" />}
       <section className={`${styles.profile}`}>
         <section className={`${styles.profile__section}`}>
           <h1>Account Information</h1>

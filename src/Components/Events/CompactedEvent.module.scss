@@ -50,6 +50,12 @@
     }
   }
 
+  a {
+    &:visited, &:link, &:active {
+      text-decoration: none;
+    }
+  }
+
   img {
     width: 100%;
     cursor: pointer;

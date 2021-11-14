@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import {
   followOrganization,
   unfollowOrganization,
@@ -46,10 +47,6 @@ const Organization = (props) => {
     };
     getURLImg();
   }, [props.information.id]);
-
-  const showOrganizationDetail = () => {
-    history.push(`/organization/${props.information.id}`);
-  };
 
   const followOrganizationHandler = async () => {
     if (!token) {
@@ -106,9 +103,14 @@ const Organization = (props) => {
       key={`ORGANIZATION_${props.information.id} `}
       className={`${styles.organization}`}
     >
-      <img src={avatarURL} alt="logo" onClick={showOrganizationDetail} />
+      <Link to={`/organization/${props.information.id}`}>
+        <img src={avatarURL} alt="logo" />
+      </Link>
       <div className={styles.organization__information}>
-        <h3 onClick={showOrganizationDetail}>{props.information.name}</h3>
+        <Link to={`/organization/${props.information.id}`}>
+          <h3>{props.information.name}</h3>
+        </Link>
+
         <p>{props.information.summary}</p>
       </div>
       {(profile.role === "Attendees" || profile.role === "") && (

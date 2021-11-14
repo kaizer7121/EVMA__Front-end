@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { categoriesAction } from "../Store/categoriesStore";
 import { notificationAction } from "../Store/notificationSlice";
 import { profileAction } from "../Store/profileSlice";
@@ -198,7 +199,7 @@ export const signInWithFullImage = async (profile, dispatch) => {
   } catch (error) {
     dispatch(profileAction.signOut());
     dispatch(tokenAction.deleteToken());
-    alert("Some thing wrong with network");
+    Swal.fire("Some thing wrong with network", "", "error");
   }
 };
 
@@ -212,7 +213,7 @@ export const updateListCategoryToStore = async (listCategory, dispatch) => {
       dispatch(categoriesAction.updateListCategories(listCategory));
     }
   } catch (error) {
-    alert("Some thing wrong with network");
+    Swal.fire("Some thing wrong with network", "", "error");
   }
 };
 
