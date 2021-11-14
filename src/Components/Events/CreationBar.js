@@ -46,6 +46,48 @@ const CreationBar = (props) => {
     setListAvailableCategory([...availableCategories]);
   }, [props.categoriesInDB, props.information.categories]);
 
+  useEffect(() => {
+    const eventError = props.eventError;
+    if (eventError.title) {
+      const element = document.getElementById("title");
+      element.scrollIntoView();
+    } else if (eventError.start) {
+      const element = document.getElementById("start");
+      element.scrollIntoView();
+    } else if (
+      eventError.end ||
+      eventError.dateCompare ||
+      eventError.checkPastTime
+    ) {
+      const element = document.getElementById("end");
+      element.scrollIntoView();
+    } else if (eventError.location) {
+      const element = document.getElementById("location");
+      element.scrollIntoView();
+    } else if (eventError.categories) {
+      const element = document.getElementById("categories");
+      element.scrollIntoView();
+    } else if (eventError.summary) {
+      const element = document.getElementById("summary");
+      element.scrollIntoView();
+    } else if (eventError.content) {
+      const element = document.getElementById("content");
+      element.scrollIntoView();
+    } else if (eventError.image) {
+      const element = document.getElementById("cover");
+      element.scrollIntoView();
+    } else if (eventError.hashtag || eventError.tagLength) {
+      const element = document.getElementById("hashtag");
+      element.scrollIntoView();
+    } else if (
+      eventError.otherOrganizations ||
+      eventError.otherOrganizationsLength
+    ) {
+      const element = document.getElementById("otherOrganizations");
+      element.scrollIntoView();
+    }
+  }, [props.eventError]);
+
   const openShortDescEmojiPickerHandler = () => {
     setIsChoosingEmoji((prevValue) => ({
       ...prevValue,
@@ -87,7 +129,7 @@ const CreationBar = (props) => {
   return (
     <div className={`${styles.creationBar}`}>
       <h1 className={`${styles.creationBar__title}`}>Create event</h1>
-      <label className={`${styles.creationBar__input}`}>
+      <label className={`${styles.creationBar__input}`} id="title">
         <input
           className={`${styles.creationBar__input__field}`}
           type="text"
@@ -108,7 +150,9 @@ const CreationBar = (props) => {
           Title length must between 3 - 50 characters
         </p>
       )}
-      <h3 className={`${styles.creationBar__picker__title}`}>Start</h3>
+      <h3 className={`${styles.creationBar__picker__title}`} id="start">
+        Start
+      </h3>
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
           <DayPickerInput
@@ -154,7 +198,9 @@ const CreationBar = (props) => {
         </p>
       )}
 
-      <h3 className={`${styles.creationBar__picker__title}`}>End (Opional)</h3>
+      <h3 className={`${styles.creationBar__picker__title}`} id="end">
+        End (Opional)
+      </h3>
       <section className={`${styles.creationBar__picker}`}>
         <label className={`${styles.creationBar__datePicker}`}>
           <DayPickerInput
@@ -228,7 +274,9 @@ const CreationBar = (props) => {
           ></span>
         </label>
       </div>
-      <h3 className={`${styles.creationBar__topic}`}>Location:</h3>
+      <h3 className={`${styles.creationBar__topic}`} id="location">
+        Location:
+      </h3>
       {props.information.locationName.map((location, index) => {
         return (
           <section key={index} className={`${styles.creationBar__multiInput}`}>
@@ -313,7 +361,9 @@ const CreationBar = (props) => {
         Add more location (+)
       </p>
 
-      <h3 className={`${styles.creationBar__topic}`}>Hashtag:</h3>
+      <h3 className={`${styles.creationBar__topic}`} id="hashtag">
+        Hashtag:
+      </h3>
       {props.information.hashtag.map((location, index) => {
         return (
           <section
@@ -383,7 +433,7 @@ const CreationBar = (props) => {
       >
         Add more hashtags (+)
       </p>
-      <section className={`${styles.creationBar__categories}`}>
+      <section className={`${styles.creationBar__categories}`} id="categories">
         <h3 className={`${styles.creationBar__topic}`}>
           Categories:<small>(Click to remove)</small>
         </h3>
@@ -436,7 +486,9 @@ const CreationBar = (props) => {
         </p>
       )}
 
-      <h3 className={`${styles.creationBar__topic}`}>Other organizations:</h3>
+      <h3 className={`${styles.creationBar__topic}`} id="otherOrganizations">
+        Other organizations:
+      </h3>
       {props.information.otherOrganizations.map((location, index) => {
         return (
           <section
@@ -506,7 +558,7 @@ const CreationBar = (props) => {
         Add more organizations (+)
       </p>
 
-      <section className={`${styles.creationBar__description}`}>
+      <section className={`${styles.creationBar__description}`} id="summary">
         <h3 className={`${styles.creationBar__topic}`}>Summary:</h3>
         <TextareaAutosize
           minRows={4}
@@ -544,7 +596,7 @@ const CreationBar = (props) => {
           Summary must not empty and not exceed 255 characters
         </p>
       )}
-      <section className={`${styles.creationBar__description}`}>
+      <section className={`${styles.creationBar__description}`} id="content">
         <h3 className={`${styles.creationBar__topic}`}>Content:</h3>
         <TextareaAutosize
           minRows={7}
@@ -582,7 +634,7 @@ const CreationBar = (props) => {
           Content must not empty and not exceed 4000 characters
         </p>
       )}
-      <section className={`${styles.creationBar__cover}`}>
+      <section className={`${styles.creationBar__cover}`} id="cover">
         <h3 className={`${styles.creationBar__topic}`}>Cover:</h3>
         <div className={`${styles.creationBar__fileUpload}`}>
           <input
