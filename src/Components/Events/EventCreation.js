@@ -195,7 +195,7 @@ const EventCreation = (props) => {
         endDateAndTime = endDateAndTime.toISOString();
       }
 
-      if (endDateAndTime && endDateAndTime < startDateAndTime) {
+      if (endDateAndTime && endDateAndTime <= startDateAndTime) {
         dateCompare = true;
       }
     }

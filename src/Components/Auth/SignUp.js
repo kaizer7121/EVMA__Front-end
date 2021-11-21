@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { profileAction } from "../../Store/profileSlice";
 import { tokenAction } from "../../Store/tokenSlice";
 import { useHistory } from "react-router";
+import Swal from "sweetalert2";
 
 const UpdateProfile = () => {
   const profile = useSelector((state) => state.profile);
@@ -84,13 +85,25 @@ const UpdateProfile = () => {
 
         const response = await updateProfile(requestData, profile.id);
         if (response.status !== 400 && response.status !== 403) {
-          dispatch(
-            profileAction.updateProfile({
-              ...response,
-              avatarURL: "/images/default-avatar.png",
-              backgroundURL: "/images/default-cover.jpg",
-            })
-          );
+          if (profileInfo.role === "Event Organizer") {
+            Swal.fire(
+              "Your permission is pending",
+              "You have to wait for administrator allow to join as an event organizer",
+              "info"
+            ).then(() => {
+              profileAction.signOut();
+              tokenAction.deleteToken();
+              history.replace("/sign-in");
+            });
+          } else {
+            dispatch(
+              profileAction.updateProfile({
+                ...response,
+                avatarURL: "/images/default-avatar.png",
+                backgroundURL: "/images/default-cover.jpg",
+              })
+            );
+          }
         }
       } catch (error) {
         console.log(error.response);
@@ -148,7 +161,9 @@ const UpdateProfile = () => {
                 )}
               </div>
               <div className={`${styles.register__form__group} `}>
-                <label htmlFor="full-name">Date of birth (older than 16 and younger than 100)</label>
+                <label htmlFor="full-name">
+                  Date of birth (older than 16 and younger than 100)
+                </label>
                 <div className={`${styles.register__form__group__date_input}`}>
                   <DayPickerInput
                     format={"DD/MM/yyyy"}

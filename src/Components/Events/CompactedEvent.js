@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { getURLImage } from "../../Service/firebaseFunctions";
 import { isPastedEvent } from "../../Service/functions";
@@ -10,8 +9,6 @@ const CompactedEvent = (props) => {
   const [backgroundURL, setBackgroundURL] = useState(
     "/images/default-cover.jpg"
   );
-
-  const history = useHistory();
 
   useEffect(() => {
     const getURLImg = async () => {

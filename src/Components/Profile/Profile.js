@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { formatDate, parseDate } from "react-day-picker/moment";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router";
+import { useHistory } from "react-router";
 import TextareaAutosize from "react-textarea-autosize";
 import Swal from "sweetalert2";
 import { updateProfile } from "../../Service/api/authApi";
