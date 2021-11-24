@@ -563,7 +563,7 @@ const CreationBar = (props) => {
         <TextareaAutosize
           minRows={4}
           maxRows={15}
-          placeholder="Type short description of event (not exceed 255 characters)"
+          placeholder="Type short description of event (not exceed to 255 characters)"
           onChange={(event) => {
             inputValue(event.target.value, "summary");
           }}
@@ -601,7 +601,7 @@ const CreationBar = (props) => {
         <TextareaAutosize
           minRows={7}
           maxRows={15}
-          placeholder="Describe the content of event (not exceed 4000 characters)"
+          placeholder="Describe the content of event (not exceed to 4000 characters)"
           onChange={(event) => {
             inputValue(event.target.value, "content");
           }}
