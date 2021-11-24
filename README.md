@@ -1,7 +1,7 @@
 # EVMA (Front-end)
 
 A website to help organizations manage their event and help other people can see and follow events.\
-website: https://evma-fpt.web.app/
+Website: https://evma-fpt.web.app/
 
 ## Available Scripts
 
