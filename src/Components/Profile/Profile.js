@@ -153,6 +153,13 @@ const Profile = () => {
       console.log(accountInformation.address);
       address = true;
     }
+    if (
+      accountInformation.city &&
+      accountInformation.city.length !== 0 &&
+      !validateName(accountInformation.city)
+    ) {
+      city = true;
+    }
     setErrorInformation({
       name,
       dob,
@@ -399,6 +406,11 @@ const Profile = () => {
                     inputValueAccountInformation(event.target.value, "city")
                   }
                 />
+                {errorInformation.city && (
+                  <p className={`${styles.profile__error}`}>
+                    Your city must not have number
+                  </p>
+                )}
               </div>
             </div>
 
@@ -420,7 +432,7 @@ const Profile = () => {
                 <TextareaAutosize
                   minRows={6}
                   maxRows={15}
-                  placeholder="Type short description of event"
+                  placeholder="Type the summary of your profile (not exceed to 255 characters)"
                   onChange={(event) => {
                     inputValueAccountInformation(event.target.value, "summary");
                   }}
