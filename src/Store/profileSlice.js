@@ -43,8 +43,16 @@ const profileSlice = createSlice({
       state.address = address;
       state.phoneNumber = phoneNumber;
       state.summary = summary;
-      state.avatarURL = avatarURL;
-      state.backgroundURL = backgroundURL;
+      state.avatarURL = avatarURL.startsWith(
+        "https://firebasestorage.googleapis.com"
+      )
+        ? avatarURL
+        : "/images/default-avatar.png";
+      state.backgroundURL = backgroundURL.startsWith(
+        "https://firebasestorage.googleapis.com"
+      )
+        ? backgroundURL
+        : "/images/default-cover.jpg";
       state.role = role && role.authority ? role.authority : null;
       state.dob = dob;
     },

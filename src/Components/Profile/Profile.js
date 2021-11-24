@@ -354,7 +354,7 @@ const Profile = () => {
                 )}
               </div>
               <div className={`${styles.profile__topic_col}`}>
-                <h3>Phone number</h3>
+                <h3>Phone number (optional)</h3>
                 <input
                   type="text"
                   value={accountInformation.phoneNumber}
@@ -375,7 +375,7 @@ const Profile = () => {
 
             <div className={`${styles.profile__topic_row}`}>
               <div className={`${styles.profile__topic_col}`}>
-                <h3>Address</h3>
+                <h3>Address (optional)</h3>
                 <input
                   type="text"
                   value={accountInformation.address}
@@ -391,7 +391,7 @@ const Profile = () => {
               </div>
 
               <div className={`${styles.profile__topic_col}`}>
-                <h3>City</h3>
+                <h3>City (optional)</h3>
                 <input
                   type="text"
                   value={accountInformation.city}
@@ -404,7 +404,7 @@ const Profile = () => {
 
             {userRole === "Attendees" && (
               <>
-                <h3>Job title</h3>
+                <h3>Job title (optional)</h3>
                 <input
                   type="text"
                   value={accountInformation.jobTitle}
@@ -416,7 +416,7 @@ const Profile = () => {
             )}
             {userRole === "Event Organizer" && (
               <>
-                <h3>Summary</h3>
+                <h3>Summary (optional)</h3>
                 <TextareaAutosize
                   minRows={6}
                   maxRows={15}

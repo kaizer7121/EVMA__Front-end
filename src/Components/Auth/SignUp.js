@@ -93,7 +93,9 @@ const UpdateProfile = () => {
             ).then(() => {
               profileAction.signOut();
               tokenAction.deleteToken();
-              history.replace("/sign-in");
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
             });
           } else {
             dispatch(
