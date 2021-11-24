@@ -43,7 +43,7 @@ const EventFilter = (props) => {
               onSelectFilter("Published");
             }}
           >
-            Published event
+            Published events
           </p>
           <p
             className={`${styles.eventFilter__option} ${
@@ -53,7 +53,7 @@ const EventFilter = (props) => {
               onSelectFilter("Draft");
             }}
           >
-            Draft event
+            Draft events
           </p>
           <p
             className={`${styles.eventFilter__option} ${
@@ -65,7 +65,7 @@ const EventFilter = (props) => {
               onSelectFilter("Cancelled");
             }}
           >
-            Cancelled event
+            Cancelled events
           </p>
           <p
             className={`${styles.eventFilter__option} ${
@@ -77,7 +77,7 @@ const EventFilter = (props) => {
               onSelectFilter("Deleted");
             }}
           >
-            Deleted event
+            Deleted events
           </p>{" "}
         </>
       )}

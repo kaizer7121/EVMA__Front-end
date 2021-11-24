@@ -58,8 +58,8 @@ const SignIn = () => {
 
   useEffect(() => {
     if (token) {
-      // history.push("/home");
-      history.goBack();
+      history.push("/home");
+      // history.goBack();
     }
   }, [token, history]);
 

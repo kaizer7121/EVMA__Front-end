@@ -1,9 +1,7 @@
-import { Switch, Route, Redirect } from "react-router-dom";
-
-import ForgotPassword from "./Components/Auth/ForgotPassword";
 
 import "./App.scss";
 
+import { Switch, Route, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import SignInPage from "./Pages/SignInPage";
 import UpdateProfilePage from "./Pages/UpdateProfilePage";
@@ -145,9 +143,6 @@ function App() {
           <Route path="/sign-in">
             <SignInPage />
           </Route>
-          <Route path="/forgot-password">
-            <ForgotPassword />
-          </Route>
           <Route exact path="/event/:id">
             <EventDetaiPage />
           </Route>
@@ -178,9 +173,6 @@ function App() {
           <Route path="/search">
             <SearchEventPage />
           </Route>
-          {/* <Route path="/test">
-            <LoadingComponent />
-          </Route> */}
           <Route exact path="*">
             <Redirect to="/event" />
           </Route>
