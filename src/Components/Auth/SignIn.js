@@ -35,7 +35,6 @@ const SignIn = () => {
     const unregisterAuthObserver = firebase
       .auth()
       .onAuthStateChanged(async (user) => {
-        console.log("check");
         if (user) {
           setIsWaiting(true);
           const token = await user.getIdToken();

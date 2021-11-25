@@ -11,6 +11,7 @@ import {
   calculateAge,
   converISOToOnlyDate,
   updateProfileWithFullImage,
+  validateCity,
   validateName,
   validatePhone,
 } from "../../Service/functions";
@@ -150,13 +151,12 @@ const Profile = () => {
       (accountInformation.address.length >= 50 ||
         !validateName(accountInformation.address))
     ) {
-      console.log(accountInformation.address);
       address = true;
     }
     if (
       accountInformation.city &&
       accountInformation.city.length !== 0 &&
-      !validateName(accountInformation.city)
+      validateCity(accountInformation.city)
     ) {
       city = true;
     }
@@ -266,7 +266,7 @@ const Profile = () => {
     <>
       <section className={`${styles.profile}`}>
         <section className={`${styles.profile__section}`}>
-          <h1>Account Information</h1>
+          <h1>Profile</h1>
           <div className={`${styles.profile__topic}`}>
             <h3>User's email address</h3>
             <p>{accountInformation.email}</p>

@@ -82,7 +82,7 @@ const CreatePost = (props) => {
             <TextareaAutosize
               minRows={7}
               maxRows={15}
-              placeholder="Type short description of event"
+              placeholder="Type short description of event (not exceed to 2500 characters)"
               onChange={onChangeContent}
               value={postInfo.content}
             />
