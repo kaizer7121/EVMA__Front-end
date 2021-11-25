@@ -34,10 +34,15 @@ const EventDetail = (props) => {
   const profile = useSelector((state) => state.profile);
   const { followedEvents } = profile;
   const token = useSelector((state) => state.token.token);
+
+  const [eventStatus, setEventStatus] = useState({
+    ...props.information.status,
+  });
   const [coverURL, setCoverURL] = useState("/images/default-cover.jpg");
   const isOwnEvent = props.information.userProfileId === profile.id;
   const [displayType, setDisplayType] = useState("detail");
   const descriptionArr = props.information.content.split("\n");
+
   const startDate = converISOToSimpleDate(props.information.startDate);
   const endDate = props.information.endDate
     ? converISOToSimpleDate(props.information.endDate)
@@ -87,6 +92,10 @@ const EventDetail = (props) => {
     getURLImg();
   }, [props.information.coverURL]);
 
+  useEffect(() => {
+    setEventStatus({ ...props.information.status });
+  }, [props.information.status]);
+
   const changeDisplayType = (type) => {
     if (displayType !== type) {
       setDisplayType(type);
@@ -108,9 +117,10 @@ const EventDetail = (props) => {
   const onConfirmDelete = (type) => {
     const id = type === "Cancel" ? 3 : 4;
     const eventID = props.information.id;
+    const name = id === 3 ? "Cancelled" : "Deleted";
     changeEventStatus(eventID, id);
 
-    window.location.reload();
+    setEventStatus((prevValue) => ({ ...prevValue, id, name }));
     setChoosingDelete(false);
   };
 
@@ -154,7 +164,6 @@ const EventDetail = (props) => {
       }
     }
   };
-
   const onShareUrl = () => {
     const el = document.createElement("input");
     el.value = window.location.href;
@@ -164,7 +173,7 @@ const EventDetail = (props) => {
     document.body.removeChild(el);
     setIsShared(true);
   };
-
+  console.log(eventStatus);
   const reloadPost = () => {
     props.reloadPost();
   };
@@ -194,7 +203,7 @@ const EventDetail = (props) => {
         <section className={`${styles.detail}`}>
           <header className={`${styles.detail__header}`}>
             <div className={`${styles.detail__poster}`}>
-              {props.information.status.name === "Published" &&
+              {eventStatus.name === "Published" &&
                 (isPastedEvent(props.information) ? (
                   <div
                     className={`${styles.detail__status} ${styles.detail__status_past}`}
@@ -208,25 +217,25 @@ const EventDetail = (props) => {
                     Published
                   </div>
                 ))}
-              {props.information.status.name === "Cancelled" && (
+              {eventStatus.name === "Cancelled" && (
                 <div
                   className={`${styles.detail__status} ${styles.detail__status_cancel}`}
                 >
-                  {props.information.status.name}
+                  {eventStatus.name}
                 </div>
               )}
-              {props.information.status.name === "Deleted" && (
+              {eventStatus.name === "Deleted" && (
                 <div
                   className={`${styles.detail__status} ${styles.detail__status_delete}`}
                 >
-                  {props.information.status.name}
+                  {eventStatus.name}
                 </div>
               )}
-              {props.information.status.name === "Draft" && (
+              {eventStatus.name === "Draft" && (
                 <div
                   className={`${styles.detail__status} ${styles.detail__status_draft}`}
                 >
-                  {props.information.status.name}
+                  {eventStatus.name}
                 </div>
               )}
               <img src={coverURL} alt="Poster" />
@@ -336,8 +345,8 @@ const EventDetail = (props) => {
                 })}
               <p></p>
               {!isPastedEvent(props.information) &&
-                (props.information.status.name === "Published" ||
-                  props.information.status.name === "Draft") && (
+                (eventStatus.name === "Published" ||
+                  eventStatus.name === "Draft") && (
                   <div className={`${styles.detail__buttons}`}>
                     {!isOwnEvent &&
                       profile.role === "Attendees" &&
@@ -373,7 +382,7 @@ const EventDetail = (props) => {
                       </>
                     )}
 
-                    {props.information.status.name !== "Draft" && (
+                    {eventStatus.name !== "Draft" && (
                       <>
                         {!isShared && (
                           <button
@@ -422,7 +431,7 @@ const EventDetail = (props) => {
           {displayType === "detail" && mainContent}
           {displayType === "posts" && (
             <ListPost
-              eventStatus={props.information.status.name}
+              eventStatus={eventStatus.name}
               isOwnEvent={isOwnEvent}
               information={props.listPost}
               reloadPost={reloadPost}

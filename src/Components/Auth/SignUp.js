@@ -91,6 +91,7 @@ const UpdateProfile = () => {
               "You have to wait for administrator allow to join as an event organizer",
               "info"
             ).then(() => {
+              localStorage.removeItem("TOKEN")
               profileAction.signOut();
               tokenAction.deleteToken();
               setTimeout(() => {

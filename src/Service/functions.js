@@ -88,6 +88,10 @@ export const validateAddress = (address) => {
   return regex.test(address);
 };
 
+export const validateCity = (city) => {
+  return /\d/.test(city);
+};
+
 export const calculateAge = (birthday) => {
   const ageDifMs = Date.now() - birthday.getTime();
   const ageDate = new Date(ageDifMs);
@@ -298,7 +302,7 @@ export const clearUnfollowNotification = (
   const modifiedNotifications = oldNotifications.filter(
     (notification) =>
       notification.type !== type ||
-      (notification.type === type && notification.notificationID === id)
+      notification.notificationID !== id.toString()
   );
   dispatch(notificationAction.modifyListNotification(modifiedNotifications));
 };

@@ -11,7 +11,6 @@ import { notificationAction } from "../Store/notificationSlice";
 
 export const uploadImgToStorage = async (imageAsFile, fileName) => {
   return await storage.ref(`/images/${fileName}`).put(imageAsFile);
- 
 };
 
 export const getURLImage = async (imgName) => {
@@ -152,6 +151,7 @@ export const ListenDataChangeFromFollowList = async (
           );
       };
       await listenData(chunk);
+      dispatch(notificationAction.allowToStoreInstantEventNoti());
     }
   } else {
     if (followedEvents.length === 0) {
@@ -161,45 +161,35 @@ export const ListenDataChangeFromFollowList = async (
 
   if (followedOrganizers.length > 0) {
     while (followedOrganizers.length > 0) {
-      console.log("while");
-      console.log(followedOrganizers.length);
       const chunk = followedOrganizers.splice(0, step);
-      console.log(followedOrganizers.length);
-      db.collection("InstantNotification")
-        .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
-        .onSnapshot(
-          (snapshot) => {
-            snapshot.docChanges().forEach((change) => {
-              if (followedOrganizers.length > 0) {
-                dispatch(
-                  notificationAction.preventToStoreInstantOrganizationNoti()
-                );
-              }
-              if (change.type === "added" || change.type === "modified") {
-                const instantEvent = change.doc.data();
-                dispatch(notificationAction.addInstantEvent(instantEvent));
-                addSingleNotificationWithImg(
-                  instantEvent,
-                  change.doc.id,
-                  dispatch
-                );
-              }
+      const listenData = async (chunk) => {
+        db.collection("InstantNotification")
+          .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
+          .onSnapshot(
+            (snapshot) => {
+              snapshot.docChanges().forEach((change) => {
+                if (change.type === "added" || change.type === "modified") {
+                  const instantEvent = change.doc.data();
+                  dispatch(notificationAction.addInstantEvent(instantEvent));
+                  addSingleNotificationWithImg(
+                    instantEvent,
+                    change.doc.id,
+                    dispatch
+                  );
+                }
+              });
               if (followedOrganizers.length === 0) {
                 dispatch(
                   notificationAction.allowToStoreInstantOrganizationNoti()
                 );
               }
-            });
-            if (followedOrganizers.length === 0) {
-              dispatch(
-                notificationAction.allowToStoreInstantOrganizationNoti()
-              );
+            },
+            (error) => {
+              console.log("Somethings wrong when listening data: " + error);
             }
-          },
-          (error) => {
-            console.log("Somethings wrong when listening data: " + error);
-          }
-        );
+          );
+      };
+      await listenData(chunk);
     }
   } else {
     dispatch(notificationAction.allowToStoreInstantOrganizationNoti());
@@ -207,6 +197,7 @@ export const ListenDataChangeFromFollowList = async (
 };
 
 export const listenNotificationOfDocID = async (docID, dispatch) => {
+  console.log("====== " + docID);
   db.collection("InstantNotification")
     .where(firebase.firestore.FieldPath.documentId(), "==", docID)
     .onSnapshot(
@@ -215,7 +206,11 @@ export const listenNotificationOfDocID = async (docID, dispatch) => {
           if (change.type === "added" || change.type === "modified") {
             const instantEvent = change.doc.data();
             dispatch(notificationAction.addInstantEvent(instantEvent));
-            await addSingleNotificationWithImg(instantEvent, change.doc.id, dispatch);
+            await addSingleNotificationWithImg(
+              instantEvent,
+              change.doc.id,
+              dispatch
+            );
             dispatch(notificationAction.allowToStoreInstantOrganizationNoti());
             dispatch(notificationAction.allowToStoreInstantEventNoti());
           }
@@ -228,7 +223,11 @@ export const listenNotificationOfDocID = async (docID, dispatch) => {
 };
 
 export const detachListenNotificationOfDocID = async (docID) => {
-  db.collection("InstantNotification")
+  console.log("====== " + docID);
+  const unsubscribe = db
+    .collection("InstantNotification")
     .where(firebase.firestore.FieldPath.documentId(), "==", docID)
     .onSnapshot();
+
+  unsubscribe();
 };

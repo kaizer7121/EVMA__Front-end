@@ -117,7 +117,6 @@ const profileSlice = createSlice({
     },
     removeFollowedEvent(state, action) {
       const eventID = action.payload;
-      console.log("REMOVE");
       const currentFollowedEvents = [...state.followedEvents];
       const newFollowedEvents = currentFollowedEvents.filter((event) => {
         return event !== eventID[0];
