@@ -14,7 +14,10 @@ const ListFollowPage = () => {
     followedEvents: [],
     followedOrganizations: [],
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState({
+    organization: true,
+    event: true,
+  });
 
   const history = useHistory();
 
@@ -31,12 +34,13 @@ const ListFollowPage = () => {
   useEffect(() => {
     const getListFollow = async () => {
       try {
-        setIsLoading(true);
+        setIsLoading((prevValue) => ({ ...prevValue, organization: true }));
         const organizationReponse = await getListFollowedOrganization();
         setInformation((prevValue) => ({
           ...prevValue,
           followedOrganizations: organizationReponse.content,
         }));
+        setIsLoading((prevValue) => ({ ...prevValue, organization: false }));
       } catch (error) {
         console.log("Error when get list follow detail" + error);
       }
@@ -47,12 +51,13 @@ const ListFollowPage = () => {
   useEffect(() => {
     const getListFollow = async () => {
       try {
-        setIsLoading(true);
+        setIsLoading((prevValue) => ({ ...prevValue, event: true }));
         const eventResponse = await getListFollowedEvent();
         setInformation((prevValue) => ({
           ...prevValue,
           followedEvents: eventResponse.content,
         }));
+        setIsLoading((prevValue) => ({ ...prevValue, event: false }));
       } catch (error) {
         console.log("Error when get list follow detail" + error);
       }

@@ -3,6 +3,7 @@ import styles from "./ListFollow.module.scss";
 
 import Event from "../Events/Event";
 import Organization from "../Organizations/Organization";
+import LoadingComponent from "../Loading/LoadingComponent";
 
 const ListFollow = (props) => {
   const [displayType, setDisplayType] = useState("Event");
@@ -38,13 +39,17 @@ const ListFollow = (props) => {
         </div>
       </section>
       {displayType === "Event" &&
+        !props.isLoading.event &&
         props.information &&
         props.information.followedEvents &&
         props.information.followedEvents.length > 0 &&
         props.information.followedEvents.map((event) => {
           return <Event key={`EVENT_${event.id}`} information={event} />;
         })}
+      {displayType === "Event" && props.isLoading.event && <LoadingComponent />}
+
       {displayType === "Organization" &&
+        !props.isLoading.organization &&
         props.information &&
         props.information.followedOrganizations &&
         props.information.followedOrganizations.length > 0 &&
@@ -56,6 +61,9 @@ const ListFollow = (props) => {
             />
           );
         })}
+      {displayType === "Organization" && props.isLoading.organization && (
+        <LoadingComponent />
+      )}
     </div>
   );
 };

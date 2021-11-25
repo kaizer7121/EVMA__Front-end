@@ -20,7 +20,7 @@ const OwnEventPage = () => {
     deleted: [],
   });
   const [viewType, setViewType] = useState("All");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const history = useHistory();
 
@@ -64,8 +64,8 @@ const OwnEventPage = () => {
           ...prevValue,
           deleted: [...response.content],
         }));
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     getEvent();
   }, [type, profile.id]);
